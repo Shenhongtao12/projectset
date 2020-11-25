@@ -1,0 +1,32 @@
+server:
+  port: 80
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB # 限制文件上传的大小
+      enabled: true  #是否启用文件上传功能
+#Email配置
+email:
+  host-name: ENC(8SBUufEewAnkOmtIZKW6WEueGovw657z)
+  authentication:
+    username: ENC(ubcVjx8yykSvqjrNayzN1BSW/m9Byrur)
+    password: ENC(2gaMxgiVYusOzqg7p+lGuXOYs5VaBnwV)
+  form:
+    mail: ENC(SOtNBTVcF8gsYnGxjqnirnaCqqM1wOfwz6kfki8u+po=) #发送方，必须为你设置的username一致
+    name: 二手交易平台 #发送方显示的名称，可以随意设置
+  charset: UTF-8
+pagehelper:
+  helperDialect: mysql  #设置数据库
+  reasonable: true  #分页合理化参数pageNum<=0 时会查询第一页，pageNum>pages（超过总数时），会查询最后一页
+  page-size-zero: true  #pageSize=0 每页显示条数为0 就会查询出全部的结果（但是返回结果仍然是 Page 类型）
+  supportMethodsArguments: true
+  params: count=countSql
+jasypt:
+  encryptor:
+    password: 841b54a7a45883874c36d59ab6e7d80c
+    algorithm: PBEWithMD5AndDES
+

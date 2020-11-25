@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: ENC(vaVC07EXXlW3dFiYKZDY6TasgOMDGG76yKum7xF/4VOCkLQT87kwE8i9FcrPqbYZdvX8pnwa/2aS+IciPVfwijVu9jJK8SklEbXGh8YOiq5A9j+XVvQZnFUS6bPMeVXSvHXcPBowEsIfqIM7TK4MQR3l5M/+9GZjYmyPoFqQr/A7U6cqFLMrfQ==)
+    username: ENC(2Io83MWwLR/etZSrMIVNMw==)
+    password: ENC(SU6acVIzxPtmSHKoZDnC2BcrFIfRFrZJ)
+    #使用阿里巴巴Druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ENC(jzqMWGCFmvFds15TpClclJz1qJhUZYzQ)
+    port: 6379
+    database: 0
+    password: ENC(6u+uxPExCZ3TPUpD6C1qOQ==)
+    timeout: 5000
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql语句包括查询结果
+    map-underscore-to-camel-case: true #下划线转驼峰配置
