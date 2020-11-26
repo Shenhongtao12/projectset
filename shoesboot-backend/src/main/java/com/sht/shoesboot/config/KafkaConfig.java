@@ -20,8 +20,8 @@ import java.util.Map;
  * @author Aaron
  * @date 2020/11/26 20:02
  */
-@EnableKafka
-@Configuration
+//@EnableKafka
+//@Configuration
 public class KafkaConfig {
 
     /**

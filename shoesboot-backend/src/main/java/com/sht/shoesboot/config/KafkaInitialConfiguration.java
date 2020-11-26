@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Aaron
  * @date 2020/11/26 21:04
  */
-@Configuration
+//@Configuration
 public class KafkaInitialConfiguration {
 
     /**
