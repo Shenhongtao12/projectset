@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Aaron
  * @date 2020/11/26 23:39
  */
-@Configuration
+//@Configuration
 public class ElasticSearchClientConfig {
 
     @Bean
