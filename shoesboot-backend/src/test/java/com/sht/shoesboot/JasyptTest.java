@@ -1,5 +1,6 @@
 package com.sht.shoesboot;
 
+import com.sht.shoesboot.enums.UrlEnum;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.jupiter.api.Test;
@@ -37,11 +38,18 @@ public class JasyptTest {
         StandardPBEStringEncryptor stringEncryptor = new StandardPBEStringEncryptor();
         stringEncryptor.setPassword("841b54a7a45883874c36d59ab6e7d80c");
         stringEncryptor.setAlgorithm("PBEWithMD5AndDES");
-        String username = stringEncryptor.encrypt("");
+        String username = stringEncryptor.encrypt("jdbc:mysql://47.98.128.88:3306/shoes?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true");
         String password = stringEncryptor.encrypt("sht123");
         String pass = stringEncryptor.decrypt(password);
+        String a = stringEncryptor.decrypt("30e0oszTKPLunfLvDo8sQgSM3KFn3Zxydy6xww+sEuXeqQf/7bUZSPiYAtnpZE8YSZna1rFp5X42nSR+vJalNQDF6f/sGcTjpvoaPc0I4DyTIWhes2KQq+kpYJZwtAdm8OgU+vprMSPBthN34o4BWfXJeYit6O+QQ1OMKbYBHiVBQvyyBtdiag==");
         System.out.println(username);
         System.out.println(password);
         System.out.println(pass);
+        System.out.println(a);
+    }
+
+    @Test
+    public void enumTest() {
+        System.out.println(UrlEnum.EMAIL.getUrl());
     }
 }

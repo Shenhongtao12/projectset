@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ENC(30e0oszTKPLunfLvDo8sQgSM3KFn3Zxydy6xww+sEuXeqQf/7bUZSPiYAtnpZE8YSZna1rFp5X42nSR+vJalNQDF6f/sGcTjpvoaPc0I4DyTIWhes2KQq+kpYJZwtAdm8OgU+vprMSPBthN34o4BWfXJeYit6O+QQ1OMKbYBHiVBQvyyBtdiag==)
+    url: ENC(fXtcBfq64N3j1gvo0ZWgt4q7F34WwdEvWvjWw5K8HFgjU2h9JRWvpUaNoWmk+4qYWwWNJ0EPTuEIA/gWyIB5dPvHsxkHyGgvSsnQsjPrQCKOzjgoXjuhu8biiR2K07JyPakFxwt/nNsAKwtxFTcWBBNlR/0gUg9uRhe77Lvs5SwkbjkNaw2gMg==)
     username: ENC(0XAQhNsW5HAM6wajkcPgPQ==)
     password: ENC(2nsnZRQP+OYw+h5bnZt/fclV7aSYCi8x)
     #使用阿里巴巴Druid数据源
@@ -12,6 +12,12 @@ spring:
     database: 0
     password: ENC(6u+uxPExCZ3TPUpD6C1qOQ==)
     timeout: 5000
+    lettuce:
+      pool:
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+        max-active: 50
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

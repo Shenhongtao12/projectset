@@ -39,6 +39,10 @@ public class BaseController {
         return new RestResponse(200, data);
     }
 
+    public RestResponse SUCCESS(Object data, String message) {
+        return new RestResponse(200, data, message);
+    }
+
     public RestResponse ERROR(String message) {
         return new RestResponse(500, message);
     }

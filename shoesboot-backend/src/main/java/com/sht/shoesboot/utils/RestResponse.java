@@ -25,4 +25,10 @@ public class RestResponse {
         this.code = code;
         this.data = data;
     }
+
+    public RestResponse(Integer code, Object data, String message) {
+        this.code = code;
+        this.data = data;
+        this.message = message;
+    }
 }
