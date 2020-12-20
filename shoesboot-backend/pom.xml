@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sht</groupId>
-    <artifactId>shoesboot</artifactId>
+    <artifactId>shoesboot-backend</artifactId>
     <version>0.1-SNAPSHOT</version>
-    <name>shoesboot</name>
+    <name>shoesboot-backend</name>
     <description>shoes Boot project for Spring Boot</description>
 
     <properties>

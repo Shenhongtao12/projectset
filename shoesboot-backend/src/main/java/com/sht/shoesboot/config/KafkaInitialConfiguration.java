@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Aaron
  * @date 2020/11/26 21:04
  */
-//@Configuration
+@Configuration
 public class KafkaInitialConfiguration {
 
     /**
@@ -23,7 +23,7 @@ public class KafkaInitialConfiguration {
      */
     @Bean
     public NewTopic initialTopic() {
-        return new NewTopic("topic.quick.initial",8, (short) 1 );
+        return new NewTopic("topic.quick.shoes",8, (short) 1 );
     }
 
     @Bean
