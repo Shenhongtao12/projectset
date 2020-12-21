@@ -30,4 +30,6 @@ public class Goods {
     private String images;
 
     private String brand;
+
+    private Boolean shelf;
 }

@@ -6,6 +6,10 @@ import com.sht.shoesboot.mapper.GoodsMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -17,6 +21,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -53,9 +58,15 @@ public class GoodsService {
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("5m");
 
-        for (int i = 0; i < goods.size(); i++) {
+        for (Goods goodsTmp : goods) {
+            String a = goodsTmp.getTitle().substring(0, goodsTmp.getTitle().length() / 2).trim();
+            String b = goodsTmp.getTitle().substring(goodsTmp.getTitle().length() / 2).trim();
+            if (a.equals(b)){
+                goodsTmp.setTitle(a);
+            }
             bulkRequest.add(new IndexRequest("shoes_goods")
-                    .source(JSON.toJSONString(goods.get(i)), XContentType.JSON));
+                    .id(goodsTmp.getId().toString())
+                    .source(JSON.toJSONString(goodsTmp), XContentType.JSON));
         }
         BulkResponse bulk = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
         return !bulk.hasFailures();
@@ -75,8 +86,8 @@ public class GoodsService {
         sourceBuilder.size(size);
         //matchQuery
         if (StringUtils.isNoneEmpty(keyword)) {
-            MatchQueryBuilder termQueryBuilder = QueryBuilders.matchQuery("title", keyword);
-            sourceBuilder.query(termQueryBuilder);
+            MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("title", keyword);
+            sourceBuilder.query(matchQueryBuilder);
         }
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
 
@@ -118,4 +129,30 @@ public class GoodsService {
         goodsMapper.insertSelective(goods);
     }
 
+    public Map<String, Object> findById(Integer id) {
+        GetRequest getRequest = new GetRequest("shoes_goods", id.toString());
+        GetResponse response = null;
+        try {
+            response = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response != null ? response.getSourceAsMap() : null;
+    }
+
+    public Boolean delete(Integer id) {
+        DeleteRequest deleteRequest = new DeleteRequest("shoes_goods", id.toString());
+        deleteRequest.timeout("2s");
+        try {
+            Goods goods = new Goods();
+            goods.setId(id);
+            goods.setShelf(false);
+            goodsMapper.updateByPrimaryKeySelective(goods);
+            DeleteResponse delete = restHighLevelClient.delete(deleteRequest, RequestOptions.DEFAULT);
+            return delete.status() != RestStatus.NOT_FOUND;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
