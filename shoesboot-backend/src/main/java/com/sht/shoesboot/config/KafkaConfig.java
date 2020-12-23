@@ -69,7 +69,7 @@ public class KafkaConfig {
     @Bean("defaultKafkaTemplate")
     public KafkaTemplate<Integer, String> defaultKafkaTemplate() {
         KafkaTemplate template = new KafkaTemplate<Integer, String>(producerFactory());
-        template.setDefaultTopic("topic.quick.default");
+        template.setDefaultTopic("topic.quick.shoes");
         return template;
     }
 

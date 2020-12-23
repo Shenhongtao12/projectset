@@ -1,6 +1,7 @@
 package com.sht.shoesboot.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.mapper.GoodsMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -72,6 +73,19 @@ public class GoodsService {
         return !bulk.hasFailures();
     }
 
+    public void saveGoodsToEs(JSONObject goods) {
+        BulkRequest bulkRequest = new BulkRequest();
+        bulkRequest.timeout("1s");
+        bulkRequest.add(new IndexRequest("shoes_goods")
+                .id(goods.get("id").toString())
+                .source(goods, XContentType.JSON));
+        try {
+            BulkResponse bulk = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 分页查询数据
      */
@@ -125,8 +139,9 @@ public class GoodsService {
         return list;
     }
 
-    public void save(Goods goods) {
+    public int save(Goods goods) {
         goodsMapper.insertSelective(goods);
+        return goods.getId();
     }
 
     public Map<String, Object> findById(Integer id) {
@@ -140,7 +155,7 @@ public class GoodsService {
         return response != null ? response.getSourceAsMap() : null;
     }
 
-    public Boolean delete(Integer id) {
+    public Boolean soldOut(Integer id) {
         DeleteRequest deleteRequest = new DeleteRequest("shoes_goods", id.toString());
         deleteRequest.timeout("2s");
         try {
@@ -154,5 +169,17 @@ public class GoodsService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public int update(Goods goods) {
+        return goodsMapper.updateByPrimaryKeySelective(goods);
+    }
+
+    public boolean existsWithPrimaryKey(Integer id) {
+        return goodsMapper.existsWithPrimaryKey(id);
+    }
+
+    public void delete(Integer id) {
+        goodsMapper.deleteByPrimaryKey(id);
     }
 }

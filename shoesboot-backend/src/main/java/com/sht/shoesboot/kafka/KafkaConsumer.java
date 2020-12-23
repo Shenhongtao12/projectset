@@ -1,5 +1,6 @@
 package com.sht.shoesboot.kafka;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.service.GoodsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ public class KafkaConsumer {
      */
     @KafkaListener(id = "shoes", topics = "topic.quick.shoes")
     public void listen(String msgData) {
+        goodsService.saveGoodsToEs(JSONObject.parseObject(msgData));
         LOGGER.info("shoes receive : " + msgData);
     }
 }
