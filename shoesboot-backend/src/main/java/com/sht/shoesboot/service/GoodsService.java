@@ -3,6 +3,8 @@ package com.sht.shoesboot.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.entity.Goods;
+import com.sht.shoesboot.entity.GoodsHistory;
+import com.sht.shoesboot.mapper.GoodsHistoryMapper;
 import com.sht.shoesboot.mapper.GoodsMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -46,6 +48,9 @@ public class GoodsService {
 
     @Autowired
     private GoodsMapper goodsMapper;
+
+    @Autowired
+    private GoodsHistoryMapper historyMapper;
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
@@ -180,6 +185,8 @@ public class GoodsService {
     }
 
     public void delete(Integer id) {
+        Goods goods = goodsMapper.selectByPrimaryKey(id);
         goodsMapper.deleteByPrimaryKey(id);
+        historyMapper.insertSelective(new GoodsHistory(goods));
     }
 }

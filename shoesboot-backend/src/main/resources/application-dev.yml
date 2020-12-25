@@ -22,6 +22,7 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapping/*.xml
 swagger:
   enable: true
   application-name: ${spring.application.name}

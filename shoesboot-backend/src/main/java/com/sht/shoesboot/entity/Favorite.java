@@ -1,35 +1,30 @@
 package com.sht.shoesboot.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
-import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author Aaron
- * @date 2020/12/19 22:41
+ * @date 2020/12/24 23:17
  */
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Goods {
+public class Favorite {
 
     @Id
     @KeySql(useGeneratedKeys = true)
     private Integer id;
 
-    public String title;
+    private Integer goodsId;
 
-    public BigDecimal price;
+    private Integer userId;
 
-    public String images;
+    private Date inDate;
 
-    public String brand;
-
-    public Boolean shelf;
 }

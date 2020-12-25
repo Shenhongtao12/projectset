@@ -37,7 +37,7 @@ public class GoodsController extends BaseController {
         goods.setId(null);
         int id = goodsService.save(goods);
         goods.setId(id);
-        if (goods.getShelf()){
+        if (goods.getShelf()) {
             kafkaProducer.send(goods);
         }
         return ResponseEntity.ok(SUCCESS(""));
@@ -49,7 +49,7 @@ public class GoodsController extends BaseController {
                                               @RequestParam(name = "size", defaultValue = "30") Integer size) {
         try {
             return ResponseEntity.ok(SUCCESS(goodsService.findByPage(page, size, keyword)));
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body(ERROR("请求失败"));
         }
@@ -66,7 +66,7 @@ public class GoodsController extends BaseController {
 
     @DeleteMapping
     public ResponseEntity<RestResponse> soldOut(@RequestParam(name = "id") Integer id) {
-        if(!goodsService.soldOut(id)) {
+        if (!goodsService.soldOut(id)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(SUCCESS("success"));
@@ -74,12 +74,12 @@ public class GoodsController extends BaseController {
 
     @PutMapping
     public ResponseEntity<RestResponse> update(@RequestBody Goods goods) {
-        if (goodsService.existsWithPrimaryKey(goods.getId())){
+        if (goodsService.existsWithPrimaryKey(goods.getId())) {
             int i = goodsService.update(goods);
             if (i != 0) {
-                if (goods.getShelf()){
+                if (goods.getShelf()) {
                     kafkaProducer.send(goods);
-                }else {
+                } else {
                     goodsService.soldOut(goods.getId());
                 }
                 return ResponseEntity.ok().body(SUCCESS("更新成功"));
@@ -91,11 +91,11 @@ public class GoodsController extends BaseController {
 
     @DeleteMapping("delete")
     public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
-        if (goodsService.existsWithPrimaryKey(id)){
+        if (goodsService.existsWithPrimaryKey(id)) {
             goodsService.soldOut(id);
             goodsService.delete(id);
-            return ResponseEntity.ok().body(SUCCESS("删除成"));
-        }else {
+            return ResponseEntity.ok().body(SUCCESS("删除成功"));
+        } else {
             return ResponseEntity.badRequest().body(ERROR(400, "该商品不存在"));
         }
     }
