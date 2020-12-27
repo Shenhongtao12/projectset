@@ -6,7 +6,8 @@ import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.entity.Favorite;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.mapper.FavoriteMapper;
-import com.sht.shoesboot.utils.RestResponse;
+import com.sht.shoesboot.mapper.GoodsHistoryMapper;
+import com.sht.shoesboot.mapper.GoodsMapper;
 import org.elasticsearch.action.get.MultiGetItemResponse;
 import org.elasticsearch.action.get.MultiGetRequest;
 import org.elasticsearch.action.get.MultiGetResponse;
@@ -20,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Aaron
@@ -34,6 +34,12 @@ public class FavoriteService {
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
+
+    @Autowired
+    private GoodsHistoryMapper goodsHistoryMapper;
 
     public Integer exists(Favorite favorite) {
         Example example = new Example(Favorite.class);
@@ -63,6 +69,7 @@ public class FavoriteService {
 
         List<Goods> goodsList = new ArrayList<>();
 
+        // Boolean flag = false;
         if (favoritePage.getTotal() > 0) {
             MultiGetRequest request = new MultiGetRequest();
             for (Favorite favorite : favoritePage.getResult()) {
@@ -74,14 +81,27 @@ public class FavoriteService {
                     if (respons.getResponse().isExists()) {
                         goodsList.add(JSON.parseObject(JSON.toJSONString(respons.getResponse().getSource()), Goods.class));
                     } else {
-                        //已经下架的商品
-
+                        // flag = true;
+                        Goods goods = goodsMapper.selectByPrimaryKey(respons.getResponse().getId());
+                        if (goods == null) {
+                            goodsList.add(goodsHistoryMapper.selectByPrimaryKey(respons.getResponse().getId()));
+                        }else {
+                            goodsList.add(goods);
+                        }
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        //下架的商品
+//        if (flag) {
+//            goodsList.addAll(goodsService.queryShelfGoods(userId));
+//        }
         return goodsList;
+    }
+
+    public void batchDelete(List<Integer> ids) {
+        favoriteMapper.batchDelete(ids);
     }
 }

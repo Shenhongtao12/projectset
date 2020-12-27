@@ -14,6 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class GoodsController extends BaseController {
     private KafkaProducer kafkaProducer;
 
     @PostMapping
-    public ResponseEntity<RestResponse> jsoupSave(@RequestBody Goods goods) {
+    public ResponseEntity<RestResponse> jsoupSave(@Valid @RequestBody Goods goods) {
         goods.setId(null);
         int id = goodsService.save(goods);
         goods.setId(id);
@@ -73,7 +74,7 @@ public class GoodsController extends BaseController {
     }
 
     @PutMapping
-    public ResponseEntity<RestResponse> update(@RequestBody Goods goods) {
+    public ResponseEntity<RestResponse> update(@Valid @RequestBody Goods goods) {
         if (goodsService.existsWithPrimaryKey(goods.getId())) {
             int i = goodsService.update(goods);
             if (i != 0) {

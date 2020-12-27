@@ -6,6 +6,7 @@ import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.entity.GoodsHistory;
 import com.sht.shoesboot.mapper.GoodsHistoryMapper;
 import com.sht.shoesboot.mapper.GoodsMapper;
+import com.sht.shoesboot.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -188,5 +189,9 @@ public class GoodsService {
         Goods goods = goodsMapper.selectByPrimaryKey(id);
         goodsMapper.deleteByPrimaryKey(id);
         historyMapper.insertSelective(new GoodsHistory(goods));
+    }
+
+    public List<Goods> queryShelfGoods(Integer userId) {
+        return goodsMapper.queryShelfGoods(userId);
     }
 }
