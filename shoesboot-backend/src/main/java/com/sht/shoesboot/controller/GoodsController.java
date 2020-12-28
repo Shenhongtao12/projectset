@@ -1,21 +1,15 @@
 package com.sht.shoesboot.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.kafka.KafkaProducer;
-import com.sht.shoesboot.kafka.KafkaSendResultHandler;
 import com.sht.shoesboot.service.GoodsService;
+import com.sht.shoesboot.service.RedisService;
 import com.sht.shoesboot.utils.RestResponse;
-import javassist.compiler.ast.Keyword;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.Map;
 
@@ -33,6 +27,9 @@ public class GoodsController extends BaseController {
     @Autowired
     private KafkaProducer kafkaProducer;
 
+    @Autowired
+    private RedisService redisService;
+
     @PostMapping
     public ResponseEntity<RestResponse> jsoupSave(@Valid @RequestBody Goods goods) {
         goods.setId(null);
@@ -40,6 +37,7 @@ public class GoodsController extends BaseController {
         goods.setId(id);
         if (goods.getShelf()) {
             kafkaProducer.send(goods);
+            redisService.setData("shoes_goods_" + id, goods.getInventory().toString());
         }
         return ResponseEntity.ok(SUCCESS(""));
     }
@@ -68,6 +66,7 @@ public class GoodsController extends BaseController {
     @DeleteMapping
     public ResponseEntity<RestResponse> soldOut(@RequestParam(name = "id") Integer id) {
         if (!goodsService.soldOut(id)) {
+            redisService.deleteData("shoes_goods_" + id);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(SUCCESS("success"));
@@ -80,6 +79,7 @@ public class GoodsController extends BaseController {
             if (i != 0) {
                 if (goods.getShelf()) {
                     kafkaProducer.send(goods);
+                    redisService.setData("shoes_goods_" + goods.getId(), goods.getInventory().toString());
                 } else {
                     goodsService.soldOut(goods.getId());
                 }
@@ -94,6 +94,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
         if (goodsService.existsWithPrimaryKey(id)) {
             goodsService.soldOut(id);
+            redisService.deleteData("shoes_goods_" + id);
             goodsService.delete(id);
             return ResponseEntity.ok().body(SUCCESS("删除成功"));
         } else {

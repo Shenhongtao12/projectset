@@ -7,6 +7,8 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -25,6 +27,8 @@ public class ShopCart {
 
     private Integer goodsId;
 
+    @Size(min = 1)
+    @NotNull(message = "加购数量不能为空")
     private Integer amount;
 
     private Integer userId;
