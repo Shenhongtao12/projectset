@@ -82,12 +82,7 @@ public class FavoriteService {
                         goodsList.add(JSON.parseObject(JSON.toJSONString(respons.getResponse().getSource()), Goods.class));
                     } else {
                         // flag = true;
-                        Goods goods = goodsMapper.selectByPrimaryKey(respons.getResponse().getId());
-                        if (goods == null) {
-                            goodsList.add(goodsHistoryMapper.selectByPrimaryKey(respons.getResponse().getId()));
-                        }else {
-                            goodsList.add(goods);
-                        }
+                        goodsList.add(queryGoods(Integer.parseInt(respons.getResponse().getId())));
                     }
                 }
             } catch (IOException e) {
@@ -103,5 +98,14 @@ public class FavoriteService {
 
     public void batchDelete(List<Integer> ids) {
         favoriteMapper.batchDelete(ids);
+    }
+
+    public Goods queryGoods(Integer id) {
+        Goods goods = goodsMapper.selectByPrimaryKey(id);
+        if (goods == null) {
+            return goodsHistoryMapper.selectByPrimaryKey(id);
+        }else {
+            return goods;
+        }
     }
 }

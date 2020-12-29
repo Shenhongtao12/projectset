@@ -25,13 +25,13 @@ public class ShopCart {
     @KeySql(useGeneratedKeys = true)
     private Integer id;
 
-    private Integer goodsId;
+    public Integer goodsId;
 
     @Size(min = 1)
     @NotNull(message = "加购数量不能为空")
-    private Integer amount;
+    public Integer amount;
 
-    private Integer userId;
+    public Integer userId;
 
-    private Date inDate;
+    public Date inDate;
 }

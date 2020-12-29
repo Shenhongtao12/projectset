@@ -1,5 +1,6 @@
 package com.sht.shoesboot;
 
+import com.sht.shoesboot.utils.OrderNumber;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,5 +17,11 @@ public class StringTest {
         System.out.println(a);
         System.out.println(b);
         System.out.println(a.equals(b));
+    }
+
+    @Test
+    public void testOrderNumber() {
+        System.out.println(System.currentTimeMillis());
+        System.out.println(OrderNumber.createOrderNumber());
     }
 }
