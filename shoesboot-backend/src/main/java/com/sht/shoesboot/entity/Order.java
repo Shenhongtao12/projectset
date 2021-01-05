@@ -24,4 +24,8 @@ public class Order extends ShopCart{
     private BigDecimal money;
 
     private String orderNumber;
+
+    private Integer cartId;
+
+    private String status;
 }

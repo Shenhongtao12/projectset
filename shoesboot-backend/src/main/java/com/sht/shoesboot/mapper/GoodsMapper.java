@@ -2,6 +2,7 @@ package com.sht.shoesboot.mapper;
 
 import com.sht.shoesboot.entity.Goods;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -34,4 +35,12 @@ public interface GoodsMapper extends Mapper<Goods> {
      * insert tmp table
      */
     void insertTmp(String ids);
+
+    /**
+     * 更新库存
+     * @param goodsId
+     * @param amount
+     */
+    @Update("UPDATE goods SET inventory = (inventory - #{amount}) WHERE id = #{goodsId}")
+    void updateInventory(Integer goodsId, Integer amount);
 }
