@@ -46,9 +46,16 @@ public class User {
     @Length(min = 11, max = 11)
     private String phone;
 
+    private Boolean vip;
+
     public User(Register register) {
         this.username = register.getUsername();
         this.password = register.getPassword();
         this.email = register.getEmail();
+    }
+
+    public User(Admin admin) {
+        this.id = admin.getId();
+        this.username = admin.getAdminName();
     }
 }

@@ -6,8 +6,10 @@ import com.sht.shoesboot.entity.Register;
 import com.sht.shoesboot.entity.User;
 import com.sht.shoesboot.service.RedisService;
 import com.sht.shoesboot.service.UserService;
+import com.sht.shoesboot.utils.JwtUtils;
 import com.sht.shoesboot.utils.RestResponse;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -60,7 +62,22 @@ public class UserController extends BaseController {
         return ResponseEntity.badRequest().body(ERROR("请求错误"));
     }
 
-    @GetMapping
+    @GetMapping("email-login")
+    public ResponseEntity<RestResponse> emailLogin(@Validated @Email @NotBlank(message = "邮箱不能为空") @RequestParam(name = "email") String email,
+                                              @RequestParam(name = "code") String code) {
+        String redisCode = redisService.getData("shoes-" + email);
+        if (!StringUtils.equals(code, redisCode)) {
+            return ResponseEntity.badRequest().body(ERROR(400, "验证码错误"));
+        }
+        User user = userService.queryUserByEmail(email);
+        JSONObject response = new JSONObject();
+        response.put("user", user);
+        response.put("token", JwtUtils.geneJsonWebToken(user));
+
+        return ResponseEntity.ok(SUCCESS(response, "success"));
+    }
+
+    @PostMapping
     public ResponseEntity<RestResponse> login(@Validated @NotBlank(message = "用户名或邮箱不能为空") @RequestParam(name = "username") String username,
                                               @Validated @NotBlank(message = "密码不能为空") @RequestParam(name = "password") String password) {
         JSONObject login = userService.login(username, password);

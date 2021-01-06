@@ -79,6 +79,13 @@ public class UserService {
 
     }
 
+    public User queryUserByEmail(String email) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.orEqualTo("email", email);
+        return userMapper.selectOneByExample(example);
+    }
+
     public Boolean update(User user) {
         return userMapper.updateByPrimaryKeySelective(user) == 1;
     }
