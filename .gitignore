@@ -1,0 +1,4 @@
+#node_modules
+/shoesboot-frontend/node_modules/
+#idea
+.idea
