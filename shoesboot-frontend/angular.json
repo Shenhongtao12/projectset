@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "ng-alain"
+  "defaultProject": "ng-alain",
+  "cli": {
+    "analytics": false
+  }
 }

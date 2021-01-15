@@ -2,3 +2,9 @@
 /shoesboot-frontend/node_modules/
 #idea
 .idea
+#specialty
+/specialty/.gitignore
+/specialty/HELP.md
+/specialty/mvnw
+/specialty/specialty.iml
+/specialty/mvnw.cmd

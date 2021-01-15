@@ -1,0 +1,30 @@
+server:
+  port: 8080
+#�������ݿ�
+database:
+  url: jdbc:mysql://localhost:3306/specialty?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+  username: root
+  password: kindy0916
+spring:
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+    #ʹ�ð���Ͱ�Druid����Դ
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB # �����ļ��ϴ��Ĵ�С
+      enabled: true #�Ƿ������ļ��ϴ�����
+  redis:
+    #host: 172.17.240.99
+    host: 47.93.240.205
+    port: 6379
+    database: 0
+    password: sht123
+    timeout: 5000
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
