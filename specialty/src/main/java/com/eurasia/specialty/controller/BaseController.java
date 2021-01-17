@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author Administrator
+ */
 public class BaseController {
 
     protected HttpServletRequest request;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"/ring/fans"})
-@Api(tags = "粉丝关注服务")
+//@Api(tags = "粉丝关注服务")
 public class FansController extends BaseController{
 
     @Autowired

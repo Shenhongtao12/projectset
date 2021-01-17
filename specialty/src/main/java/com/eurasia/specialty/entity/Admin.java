@@ -1,6 +1,7 @@
 package com.eurasia.specialty.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "sp_Admin")
+@DynamicUpdate
 public class Admin implements Serializable {
 
     /**

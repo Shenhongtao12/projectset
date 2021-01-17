@@ -6,6 +6,7 @@ import com.eurasia.specialty.entity.User;
 import com.eurasia.specialty.service.AdminService;
 import com.eurasia.specialty.utils.JsonData;
 import com.eurasia.specialty.utils.JwtUtils;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("api/admin")
+@Api(tags = "管理员模块")
 public class AdminController extends BaseController {
 
     @Autowired

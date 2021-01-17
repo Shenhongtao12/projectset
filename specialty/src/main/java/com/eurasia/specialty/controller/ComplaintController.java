@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/ring/complaint")
-@Api(tags = "投诉举报服务")
+//@Api(tags = "投诉举报服务")
 public class ComplaintController extends BaseController{
     @Autowired
     private ComplaintService complaintService;

@@ -1,5 +1,6 @@
 package com.eurasia.specialty.config;
 
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -40,7 +41,7 @@ public class SwaggerConfig {
                 .enable(true)
                 .select()
                 //配置扫描的包  RequestHandlerSelectors.any()  扫描全部
-                .apis(RequestHandlerSelectors.basePackage("com.sht.shoesboot.controller"))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 //过滤的路径  .paths(PathSelectors.ant("path"))
                 .paths(PathSelectors.any())
                 .build();

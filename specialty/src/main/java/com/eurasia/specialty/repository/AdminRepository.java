@@ -9,4 +9,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @date 2021/1/15 22:48
  */
 public interface AdminRepository extends JpaRepository<Admin, Integer>, JpaSpecificationExecutor<Admin> {
+
+    /**
+     * 登录API
+     * @param adminName
+     * @param password
+     * @return
+     */
+    public Admin findAdminByAdminNameAndPassword(String adminName, String password);
 }

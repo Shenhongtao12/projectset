@@ -2,11 +2,21 @@ package com.eurasia.specialty.service;
 
 import com.eurasia.specialty.entity.Admin;
 import com.eurasia.specialty.repository.AdminRepository;
+import com.eurasia.specialty.utils.JpaUtils;
 import com.eurasia.specialty.utils.PageResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Aaron.H.Shen
@@ -47,27 +57,30 @@ public class AdminService {
     }
 
     public Admin login(Admin admin) {
-        Example example = new Example(Admin.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("admin_name", admin.getAdminName());
-        criteria.andEqualTo("password", admin.getPassword());
-        return adminRepository.selectOneByExample(example);
+        return adminRepository.findAdminByAdminNameAndPassword(admin.getAdminName(), admin.getPassword());
     }
 
     public PageResult<Admin> queryPage(String role, Integer page, Integer rows) {
-        PageHelper.startPage(page, rows);
-        Example example = new Example(Admin.class);
-        Example.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotEmpty(role)) {
-            criteria.andEqualTo("role", role);
-        }
-        Page<Admin> adminPage = (Page<Admin>) adminRepository.selectByExample(example);
-        return new PageResult<>(adminPage.getTotal(), adminPage.getPages(), adminPage.getResult());
+        Specification<Admin> specification = new Specification<Admin>() {
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+                if(StringUtils.isNotEmpty(role)){
+                    list.add(criteriaBuilder.equal(root.get("role"), role));
+                }
+                return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            }
+        };
+
+        Page<Admin> adminPage = adminRepository.findAll(specification, PageRequest.of(page, rows));
+        return new PageResult<>(adminPage.getTotalElements(), adminPage.getTotalPages(), adminPage.getContent());
     }
 
     public boolean update(Admin admin) {
         try {
-            adminRepository.updateByPrimaryKeySelective(admin);
+            Admin response = adminRepository.findById(admin.getId()).get();
+            JpaUtils.copyNotNullProperties(admin, response);
+            adminRepository.save(admin);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +90,7 @@ public class AdminService {
 
     public boolean delete(Integer id) {
         try {
-            adminRepository.deleteByPrimaryKey(id);
+            adminRepository.deleteById(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

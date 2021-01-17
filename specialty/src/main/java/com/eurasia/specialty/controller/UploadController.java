@@ -20,7 +20,6 @@ public class UploadController {
     @Autowired
     private UploadService uploadService;
 
-    //@PostMapping(value = "/image", headers = "content-type=multipart/form-data")
     @PostMapping({"image"})
     @ApiOperation(value = "上传图片", notes = "上传图片,可选图片路径为/eurasia/classify、/eurasia/carousel")
     public ResponseEntity<JsonData> uploadImage(@RequestParam("file") MultipartFile[] file, @RequestParam(name = "site", defaultValue = "/eurasia/other") String site) {

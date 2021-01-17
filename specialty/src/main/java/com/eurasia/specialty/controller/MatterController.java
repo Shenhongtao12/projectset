@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("ring/matter")
-@Api(tags = "热门事件")
+@Api(tags = "热点资讯")
 public class MatterController {
 
     @Autowired
