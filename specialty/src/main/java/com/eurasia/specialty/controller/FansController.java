@@ -24,7 +24,7 @@ public class FansController extends BaseController{
     @ApiOperation(value = "关注或者取消关注用户", notes = "第一次是关注，第二次是取消关注")
     public ResponseEntity save(@RequestBody Fans fans) {
         fans.setFansId(userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.fansService.save(fans));
+        return ResponseEntity.status(HttpStatus.OK).body(this.fansService.save(fans));
     }
 
     @DeleteMapping({"delete"})

@@ -1,6 +1,5 @@
 package com.eurasia.specialty.controller;
 
-import com.eurasia.specialty.exception.AllException;
 import com.eurasia.specialty.service.UploadService;
 import com.eurasia.specialty.utils.JsonData;
 import io.swagger.annotations.Api;
@@ -25,7 +24,7 @@ public class UploadController {
     public ResponseEntity<JsonData> uploadImage(@RequestParam("file") MultipartFile[] file, @RequestParam(name = "site", defaultValue = "/eurasia/other") String site) {
         JsonData url = this.uploadService.upload(file, site);
         if (StringUtils.isEmpty(url)) {
-            throw new AllException(-1, "图片上传失败");
+            return ResponseEntity.badRequest().body(JsonData.buildError("上传失败"));
         }
 
         return ResponseEntity.ok(url);
@@ -36,8 +35,8 @@ public class UploadController {
     public ResponseEntity<JsonData> delFile(@RequestParam(name = "url") String url) {
         String msg = uploadService.deleteImage(url);
         if ("删除成功".equals(msg)) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(JsonData.buildSuccess(msg));
+            return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildSuccess(msg));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(JsonData.buildError(msg));
+        return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildError(msg));
     }
 }

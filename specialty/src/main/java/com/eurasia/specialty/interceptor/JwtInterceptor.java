@@ -85,6 +85,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         PrintWriter writer = response.getWriter();
         writer.print(JSON.toJSON(obj));
         writer.close();
+        response.setStatus(200);
         try {
             response.flushBuffer();
         }catch (IOException e){

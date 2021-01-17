@@ -56,7 +56,7 @@ public class AdminController extends BaseController {
         if (adminService.updatePassword(userId, oldPassword, password)) {
             return ResponseEntity.ok(JsonData.buildSuccess("修改成功，请重新登录"));
         }
-        return ResponseEntity.badRequest().body(JsonData.buildError("密码错误，修改失败"));
+        return ResponseEntity.ok(JsonData.buildError("密码错误，修改失败"));
     }
 
     @GetMapping
@@ -72,7 +72,7 @@ public class AdminController extends BaseController {
         if (adminService.update(admin)) {
             return ResponseEntity.ok(JsonData.buildSuccess("成功"));
         }
-        return ResponseEntity.badRequest().body(JsonData.buildError(400,"更新失败"));
+        return ResponseEntity.ok(JsonData.buildError(400,"更新失败"));
     }
 
     @DeleteMapping
@@ -80,7 +80,7 @@ public class AdminController extends BaseController {
         if (adminService.delete(id)) {
             return ResponseEntity.ok(JsonData.buildSuccess("成功"));
         }
-        return ResponseEntity.badRequest().body(JsonData.buildError(400,"删除失败"));
+        return ResponseEntity.ok(JsonData.buildError(400,"删除失败"));
     }
 
 }

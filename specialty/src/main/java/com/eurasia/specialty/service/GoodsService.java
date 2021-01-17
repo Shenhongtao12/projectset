@@ -2,8 +2,6 @@ package com.eurasia.specialty.service;
 
 
 import com.eurasia.specialty.entity.Goods;
-import com.eurasia.specialty.entity.User;
-import com.eurasia.specialty.exception.AllException;
 import com.eurasia.specialty.repository.GoodsRepository;
 import com.eurasia.specialty.repository.UserRepository;
 import com.eurasia.specialty.utils.JpaUtils;
@@ -37,7 +35,9 @@ public class GoodsService {
     public Map<String, Object> add(Goods goods) throws Exception {
         Map<String, Object> result = new HashMap<>(2);
         if (goods.getClassifyId() == null) {
-            throw new AllException(-1, "请选择分类");
+            result.put("code", 400);
+            result.put("msg", "请选择分类");
+            return result;
         }
 
         goods.setCreateTime(new Date());

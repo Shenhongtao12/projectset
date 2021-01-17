@@ -7,7 +7,6 @@ import java.util.List;
 import com.eurasia.specialty.entity.*;
 import com.eurasia.specialty.repository.PraiseRepository;
 import com.eurasia.specialty.repository.ReplyRepository;
-import com.eurasia.specialty.exception.AllException;
 import com.eurasia.specialty.utils.DateUtils;
 import com.eurasia.specialty.utils.JsonData;
 import com.eurasia.specialty.utils.MessageUtils;
@@ -46,18 +45,7 @@ public class ReplyService {
 
 
     public JsonData save(Reply reply) throws Exception {
-        if (reply.getCommentId() == null || reply.getLeaf() == null) {
-            throw new AllException(-1, "回复失败");
-        }
-        if (reply.getUserId() == null) {
-            throw new AllException(-1, "请登录！");
-        }
-        if (reply.getContent().equals("") || reply.getContent().equals(" ")) {
-            throw new AllException(-1, "内容不能为空");
-        }
-        if (reply.getContent().getBytes("UTF-8").length > 200) {
-            throw new AllException(-1, "内容过长");
-        }
+
         reply.setCreateTime(DateUtils.dateToString());
 
         if (reply.getLeaf() != 0) {
@@ -279,8 +267,9 @@ public class ReplyService {
         }
         List<Reply> list = reply.getReplyList();
         for (Reply reply1 : list) {
-            if (reply1.getParentId() == 0)
+            if (reply1.getParentId() == 0) {
                 addReplyToResult(result, reply1);
+            }
         }
     }
 }

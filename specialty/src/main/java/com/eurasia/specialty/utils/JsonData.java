@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+/**
+ * @author Administrator
+ */
 @ApiModel("返回结果实体类")
 public class JsonData implements Serializable {
 
@@ -25,15 +28,15 @@ public class JsonData implements Serializable {
     }
 
     public static JsonData buildSuccess() {
-        return new JsonData(0, null, null);
+        return new JsonData(200, null, null);
     }
 
     public static JsonData buildError(Object data, String msg) {
-        return new JsonData(-1, data, msg);
+        return new JsonData(400, data, msg);
     }
 
     public static JsonData buildError(String msg) {
-        return new JsonData(-1, null, msg);
+        return new JsonData(400, null, msg);
     }
 
     public static JsonData buildError(String msg, Integer code) {
@@ -41,11 +44,11 @@ public class JsonData implements Serializable {
     }
 
     public static JsonData buildSuccess(Object data, String msg) {
-        return new JsonData(0, data, msg);
+        return new JsonData(200, data, msg);
     }
 
     public static JsonData buildSuccess(String msg) {
-        return new JsonData(0, null, msg);
+        return new JsonData(200, null, msg);
     }
 
     public Integer getCode() {
@@ -72,6 +75,7 @@ public class JsonData implements Serializable {
         this.msg = msg;
     }
 
+    @Override
     public String toString() {
         return "JsonData [code=" + this.code + ", data=" + this.data + ", msg=" + this.msg + "]";
     }

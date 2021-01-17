@@ -33,7 +33,7 @@ public class UserController extends BaseController{
     @ApiOperation(value = "登陆", notes = "该接口不需要身份令牌")
     public ResponseEntity<JsonData> login(@RequestBody User user) {
         Map<String, Object> result = userService.login(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(JsonData.buildSuccess(result,"登录成功"));
+        return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildSuccess(result,"登录成功"));
     }
 
     @GetMapping("init")
