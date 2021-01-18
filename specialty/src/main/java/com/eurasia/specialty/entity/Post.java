@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 帖子
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/17 - 18:42
  **/
 @Data
@@ -25,7 +25,6 @@ public class Post implements Serializable,  Comparable<Post> {
     private String imagesUrl;
     private String createTime;
     private Integer userId;
-    private Integer matterId;
     private Integer classifyId;
     private Integer views;
     /**
@@ -49,9 +48,9 @@ public class Post implements Serializable,  Comparable<Post> {
     private List<Comment> commentList;
 
     public int compareTo(Post o) {
-        if (getCreateTime().compareTo(o.getCreateTime()) > 0)
+        if (getCreateTime().compareTo(o.getCreateTime()) > 0) {
             return -1;
-        else if (getCreateTime().compareTo(o.getCreateTime()) == 0) {
+        } else if (getCreateTime().compareTo(o.getCreateTime()) == 0) {
             return 0;
         }
         return 1;

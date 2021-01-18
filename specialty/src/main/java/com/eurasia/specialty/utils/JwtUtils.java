@@ -18,8 +18,6 @@ public class JwtUtils {
 			token = Jwts.builder().setSubject(SUBJECT)
 					.claim("id", user.getId())
 					.claim("nickName", user.getNickName())
-					.claim("openid", user.getOpenid())
-					.claim("session_key", user.getSession_key())
 					.setIssuedAt(new Date())
 					.setExpiration(new Date(System.currentTimeMillis() + EXPIRE))  //设置到期时长
 					.signWith(SignatureAlgorithm.HS256, APPSECRET)

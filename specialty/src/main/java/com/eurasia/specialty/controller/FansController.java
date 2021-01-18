@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping({"/ring/fans"})
+@RequestMapping({"/api/fans"})
 //@Api(tags = "粉丝关注服务")
 public class FansController extends BaseController{
 

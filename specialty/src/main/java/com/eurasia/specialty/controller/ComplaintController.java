@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/6/8 - 20:44
  **/
 @RestController
-@RequestMapping("/ring/complaint")
+@RequestMapping("/api/complaint")
 //@Api(tags = "投诉举报服务")
 public class ComplaintController extends BaseController{
     @Autowired

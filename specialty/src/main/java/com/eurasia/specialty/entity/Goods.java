@@ -25,7 +25,7 @@ public class Goods implements Serializable
 	private Integer id;
 	private String name;
 	private String intro;
-	private Double price1;
+	private Double price;
 	private String images;
 
 	@Column(name = "create_time")

@@ -25,7 +25,6 @@ import java.util.List;
 
 
 @Service
-@Transactional
 public class CommentService {
 
     @Autowired

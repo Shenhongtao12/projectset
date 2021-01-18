@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/24 - 19:59
  **/
 public interface PraiseRepository extends JpaRepository<Praise, Integer> {

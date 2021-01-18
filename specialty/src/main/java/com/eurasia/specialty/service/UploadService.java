@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@Transactional
 public class UploadService {
     //private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 

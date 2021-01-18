@@ -6,4 +6,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
 
+    /**
+     * get user
+     * @param nickName
+     * @return
+     */
+    User findUserByNickName(String nickName);
 }

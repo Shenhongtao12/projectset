@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * 熱門事件
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/23 - 13:29
  **/
 @Table(name = "sp_matter")
@@ -18,11 +18,10 @@ public class Matter implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
+    private String title;
+    private String content;
     private String matterUrl;
     private String createTime;
 
-    @Transient
-    private Integer MatterNum;
 
 }

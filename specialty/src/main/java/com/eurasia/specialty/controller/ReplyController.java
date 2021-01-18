@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping({"ring/reply"})
+@RequestMapping({"api/reply"})
 @Api(tags = "回复服务")
 public class ReplyController extends BaseController{
 

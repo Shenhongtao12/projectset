@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/24 - 19:58
  **/
-@RequestMapping("ring/praise")
+@RequestMapping("api/praise")
 @RestController
 @Api(tags = "点赞服务")
 public class PraiseController extends BaseController {

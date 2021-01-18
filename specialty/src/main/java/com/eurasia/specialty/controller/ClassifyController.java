@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 17:30
  **/
 @RestController
-@RequestMapping("ring/classify")
+@RequestMapping("api/classify")
 @Api(tags = "分类服务")
 public class ClassifyController {
 

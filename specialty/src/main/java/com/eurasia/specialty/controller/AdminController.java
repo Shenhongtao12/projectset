@@ -30,19 +30,19 @@ public class AdminController extends BaseController {
     @PostMapping("add")
     public ResponseEntity<JsonData> add(@RequestBody Admin admin) {
         if (!adminService.checkRole(userId)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(JsonData.buildError("您无权限添加管理员"));
+            return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildError("您无权限添加管理员", 401));
         }
         if (!adminService.add(admin)) {
-            return ResponseEntity.badRequest().body(JsonData.buildError("数据异常"));
+            return ResponseEntity.ok().body(JsonData.buildError("数据异常"));
         }
         return ResponseEntity.ok(JsonData.buildSuccess(""));
     }
 
-    @PostMapping
+    @PostMapping("login")
     public ResponseEntity<JsonData> login(@RequestBody Admin admin) {
         Admin adminInfo = adminService.login(admin);
         if (adminInfo == null) {
-            return ResponseEntity.badRequest().body(JsonData.buildError("用户名或密码错误"));
+            return ResponseEntity.ok().body(JsonData.buildError("用户名或密码错误"));
         }
         JSONObject response = new JSONObject();
         response.put("admin", adminInfo);

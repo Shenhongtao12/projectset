@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/17 - 19:11
  **/
 @Service
@@ -50,10 +50,6 @@ public class PostService {
             post.setImagesUrl(split[0]);
         }
         return new PageResult<>(page.getTotalElements(), page.getTotalPages(), page.getContent());
-    }
-
-    public Integer countNumByMatter(Integer matterId){
-        return postRepository.countByMatterId(matterId);
     }
 
     public JsonData save(Post post) {
@@ -111,7 +107,7 @@ public class PostService {
         return postRepository.findByUserId(userId);
     }
 
-    public PageResult<Post> findByClassify(Integer classifyId, Integer matterId,String searchName, Integer page, Integer rows) {
+    public PageResult<Post> findByClassify(Integer classifyId,String searchName, Integer page, Integer rows) {
         //自定义查询条件  匿名内部类
         Specification<Post> spec = new Specification<Post>() {
             @Override
@@ -121,9 +117,6 @@ public class PostService {
                 //Path<Reply> path = root.get("nameId");
                 //相当于 where receiverName = "Veggie", CriteriaBuilder接口中还有很多查询条件，建议看源码
                 //Predicate equal = criteriaBuilder.equal(path, userId);
-                if(matterId != null){
-                    list.add(criteriaBuilder.equal(root.get("matterId"), matterId));
-                }
                 if(classifyId != null){
                     list.add(criteriaBuilder.equal(root.get("classifyId"), classifyId));
                 }

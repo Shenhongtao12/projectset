@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * 轮播图
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 14:14
  **/
 @Data

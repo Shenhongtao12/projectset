@@ -20,7 +20,6 @@ import javax.persistence.criteria.*;
 
 
 @Service
-@Transactional
 public class ReplyService {
     @Autowired
     private ReplyRepository replyRepository;

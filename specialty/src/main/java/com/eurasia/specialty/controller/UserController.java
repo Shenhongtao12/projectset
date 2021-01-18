@@ -1,5 +1,6 @@
 package com.eurasia.specialty.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.eurasia.specialty.entity.User;
 import com.eurasia.specialty.service.FansService;
 import com.eurasia.specialty.service.UserService;
@@ -17,11 +18,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Hongtao Shen
+ * @author aaron
  * @date 2020/5/16 - 13:48
  **/
 @RestController
-@RequestMapping("ring/user")
+@RequestMapping("api/user")
 @Api(tags = "用户服务")
 public class UserController extends BaseController{
     @Autowired
@@ -32,8 +33,13 @@ public class UserController extends BaseController{
     @PostMapping("login")
     @ApiOperation(value = "登陆", notes = "该接口不需要身份令牌")
     public ResponseEntity<JsonData> login(@RequestBody User user) {
-        Map<String, Object> result = userService.login(user);
-        return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildSuccess(result,"登录成功"));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(user));
+    }
+
+    @PostMapping
+    @ApiOperation(value = "注册或更新", notes = "注册或者更新都是同一个接口，区别: 更新需要传递id")
+    public ResponseEntity<JsonData> save(@RequestBody User user) {
+        return ResponseEntity.ok(userService.save(user));
     }
 
     @GetMapping("init")
@@ -66,8 +72,6 @@ public class UserController extends BaseController{
         User user = new User();
         user.setId(id);
         user.setNickName("Binary");
-        user.setOpenid("otwpb5HTpiMlSH7EQ6r5Ezr7nNQw");
-        user.setSession_key("aaaaaaaaaa");
         String token ="Bearer " + JwtUtils.geneJsonWebToken(user);
         return ResponseEntity.ok(token);
     }

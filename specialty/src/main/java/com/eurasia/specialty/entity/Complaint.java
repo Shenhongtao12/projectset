@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/6/8 - 20:39
  **/
 @Data

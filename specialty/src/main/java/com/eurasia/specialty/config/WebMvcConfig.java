@@ -7,6 +7,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
+
 //@Configuration
 //public class InterceptorConfig extends WebMvcConfigurationSupport {
 //
@@ -20,19 +22,33 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //    protected void addInterceptors(InterceptorRegistry registry) {
 //        //1.添加自定义拦截器
 //        registry.addInterceptor(jwtInterceptor).
-//                addPathPatterns("/ring/*/**").//2.指定拦截器的url地址
-//                excludePathPatterns("/ring/user/login","/ring/user/init","/eurasia/**");//3.指定不拦截的url地址
+//                addPathPatterns("/api/*/**").//2.指定拦截器的url地址
+//                excludePathPatterns("/api/user/login","/api/user/init","/eurasia/**");//3.指定不拦截的url地址
 //    }
 //}
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Resource
+    private CorsInterceptor corsInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
+        // 跨域拦截器需放在最上面
+        registry.addInterceptor(corsInterceptor)
+                .addPathPatterns("/**");
+
         registry.addInterceptor(new JwtInterceptor())
-                .addPathPatterns("/ring/*/**")
-                .excludePathPatterns("/ring/user/login","/ring/user/init","/ring/user/getToken");
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/user/**",
+                        "/api/admin/login",
+                        "/api/goods/findByPage",
+                        "api/post/findByClassifyOrMatter",
+                        "api/goods/findById",
+                        "api/matter/**"
+                );
 
         WebMvcConfigurer.super.addInterceptors(registry);
     }

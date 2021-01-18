@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/17 - 19:07
  **/
 @RestController
-@RequestMapping("/ring/post")
+@RequestMapping("/api/post")
 @Api(tags = "帖子服务")
 public class PostController extends BaseController{
 
@@ -67,12 +67,11 @@ public class PostController extends BaseController{
     @ApiOperation(value = "多条件查询")
     public ResponseEntity<JsonData> findByClassify(
             @RequestParam(name = "classifyId", required = false) Integer classifyId,
-            @RequestParam(name = "matterId", required = false) Integer matterId,
             @RequestParam(name = "searchName",required = false) String searchName,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "rows", defaultValue = "30") Integer rows
             ) {
-        return ResponseEntity.ok(JsonData.buildSuccess(postService.findByClassify(classifyId,matterId,searchName, page, rows), ""));
+        return ResponseEntity.ok(JsonData.buildSuccess(postService.findByClassify(classifyId,searchName, page, rows), ""));
     }
 
     @GetMapping("findByUserId")

@@ -1,20 +1,26 @@
 package com.eurasia.specialty.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * User用户信息
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 12:16
  **/
 @JsonInclude(JsonInclude.Include.NON_NULL) //返回信息忽略空值
 @Data
 @Table(name = "sp_user")
 @Entity
+@NoArgsConstructor
 public class User implements Serializable {
 
     /**
@@ -35,34 +41,27 @@ public class User implements Serializable {
     private String avatarUrl;
 
     /**
-     * 用户唯一标识
+     * 密码
      */
-    private String openid;
+    private String password;
 
     /**
-     * 会话密匙
+     * 新用户首次注册时间
      */
-    @Transient
-    private String session_key;
+    @Column(name = "create_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 
     /**
-     * 新用户首次登陆时间
-     */
-    private String createTime;
-
-    /**
-     * 登录code
+     * 手机号
      */
     @Transient
-    private String js_code;
+    private String phone;
 
-    /**
-     * 登录错误时的状态码
-     */
-    @Transient
-    private Integer errcode;
 
-    @Transient
-    private Integer flag;
-
+    public User(Admin admin) {
+        this.id = admin.getId();
+        this.nickName = admin.getAdminName();
+    }
 }

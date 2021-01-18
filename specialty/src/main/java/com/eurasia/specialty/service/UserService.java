@@ -6,28 +6,23 @@ import com.eurasia.specialty.entity.Carousel;
 import com.eurasia.specialty.entity.Classify;
 import com.eurasia.specialty.entity.User;
 import com.eurasia.specialty.utils.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 13:48
  **/
 @Service
 public class UserService {
-
-    @Value("${WX_DATA.appid}")
-    protected String APPID;
-    @Value("${WX_DATA.secret}")
-    protected String SECRET;
-    @Value("${WX_DATA.grant_type}")
-    protected String GRANT_TYPE;
 
     @Autowired
     private UserRepository userRepository;
@@ -39,17 +34,27 @@ public class UserService {
     private CarouselService carouselService;
 
     @Autowired
-    private MatterService matterService;
-    @Autowired
-    private PostService postService;
+    private GoodsService goodsService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
 
-    public JSONObject login(User user) {
+    public JsonData login(User user) {
+        User info = userRepository.findUserByNickName(user.getNickName());
+        JsonData data = new JsonData();
 
-        return null;
+        if (info == null || !StringUtils.equals(user.getPassword(), info.getPassword())) {
+            data.setCode(400);
+            data.setMsg("用户名或密码错误");
+        } else {
+            data.setCode(200);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("user", user);
+            jsonObject.put("token", JwtUtils.geneJsonWebToken(user));
+            data.setData(jsonObject);
+        }
+        return data;
     }
 
     public Map<String, Object> init() {
@@ -62,10 +67,8 @@ public class UserService {
         //分类数据
         List<Classify> classifyList = classifyService.findAll();
         map.put("classifyList", classifyList);
-        //热门
-        map.put("matterList", matterService.init());
-        //帖子
-        map.put("post", postService.init());
+        //土特产
+        map.put("goods", goodsService.findByPage(null, null, "id", "1", null, 0, 20));
         return map;
     }
 
@@ -91,5 +94,26 @@ public class UserService {
 
     public User findUserById(Integer id) {
         return userRepository.findById(id).get();
+    }
+
+    public JsonData save(User user) {
+        JsonData data = new JsonData();
+        try {
+            if (user.getId() != null) {
+                User one = userRepository.getOne(user.getId());
+                JpaUtils.copyNotNullProperties(user, one);
+            }else {
+                user.setCreateTime(new Date());
+            }
+            userRepository.save(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            data.setCode(502);
+            data.setMsg("服务异常，请稍后重试");
+            return data;
+        }
+        data.setCode(200);
+        data.setMsg("成功");
+        return data;
     }
 }

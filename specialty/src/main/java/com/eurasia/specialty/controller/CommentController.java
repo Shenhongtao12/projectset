@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping({"ring/comment"})
+@RequestMapping({"api/comment"})
 @Api(tags = "留言服务")
 public class CommentController extends BaseController{
 

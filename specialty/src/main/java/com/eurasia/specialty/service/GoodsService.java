@@ -22,7 +22,6 @@ import java.util.*;
 
 
 @Service
-//@Transactional
 public class GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;

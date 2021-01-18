@@ -10,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 18:14
  **/
 @RestController
-@RequestMapping("ring/carousel")
+@RequestMapping("api/carousel")
 @Api(tags = "轮播图")
 public class CarouselController {
 

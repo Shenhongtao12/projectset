@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 //上传图片
 @RestController
-@RequestMapping({"ring/upload"})
+@RequestMapping({"api/upload"})
 @Api(tags = "图片服务")
 public class UploadController {
     @Autowired

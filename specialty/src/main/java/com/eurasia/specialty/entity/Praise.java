@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/24 - 19:58
  **/
 @Table(name = "sp_praise")

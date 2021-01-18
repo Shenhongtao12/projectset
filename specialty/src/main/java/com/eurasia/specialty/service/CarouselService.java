@@ -2,6 +2,7 @@ package com.eurasia.specialty.service;
 
 import com.eurasia.specialty.repository.CarouselRepository;
 import com.eurasia.specialty.entity.Carousel;
+import com.eurasia.specialty.utils.JpaUtils;
 import com.eurasia.specialty.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/5/16 - 18:17
  **/
 @Service
@@ -27,6 +28,7 @@ public class CarouselService {
         if (!carouselOptional.isPresent()){
             return JsonData.buildError("数据错误");
         }
+        JpaUtils.copyNotNullProperties(carousel, carouselOptional.get());
         carouselRepository.save(carousel);
         return JsonData.buildSuccess("更新成功");
     }

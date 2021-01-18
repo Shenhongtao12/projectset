@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 
 /**
- * @author Hongtao Shen
+ * @author Aaron
  * @date 2020/6/4 - 21:04
  **/
 public interface FansRepository  extends JpaRepository<Fans,Integer>, JpaSpecificationExecutor<Fans> {

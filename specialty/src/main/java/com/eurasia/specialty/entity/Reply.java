@@ -24,14 +24,33 @@ public class Reply implements Serializable {
 	private String content;
 	private Integer number;
 	private Integer leaf;   //等于0时就是一个树的末尾
-	private Integer userId;  //发布回复的人id
-	private Integer postId;  //帖子的id
+	/**
+	 * 发布回复的人id
+	 */
+	private Integer userId;
+	/**
+	 * 帖子的id
+	 */
+	private Integer postId;
 	private Integer commentId;
-	private Integer nameId;  //给谁回复的人id 父id
-	private Integer parentId; // reply的父id
-	private String parentName;//父name
+	/**
+	 * 给谁回复的人id 父id
+	 */
+	private Integer nameId;
+	/**
+	 * reply的父id
+	 */
+	private Integer parentId;
+	/**
+	 * 父name
+	 */
+	private String parentName;
+
+	/**
+	 * 判断点赞
+	 */
 	@Transient
-	private Object state;  //判断点赞
+	private Object state;
 	@Transient
 	private User user;
 	@Transient
