@@ -1,7 +1,7 @@
 server:
-  port: 8080
+  port: 8888
 database:
-  url: jdbc:mysql://localhost:3306/specialty?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+  url: jdbc:mysql://47.98.128.88:3306/specialty?useUnicode=true&characterEncoding=utf-8&useSSL=false
   username: root
   password: kindy0916
 spring:
@@ -26,4 +26,4 @@ spring:
     show-sql: true
     hibernate:
       #create-drop
-      ddl-auto: create-drop
+      ddl-auto: update

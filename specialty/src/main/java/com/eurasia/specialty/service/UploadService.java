@@ -58,7 +58,7 @@ public class UploadService {
                 //缩略图
                 String thumbnailName = uuid + "thumbnail" + suffixName;
 
-                String thumbnailUrl = "https://eurasia.plus" + site + "/" + thumbnailName;
+                String thumbnailUrl = "http://182.92.218.236:8888" + site + "/" + thumbnailName;
 
                 if (size < 200 * 1024) {
                     Thumbnails.of(new String[]{site + "/" + fileName}).scale(1.0D).toFile(site + "/" + thumbnailName);
@@ -87,7 +87,7 @@ public class UploadService {
     public String deleteImage(String url) {
         String resultInfo;
 
-        String path = url.substring(20); //截掉http://eurasia.plus:8800
+        String path = url.substring(26); //截掉http://182.92.218.236:8888
 
         String name2 = path.substring(0, path.indexOf("thumbnail"));
         String jpg = url.substring(url.lastIndexOf("."));

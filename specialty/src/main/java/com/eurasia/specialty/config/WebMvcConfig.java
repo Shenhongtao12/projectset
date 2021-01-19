@@ -47,7 +47,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/goods/findByPage",
                         "api/post/findByClassifyOrMatter",
                         "api/goods/findById",
-                        "api/matter/**"
+                        "api/matter/**",
+                        "api/upload/**"
                 );
 
         WebMvcConfigurer.super.addInterceptors(registry);
