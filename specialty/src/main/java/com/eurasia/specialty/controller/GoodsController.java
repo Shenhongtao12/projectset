@@ -40,7 +40,7 @@ public class GoodsController {
                                                         @RequestParam(value = "orderBy", defaultValue = "id", required = false) String orderBy,
                                                         @RequestParam(value = "status", defaultValue = "") String status,
                                                         @RequestParam(value = "goodsName", required = false) String goodsName,
-                                                        @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                         @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
         return ResponseEntity.ok(this.goodsService.findByPage(id, classify, orderBy, status, goodsName, page, rows));
     }

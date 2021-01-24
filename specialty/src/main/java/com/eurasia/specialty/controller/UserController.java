@@ -1,11 +1,13 @@
 package com.eurasia.specialty.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.eurasia.specialty.entity.Goods;
 import com.eurasia.specialty.entity.User;
 import com.eurasia.specialty.service.FansService;
 import com.eurasia.specialty.service.UserService;
 import com.eurasia.specialty.utils.JsonData;
 import com.eurasia.specialty.utils.JwtUtils;
+import com.eurasia.specialty.utils.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -74,5 +76,13 @@ public class UserController extends BaseController{
         user.setNickName("Binary");
         String token ="Bearer " + JwtUtils.geneJsonWebToken(user);
         return ResponseEntity.ok(token);
+    }
+
+    @GetMapping("queryPage")
+    public ResponseEntity<PageResult<User>> findByPage(
+                                                        @RequestParam(value = "name", required = false) String name,
+                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                        @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
+        return ResponseEntity.ok(this.userService.findByPage( name, page, rows));
     }
 }

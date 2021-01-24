@@ -79,6 +79,7 @@ public class AdminService {
     public boolean update(Admin admin) {
         try {
             Admin response = adminRepository.findById(admin.getId()).get();
+            admin.setPassword(response.getPassword());
             JpaUtils.copyNotNullProperties(admin, response);
             adminRepository.save(admin);
             return true;

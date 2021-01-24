@@ -56,33 +56,41 @@
             <router-link
               :to="{
                 path: '/goods/details',
-                query: { productID: item.productID },
+                query: { productID: item.goodsId },
               }"
             >
-              <img :src="$target + item.productImg" />
+              <img :src="item.image" />
             </router-link>
           </div>
           <div class="pro-name">
             <router-link
               :to="{
                 path: '/goods/details',
-                query: { productID: item.productID },
+                query: { productID: item.goodsId },
               }"
-              >{{ item.productName }}</router-link
             >
+              <el-tooltip
+                class="item"
+                effect="light"
+                :content="item.title"
+                placement="top"
+              >
+                <p class="title">{{ item.title }}</p>
+              </el-tooltip>
+            </router-link>
           </div>
           <div class="pro-price">{{ item.price }}元</div>
           <div class="pro-num">
             <el-input-number
               size="small"
-              :value="item.num"
+              :value="item.amount"
               @change="handleChange($event, index, item.productID)"
               :min="1"
               :max="item.maxNum"
             ></el-input-number>
           </div>
           <div class="pro-total pro-total-in">
-            {{ item.price * item.num }}元
+            {{ item.price * item.amount }}元
           </div>
           <div class="pro-action">
             <el-popover placement="right">
@@ -148,8 +156,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -436,6 +443,11 @@ export default {
 .shoppingCart .cart-empty .empty p {
   margin: 0 0 20px;
   font-size: 20px;
+}
+.title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 /* 购物车为空的时候显示的内容CSS END */
 </style>

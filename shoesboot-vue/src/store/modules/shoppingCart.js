@@ -28,12 +28,7 @@ export default {
     },
     getNum(state) {
       // 购物车商品总数量
-      let totalNum = 0;
-      for (let i = 0; i < state.shoppingCart.length; i++) {
-        const temp = state.shoppingCart[i];
-        totalNum += temp.num;
-      }
-      return totalNum;
+      return state.shoppingCart.length;
     },
     getIsAllCheck(state) {
       // 判断是否全选
@@ -66,7 +61,7 @@ export default {
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
         if (temp.check) {
-          totalNum += temp.num;
+          totalNum += temp.amount;
         }
       }
       return totalNum;
@@ -77,7 +72,7 @@ export default {
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
         if (temp.check) {
-          totalPrice += temp.price * temp.num;
+          totalPrice += temp.price * temp.amount;
         }
       }
       return totalPrice;
@@ -115,8 +110,8 @@ export default {
       for (let i = 0; i < state.shoppingCart.length; i++) {
         const temp = state.shoppingCart[i];
         if (temp.productID == productID) {
-          if (temp.num < temp.maxNum) {
-            temp.num++;
+          if (temp.amount < temp.maxNum) {
+            temp.amount++;
           }
         }
       }

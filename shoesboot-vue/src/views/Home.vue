@@ -121,6 +121,7 @@
   </div>
 </template>
 <script>
+import { getGoods } from "@/api/GoodsService";
 export default {
   data() {
     return {
@@ -216,13 +217,14 @@ export default {
     },
     // 获取各类商品数据方法封装
     getPromo(categoryName, val, api) {
-      api = api != undefined ? api : "/api/product/getPromoProduct";
-      this.$axios
-        .post(api, {
-          categoryName,
-        })
+      //api = api != undefined ? api : "/api/product/getPromoProduct";
+      let request = {
+        page: 1,
+        rows: 10,
+      };
+      getGoods(request)
         .then((res) => {
-          this[val] = res.data.Product;
+          this[val] = res.data;
         })
         .catch((err) => {
           return Promise.reject(err);

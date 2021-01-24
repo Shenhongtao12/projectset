@@ -19,7 +19,7 @@ public class JwtUtils {
 					.claim("id", user.getId())
 					.claim("nickName", user.getNickName())
 					.setIssuedAt(new Date())
-					.setExpiration(new Date(System.currentTimeMillis() + EXPIRE))  //设置到期时长
+					//.setExpiration(new Date(System.currentTimeMillis() + EXPIRE))  //设置到期时长
 					.signWith(SignatureAlgorithm.HS256, APPSECRET)
 					.compact();
 

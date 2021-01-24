@@ -18,7 +18,7 @@
         <el-form-item prop="name">
           <el-input
             prefix-icon="el-icon-user-solid"
-            placeholder="请输入账号"
+            placeholder="请输入用户名或邮箱"
             v-model="LoginUser.name"
           ></el-input>
         </el-form-item>
@@ -45,14 +45,14 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-
+import { login } from "@/api/UserService";
 export default {
   name: "MyLogin",
   data() {
     // 用户名的校验方法
     let validateName = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("请输入用户名"));
+        return callback(new Error("请输入用户名或邮箱"));
       }
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
       const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
@@ -110,28 +110,29 @@ export default {
       this.$refs["ruleForm"].validate((valid) => {
         //如果通过校验开始登录
         if (valid) {
-          this.$axios
-            .post("/api/users/login", {
-              userName: this.LoginUser.name,
-              password: this.LoginUser.pass,
-            })
+          let request = {
+            username: this.LoginUser.name,
+            password: this.LoginUser.pass,
+          };
+          login(request)
             .then((res) => {
-              // “001”代表登录成功，其他的均为失败
-              if (res.data.code === "001") {
+              console.log(res);
+              if (res.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;
                 // 登录信息存到本地
                 let user = JSON.stringify(res.data.user);
                 localStorage.setItem("user", user);
+                localStorage.setItem("User-Token", res.data.token);
                 // 登录信息存到vuex
                 this.setUser(res.data.user);
                 // 弹出通知框提示登录成功信息
-                this.notifySucceed(res.data.msg);
+                this.notifySucceed(res.message);
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();
                 // 弹出通知框提示登录失败信息
-                this.notifyError(res.data.msg);
+                this.notifyError(res.message);
               }
             })
             .catch((err) => {

@@ -32,4 +32,9 @@ public class CarouselController {
         return ResponseEntity.status(HttpStatus.OK).body(carouselService.update(carousel));
     }
 
+    @GetMapping
+    public ResponseEntity<JsonData> query(){
+        return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildSuccess(carouselService.findAll(), ""));
+    }
+
 }

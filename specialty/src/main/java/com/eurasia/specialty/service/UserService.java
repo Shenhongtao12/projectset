@@ -1,6 +1,7 @@
 package com.eurasia.specialty.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.eurasia.specialty.entity.Goods;
 import com.eurasia.specialty.repository.UserRepository;
 import com.eurasia.specialty.entity.Carousel;
 import com.eurasia.specialty.entity.Classify;
@@ -9,13 +10,18 @@ import com.eurasia.specialty.utils.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.*;
 
 /**
  * @author Aaron
@@ -115,5 +121,20 @@ public class UserService {
         data.setCode(200);
         data.setMsg("成功");
         return data;
+    }
+
+    public PageResult<User> findByPage(String name, Integer page, Integer rows) {
+        Specification<User> specification = new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+                if (name != null) {
+                    list.add(criteriaBuilder.like(root.get("goodsName"),"%" + name + "%"));
+                }
+                return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            }
+        };
+        Page<User> userPage = userRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.ASC, "id")));
+        return new PageResult<>(userPage.getTotalElements(), userPage.getTotalPages(), userPage.getContent());
     }
 }

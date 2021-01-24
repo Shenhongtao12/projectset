@@ -42,10 +42,10 @@ public class UserController extends BaseController {
                 redisService.deleteData("shoes-" + register.getEmail());
                 return ResponseEntity.ok(SUCCESS("注册成功"));
             } else {
-                return ResponseEntity.badRequest().body(ERROR("邮箱验证码错误"));
+                return ResponseEntity.badRequest().body(ERROR(400,"邮箱验证码错误"));
             }
         } else {
-            return ResponseEntity.badRequest().body(ERROR("请发送邮箱验证码"));
+            return ResponseEntity.badRequest().body(ERROR(400,"请发送邮箱验证码"));
         }
     }
 

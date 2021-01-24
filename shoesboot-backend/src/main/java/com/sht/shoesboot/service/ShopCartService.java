@@ -49,7 +49,7 @@ public class ShopCartService {
         PageHelper.startPage(page, size);
         Example example = new Example(ShopCart.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("user_id", userId);
+        criteria.andEqualTo("userId", userId);
         Page<ShopCart> carts = (Page<ShopCart>) shopCartMapper.selectByExample(example);
         Map<Integer, ShopCart> map = carts.getResult().stream().collect(Collectors.toMap(ShopCart::getGoodsId, shopCart -> shopCart));
         List<ShopCartDTO> shopCartDto = new ArrayList<>();
@@ -57,7 +57,7 @@ public class ShopCartService {
         if (carts.getTotal() > 0) {
             MultiGetRequest request = new MultiGetRequest();
             for (ShopCart shopCart : carts.getResult()) {
-                request.add(new MultiGetRequest.Item("shoes", shopCart.getGoodsId().toString()));
+                request.add(new MultiGetRequest.Item("shoes_goods", shopCart.getGoodsId().toString()));
             }
             try {
                 MultiGetResponse itemResponses = restHighLevelClient.mget(request, RequestOptions.DEFAULT);
@@ -65,12 +65,12 @@ public class ShopCartService {
                     Goods goods = new Goods();
                     if (respons.getResponse().isExists()) {
                         goods = JSON.parseObject(JSON.toJSONString(respons.getResponse().getSource()), Goods.class);
-                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount()));
+                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), map.get(goods.getId()).getCheck()));
                     } else {
                         // flag = true;
                         goods = favoriteService.queryGoods(Integer.valueOf(respons.getResponse().getId()));
+                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), map.get(goods.getId()).getCheck()));
                     }
-                    shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount()));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,6 +83,7 @@ public class ShopCartService {
     }
 
     public void save(ShopCart shopCart) {
+        shopCart.setCheck(false);
         shopCartMapper.insertSelective(shopCart);
     }
 

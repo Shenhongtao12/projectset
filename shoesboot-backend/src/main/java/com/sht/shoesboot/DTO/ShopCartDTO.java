@@ -22,4 +22,5 @@ public class ShopCartDTO {
 
     private Integer cartId;
     private Integer amount;
+    private Boolean check;
 }

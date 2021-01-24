@@ -46,7 +46,7 @@ public class AdminController extends BaseController {
         }
         JSONObject response = new JSONObject();
         response.put("admin", adminInfo);
-        //response.put("token", JwtUtils.geneJsonWebToken(new User(admin)));
+        response.put("token", JwtUtils.geneJsonWebToken(new User(adminInfo)));
         return ResponseEntity.ok(JsonData.buildSuccess(response, ""));
     }
 
@@ -61,14 +61,13 @@ public class AdminController extends BaseController {
 
     @GetMapping
     public ResponseEntity<JsonData> queryPage(@RequestParam(name = "role", required = false) String role,
-                                                  @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                  @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                   @RequestParam(name = "rows", defaultValue = "10") Integer rows) {
         return ResponseEntity.ok(JsonData.buildSuccess(adminService.queryPage(role, page, rows), ""));
     }
 
     @PutMapping
     public ResponseEntity<JsonData> update(@RequestBody Admin admin) {
-        admin.setPassword(null);
         if (adminService.update(admin)) {
             return ResponseEntity.ok(JsonData.buildSuccess("成功"));
         }

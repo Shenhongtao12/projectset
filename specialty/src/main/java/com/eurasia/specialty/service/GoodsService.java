@@ -57,7 +57,7 @@ public class GoodsService {
         goods.setCreateTime(new Date());
         try {
             Goods info = goodsRepository.findById(goods.getId()).get();
-            JpaUtils.copyNotNullProperties(info, goods);
+            JpaUtils.copyNotNullProperties(goods, info);
             this.goodsRepository.save(goods);
             result.put("code", 0);
             result.put("msg", "成功");
@@ -87,9 +87,9 @@ public class GoodsService {
                     list.add(criteriaBuilder.equal(root.get("status"), status));
                 }
                 if (goodsName != null) {
-                    list.add(criteriaBuilder.equal(root.get("goodsName"), goodsName));
+                    list.add(criteriaBuilder.like(root.get("goodsName"),"%" + goodsName + "%"));
                 }
-                return null;
+                return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }
         };
         Page<Goods> goodsPage = (Page<Goods>) this.goodsRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.DESC,orderBy)));

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -34,4 +35,7 @@ public class ShopCart {
     public Integer userId;
 
     public Date inDate;
+
+    @Column(name = "is_check")
+    public Boolean check;
 }

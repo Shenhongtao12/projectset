@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@MapperScan("com.sht.shoesboot.Mapper")
+@MapperScan("com.sht.shoesboot.mapper")
 public class ShoesbootApplication {
 
     public static void main(String[] args) {

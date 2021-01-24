@@ -30,7 +30,7 @@
                   >
                 </div>
                 <el-button type="text" slot="reference">{{
-                  this.$store.getters.getUser.userName
+                  this.$store.getters.getUser.username
                 }}</el-button>
               </el-popover>
             </li>
@@ -132,9 +132,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { mapGetters } from "vuex";
-
+import { mapActions, mapGetters } from "vuex";
+import { getShopCart } from "@/api/ShopCartService";
 export default {
   beforeUpdate() {
     this.activeIndex = this.$route.path;
@@ -153,18 +152,6 @@ export default {
       // 如果已经登录，设置vuex登录状态
       this.setUser(JSON.parse(localStorage.getItem("user")));
     }
-    /* window.setTimeout(() => {
-      this.$message({
-        duration: 0,
-        showClose: true,
-        message: `
-        <p>如果觉得这个项目还不错，</p>
-        <p style="padding:10px 0">您可以给项目源代码仓库点Star支持一下，谢谢！</p>
-        <p><a href="https://github.com/hai-27/vue-store" target="_blank">Github传送门</a></p>`,
-        dangerouslyUseHTMLString: true,
-        type: "success"
-      });
-    }, 1000 * 60); */
   },
   computed: {
     ...mapGetters(["getUser", "getNum"]),
@@ -177,17 +164,18 @@ export default {
         this.setShoppingCart([]);
       } else {
         // 用户已经登录,获取该用户的购物车信息
-        this.$axios
-          .post("/api/user/shoppingCart/getShoppingCart", {
-            user_id: val.user_id,
-          })
+        let request = {
+          page: 1,
+          size: 10,
+        };
+        getShopCart(request)
           .then((res) => {
-            if (res.data.code === "001") {
+            if (res.code == 200) {
               // 001 为成功, 更新vuex购物车状态
-              this.setShoppingCart(res.data.shoppingCartData);
+              this.setShoppingCart(res.data.data);
             } else {
               // 提示失败信息
-              this.notifyError(res.data.msg);
+              this.notifyError(res.message);
             }
           })
           .catch((err) => {
@@ -207,6 +195,7 @@ export default {
       this.visible = false;
       // 清空本地登录信息
       localStorage.setItem("user", "");
+      localStorage.removeItem("User-Token");
       // 清空vuex登录信息
       this.setUser("");
       this.notifySucceed("成功退出登录");

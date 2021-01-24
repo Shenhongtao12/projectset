@@ -38,6 +38,45 @@
             v-model="RegisterUser.confirmPass"
           ></el-input>
         </el-form-item>
+        <el-form-item
+          label="邮箱"
+          prop="email"
+          :rules="[
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            {
+              type: 'email',
+              message: '请输入正确的邮箱地址',
+              trigger: ['blur', 'change'],
+            },
+          ]"
+        >
+          <el-input v-model="RegisterUser.email" autocomplete="off">
+            <el-button
+              slot="append"
+              style="color: white; background-color: #3c8dbc"
+              v-show="showTime"
+              @click="sendEmail(RegisterUser.email)"
+              >发送验证码</el-button
+            >
+            <el-button
+              slot="append"
+              style="
+                color: white;
+                background-color: #3c8dbc;
+                margin-left: -20px;
+              "
+              v-show="!showTime"
+              >{{ sendTime }}秒</el-button
+            >
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="emailCode">
+          <el-input
+            prefix-icon="el-icon-user-solid"
+            placeholder="请输入验证码"
+            v-model="RegisterUser.code"
+          ></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button
             size="medium"
@@ -52,6 +91,7 @@
   </div>
 </template>
 <script>
+import { sendEmailCode, regist } from "@/api/UserService";
 export default {
   name: "MyRegister",
   props: ["register"],
@@ -64,23 +104,8 @@ export default {
       // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
       const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
       if (userNameRule.test(value)) {
-        //判断数据库中是否已经存在该用户名
-        this.$axios
-          .post("/api/users/findUserName", {
-            userName: this.RegisterUser.name,
-          })
-          .then((res) => {
-            // “001”代表用户名不存在，可以注册
-            if (res.data.code == "001") {
-              this.$refs.ruleForm.validateField("checkPass");
-              return callback();
-            } else {
-              return callback(new Error(res.data.msg));
-            }
-          })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+        this.$refs.ruleForm.validateField("checkPass");
+        return callback();
       } else {
         return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
       }
@@ -114,18 +139,29 @@ export default {
         return callback(new Error("两次输入的密码不一致"));
       }
     };
+    /* let validateEmail = (rule, value, callback) => {
+      if (value === "") {
+        return callback(new Error("请输入邮箱"));
+      }
+    }; */
     return {
       isRegister: false, // 控制注册组件是否显示
       RegisterUser: {
         name: "",
         pass: "",
         confirmPass: "",
+        email: "",
+        code: "",
       },
+      showTime: true /* 布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
+      sendTime: null /* 倒计时 计数器 */,
+      timer: null,
       // 用户信息校验规则,validator(校验方法),trigger(触发方式),blur为在组件 Input 失去焦点时触发
       rules: {
         name: [{ validator: validateName, trigger: "blur" }],
         pass: [{ validator: validatePass, trigger: "blur" }],
         confirmPass: [{ validator: validateConfirmPass, trigger: "blur" }],
+        // email: [{ validator: validateEmail, trigger: "blur" }],
       },
     };
   },
@@ -145,26 +181,59 @@ export default {
     },
   },
   methods: {
+    sendEmail(email) {
+      this.$refs["ruleForm"].validate((valid) => {
+        if (valid) {
+          let request = {
+            email: email,
+            newUser: 0,
+          };
+          sendEmailCode(request).then((res) => {
+            if (res.code == 200) {
+              const TIME_COUNT = 90; //  更改倒计时时间
+              this.notifySucceed(res.message);
+              if (!this.timer) {
+                this.sendTime = TIME_COUNT;
+                this.showTime = false;
+                this.timer = setInterval(() => {
+                  if (this.sendTime > 0 && this.sendTime <= TIME_COUNT) {
+                    this.sendTime--;
+                  } else {
+                    this.showTime = true;
+                    clearInterval(this.timer); // 清除定时器
+                    this.timer = null;
+                  }
+                }, 1000);
+              }
+            } else {
+              this.notifyError(res.message);
+            }
+          });
+        }
+      });
+    },
     Register() {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
       this.$refs["ruleForm"].validate((valid) => {
         //如果通过校验开始注册
         if (valid) {
-          this.$axios
-            .post("/api/users/register", {
-              userName: this.RegisterUser.name,
-              password: this.RegisterUser.pass,
-            })
+          let request = {
+            username: this.RegisterUser.name,
+            password: this.RegisterUser.pass,
+            email: this.RegisterUser.email,
+            emailCode: this.RegisterUser.code,
+          };
+          regist(request)
             .then((res) => {
               // “001”代表注册成功，其他的均为失败
-              if (res.data.code === "001") {
+              if (res.code == 200) {
                 // 隐藏注册组件
                 this.isRegister = false;
                 // 弹出通知框提示注册成功信息
-                this.notifySucceed(res.data.msg);
+                this.notifySucceed(res.msg);
               } else {
                 // 弹出通知框提示注册失败信息
-                this.notifyError(res.data.msg);
+                this.notifyError(res.msg);
               }
             })
             .catch((err) => {
