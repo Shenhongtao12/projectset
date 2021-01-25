@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,21 +28,26 @@ public class OrderController extends BaseController{
     private GoodsService goodsService;
 
     @PostMapping
-    public ResponseEntity<RestResponse> createOrder(@Valid @RequestBody Order order) {
-        Map<String, Object> goods = goodsService.findById(order.getId());
-        double sumPrice = Double.parseDouble(goods.get("price").toString()) * order.getAmount();
-        if (!order.getMoney().equals(new BigDecimal(sumPrice).setScale(2, BigDecimal.ROUND_CEILING))){
-            return ResponseEntity.badRequest().body(ERROR("金额计算错误"));
+    public ResponseEntity<List<RestResponse>> createOrder(@Valid @RequestBody List<Order> orderList) {
+        List<RestResponse> responses = new ArrayList<>();
+        for (Order order : orderList) {
+            Map<String, Object> goods = goodsService.findById(order.getGoodsId());
+            double sumPrice = Double.parseDouble(goods.get("price").toString()) * order.getAmount();
+            /*if (order.getMoney().equals(new BigDecimal(sumPrice).setScale(2, BigDecimal.ROUND_CEILING))){
+                responses.add(ERROR("金额计算错误"));
+                continue;
+            }*/
+            order.setMoney(new BigDecimal(sumPrice).setScale(2, BigDecimal.ROUND_CEILING));
+            order.setUserId(userId);
+            RestResponse response = orderService.createOrder(order);
+            responses.add(response);
         }
-        RestResponse response = orderService.createOrder(order);
-        if (response.getCode() != 200) {
-            return ResponseEntity.badRequest().body(response);
-        }
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping
-    public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", required = false) String status,
+    public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", required = false, defaultValue = "0") String status,
+                                                  @RequestParam(name = "userId", required = false, defaultValue = "0") Integer userId,
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(name = "size", defaultValue = "20") Integer size) {
         return ResponseEntity.ok(SUCCESS(orderService.queryPage(status, userId, page, size)));

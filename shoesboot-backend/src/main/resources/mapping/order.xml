@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
+
+   <select id="queryPage" parameterType="string" resultType="com.sht.shoesboot.DTO.OrderDTO">
+       SELECT g.id AS goodsId,g.title AS title,g.images AS images,g.price AS price, o.id AS orderId,o.order_number AS orderNumber,o.status AS status,o.amount AS amount,o.money AS money,o.in_date AS inDate
+       FROM `order` o
+       INNER JOIN goods g
+       ON o.goods_id = g.id
+    <where>
+           <if test="status != '0'"> status = #{status} </if>
+           <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
+    </where>
+   </select>
+
+</mapper>

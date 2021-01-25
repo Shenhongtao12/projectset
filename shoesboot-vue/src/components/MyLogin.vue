@@ -7,7 +7,7 @@
  -->
 <template>
   <div id="myLogin">
-    <el-dialog title="登录" width="300px" center :visible.sync="isLogin">
+    <el-dialog title="登录" width="25%" center :visible.sync="isLogin">
       <el-form
         :model="LoginUser"
         :rules="rules"
@@ -127,7 +127,7 @@ export default {
                 // 登录信息存到vuex
                 this.setUser(res.data.user);
                 // 弹出通知框提示登录成功信息
-                this.notifySucceed(res.message);
+                this.notifySucceed("登录成功");
               } else {
                 // 清空输入框的校验状态
                 this.$refs["ruleForm"].resetFields();

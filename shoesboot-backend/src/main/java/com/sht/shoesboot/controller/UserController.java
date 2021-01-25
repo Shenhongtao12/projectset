@@ -42,10 +42,10 @@ public class UserController extends BaseController {
                 redisService.deleteData("shoes-" + register.getEmail());
                 return ResponseEntity.ok(SUCCESS("注册成功"));
             } else {
-                return ResponseEntity.badRequest().body(ERROR(400,"邮箱验证码错误"));
+                return ResponseEntity.ok().body(ERROR(400,"邮箱验证码错误"));
             }
         } else {
-            return ResponseEntity.badRequest().body(ERROR(400,"请发送邮箱验证码"));
+            return ResponseEntity.ok().body(ERROR(400,"请发送邮箱验证码"));
         }
     }
 
@@ -59,7 +59,7 @@ public class UserController extends BaseController {
         if ("1".equals(newUser) || "0".equals(newUser)) {
             return ResponseEntity.ok(userService.sendEmailCode(email, newUser));
         }
-        return ResponseEntity.badRequest().body(ERROR("请求错误"));
+        return ResponseEntity.ok().body(ERROR("请求错误"));
     }
 
     @GetMapping("email-login")
@@ -67,7 +67,7 @@ public class UserController extends BaseController {
                                               @RequestParam(name = "code") String code) {
         String redisCode = redisService.getData("shoes-" + email);
         if (!StringUtils.equals(code, redisCode)) {
-            return ResponseEntity.badRequest().body(ERROR(400, "验证码错误"));
+            return ResponseEntity.ok().body(ERROR(400, "验证码错误"));
         }
         User user = userService.queryUserByEmail(email);
         JSONObject response = new JSONObject();
@@ -82,7 +82,7 @@ public class UserController extends BaseController {
                                               @Validated @NotBlank(message = "密码不能为空") @RequestParam(name = "password") String password) {
         JSONObject login = userService.login(username, password);
         if (login == null) {
-            return ResponseEntity.badRequest().body(ERROR(400, "用户名或密码错误"));
+            return ResponseEntity.ok().body(ERROR(400, "用户名或密码错误"));
         }
         return ResponseEntity.ok(SUCCESS(login, "success"));
     }
@@ -94,7 +94,7 @@ public class UserController extends BaseController {
         if (userService.update(user)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR("更新失败"));
+        return ResponseEntity.ok().body(ERROR("更新失败"));
     }
 
     @PutMapping("updatePas")
@@ -103,7 +103,7 @@ public class UserController extends BaseController {
         if (userService.updatePassword(userId, oldPassword, password)) {
             return ResponseEntity.ok(SUCCESS("修改成功，请重新登录"));
         }
-        return ResponseEntity.badRequest().body(ERROR("修改失败，请重试"));
+        return ResponseEntity.ok().body(ERROR("修改失败，请重试"));
     }
 
     @GetMapping("userPage")

@@ -36,10 +36,10 @@ public class ShopCartController extends BaseController{
                 return ResponseEntity.ok(SUCCESS(Integer.valueOf(inventory), "成功"));
             }
             else {
-                return ResponseEntity.badRequest().body(ERROR(400, "库存不足"));
+                return ResponseEntity.ok().body(ERROR(400, "库存不足"));
             }
         }
-        return ResponseEntity.badRequest().body(ERROR(400, "该商品已下架"));
+        return ResponseEntity.ok().body(ERROR(400, "该商品已下架"));
     }
 
     @GetMapping
@@ -53,6 +53,6 @@ public class ShopCartController extends BaseController{
         if (shopCartService.delete(id)) {
             return ResponseEntity.ok(SUCCESS("删除成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR("删除失败,不存在id: "+ id +"的数据"));
+        return ResponseEntity.ok().body(ERROR("删除失败,不存在id: "+ id +"的数据"));
     }
 }

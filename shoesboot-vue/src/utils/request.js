@@ -31,7 +31,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (res) => {
     // 未设置状态码则默认成功状态
-    const code = res.data.code || 200;
+    const code = res.code || 200;
     // 获取错误信息
     const msg = errorCode[code] || res.data.msg || errorCode["default"];
     if (code === 401) {

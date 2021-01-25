@@ -36,4 +36,13 @@ public class CarouselService {
     public List<Carousel> findAll(){
         return carouselRepository.findAll();
     }
+
+    public JsonData delete(Integer id) {
+        try {
+            carouselRepository.deleteById(id);
+            return JsonData.buildSuccess("删除成功");
+        } catch (Exception e) {
+            return JsonData.buildSuccess("删除失败");
+        }
+    }
 }

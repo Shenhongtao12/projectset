@@ -58,7 +58,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity<RestResponse> queryById(@PathVariable(value = "id") Integer id) {
         Map<String, Object> byId = goodsService.findById(id);
         if (byId == null) {
-            return ResponseEntity.badRequest().body(ERROR(404, "不存在"));
+            return ResponseEntity.ok().body(ERROR(404, "不存在"));
         }
         return ResponseEntity.ok().body(SUCCESS(byId));
     }
@@ -85,9 +85,9 @@ public class GoodsController extends BaseController {
                 }
                 return ResponseEntity.ok().body(SUCCESS("更新成功"));
             }
-            return ResponseEntity.badRequest().body(ERROR(400, "更新失败"));
+            return ResponseEntity.ok().body(ERROR(400, "更新失败"));
         }
-        return ResponseEntity.badRequest().body(ERROR(400, "该商品不存在"));
+        return ResponseEntity.ok().body(ERROR(400, "该商品不存在"));
     }
 
     @DeleteMapping("delete")
@@ -98,7 +98,7 @@ public class GoodsController extends BaseController {
             goodsService.delete(id);
             return ResponseEntity.ok().body(SUCCESS("删除成功"));
         } else {
-            return ResponseEntity.badRequest().body(ERROR(400, "该商品不存在"));
+            return ResponseEntity.ok().body(ERROR(400, "该商品不存在"));
         }
     }
 }

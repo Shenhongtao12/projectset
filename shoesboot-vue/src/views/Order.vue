@@ -101,6 +101,7 @@
   </div>
 </template>
 <script>
+import { getOrderList } from "@/api/OrderService";
 export default {
   data() {
     return {
@@ -110,15 +111,17 @@ export default {
   },
   activated() {
     // 获取订单数据
-    this.$axios
-      .post("/api/user/order/getOrder", {
-        user_id: this.$store.getters.getUser.user_id,
-      })
+    let request = {
+      userId: this.$store.getters.getUser.id,
+      page: 1,
+      rows: 10,
+    };
+    getOrderList(request)
       .then((res) => {
-        if (res.data.code === "001") {
-          this.orders = res.data.orders;
+        if (res.code == 200) {
+          this.orders = res.data.data;
         } else {
-          this.notifyError(res.data.msg);
+          this.notifyError(res.message);
         }
       })
       .catch((err) => {

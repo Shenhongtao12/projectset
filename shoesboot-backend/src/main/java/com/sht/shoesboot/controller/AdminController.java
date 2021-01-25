@@ -31,7 +31,7 @@ public class AdminController extends BaseController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ERROR("您无权限添加管理员"));
         }
         if (!adminService.add(admin)) {
-            return ResponseEntity.badRequest().body(ERROR("数据异常"));
+            return ResponseEntity.ok().body(ERROR("数据异常"));
         }
         return ResponseEntity.ok(SUCCESS(""));
     }
@@ -40,7 +40,7 @@ public class AdminController extends BaseController {
     public ResponseEntity<RestResponse> login(@RequestBody Admin admin) {
         Admin adminInfo = adminService.login(admin);
         if (adminInfo == null) {
-            return ResponseEntity.badRequest().body(ERROR("用户名或密码错误"));
+            return ResponseEntity.ok().body(ERROR("用户名或密码错误"));
         }
         JSONObject response = new JSONObject();
         response.put("admin", adminInfo);
@@ -54,7 +54,7 @@ public class AdminController extends BaseController {
         if (adminService.updatePassword(userId, oldPassword, password)) {
             return ResponseEntity.ok(SUCCESS("修改成功，请重新登录"));
         }
-        return ResponseEntity.badRequest().body(ERROR("密码错误，修改失败"));
+        return ResponseEntity.ok().body(ERROR("密码错误，修改失败"));
     }
 
     @GetMapping
@@ -70,7 +70,7 @@ public class AdminController extends BaseController {
         if (adminService.update(admin)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR(400,"更新失败"));
+        return ResponseEntity.ok().body(ERROR(400,"更新失败"));
     }
 
     @DeleteMapping
@@ -78,7 +78,7 @@ public class AdminController extends BaseController {
         if (adminService.delete(id)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR(400,"删除失败"));
+        return ResponseEntity.ok().body(ERROR(400,"删除失败"));
     }
 
 }

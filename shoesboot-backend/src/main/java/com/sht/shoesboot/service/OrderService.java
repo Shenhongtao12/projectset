@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Aaron
@@ -67,7 +68,8 @@ public class OrderService {
 
     public PageResult<OrderDTO> queryPage(String status, Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        Page<OrderDTO> dtoPage = (Page<OrderDTO>) orderMapper.queryPage(status, userId);
+        List<OrderDTO> dtoList = orderMapper.queryPage(status, userId);
+        Page<OrderDTO> dtoPage = (Page<OrderDTO>) dtoList;
         return new PageResult<>(dtoPage.getTotal(), dtoPage.getPages(), dtoPage.getResult());
     }
 }

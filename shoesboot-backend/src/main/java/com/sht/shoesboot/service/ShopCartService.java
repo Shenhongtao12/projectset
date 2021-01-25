@@ -41,6 +41,9 @@ public class ShopCartService {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    @Autowired
+    private RedisService redisService;
+
     public void update(ShopCart shopCart) {
         shopCartMapper.updateByPrimaryKeySelective(shopCart);
     }
@@ -65,11 +68,12 @@ public class ShopCartService {
                     Goods goods = new Goods();
                     if (respons.getResponse().isExists()) {
                         goods = JSON.parseObject(JSON.toJSONString(respons.getResponse().getSource()), Goods.class);
-                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), map.get(goods.getId()).getCheck()));
+                        String inventory = redisService.getData("shoes_goods_" + goods.getId());
+                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), Integer.parseInt(inventory), map.get(goods.getId()).getCheck()));
                     } else {
                         // flag = true;
                         goods = favoriteService.queryGoods(Integer.valueOf(respons.getResponse().getId()));
-                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), map.get(goods.getId()).getCheck()));
+                        shopCartDto.add(new ShopCartDTO(goods.getId(), goods.getTitle(), goods.getImages(), goods.getPrice(), map.get(goods.getId()).getId(),  map.get(goods.getId()).getAmount(), goods.getInventory() != null ? goods.getInventory() : 0, map.get(goods.getId()).getCheck()));
                     }
                 }
             } catch (IOException e) {

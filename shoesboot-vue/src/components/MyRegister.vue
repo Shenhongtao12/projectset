@@ -7,7 +7,7 @@
  -->
 <template>
   <div id="register">
-    <el-dialog title="注册" width="300px" center :visible.sync="isRegister">
+    <el-dialog title="注册" width="25%" center :visible.sync="isRegister">
       <el-form
         :model="RegisterUser"
         :rules="rules"
@@ -37,6 +37,14 @@
             placeholder="请再次输入密码"
             v-model="RegisterUser.confirmPass"
           ></el-input>
+        </el-form-item>
+        <el-form-item label="是否注册为会员: " prop="vip">
+          <el-switch
+            v-model="RegisterUser.vip"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
         </el-form-item>
         <el-form-item
           label="邮箱"
@@ -72,7 +80,7 @@
         </el-form-item>
         <el-form-item prop="emailCode">
           <el-input
-            prefix-icon="el-icon-user-solid"
+            prefix-icon="el-icon-bangzhu"
             placeholder="请输入验证码"
             v-model="RegisterUser.code"
           ></el-input>
@@ -152,6 +160,7 @@ export default {
         confirmPass: "",
         email: "",
         code: "",
+        vip: true,
       },
       showTime: true /* 布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
       sendTime: null /* 倒计时 计数器 */,

@@ -49,7 +49,7 @@
           <div class="pro-check">
             <el-checkbox
               :value="item.check"
-              @change="checkChange($event, index)"
+              @change="checkChange($event, index, item)"
             ></el-checkbox>
           </div>
           <div class="pro-img">
@@ -84,9 +84,9 @@
             <el-input-number
               size="small"
               :value="item.amount"
-              @change="handleChange($event, index, item.productID)"
+              @change="handleChange($event, index, item, true)"
               :min="1"
-              :max="item.maxNum"
+              :max="item.inventory"
             ></el-input-number>
           </div>
           <div class="pro-total pro-total-in">
@@ -99,7 +99,7 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  @click="deleteItem($event, item.id, item.productID)"
+                  @click="deleteItem($event, item.cartId)"
                   >确定</el-button
                 >
               </div>
@@ -157,7 +157,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import { deleteShopCart, putShopCart } from "@/api/ShopCartService";
 export default {
   data() {
     return {};
@@ -165,61 +165,53 @@ export default {
   methods: {
     ...mapActions(["updateShoppingCart", "deleteShoppingCart", "checkAll"]),
     // 修改商品数量的时候调用该函数
-    handleChange(currentValue, key, productID) {
+    handleChange(currentValue, key, item, isCheck) {
       // 当修改数量时，默认勾选
-      this.updateShoppingCart({ key: key, prop: "check", val: true });
+      this.updateShoppingCart({ key: key, prop: "check", val: request.check });
       // 向后端发起更新购物车的数据库信息请求
-      this.$axios
-        .post("/api/user/shoppingCart/updateShoppingCart", {
-          user_id: this.$store.getters.getUser.user_id,
-          product_id: productID,
-          num: currentValue,
-        })
+      let request = {
+        id: item.cartId,
+        goodsId: item.goodsId,
+        amount: currentValue,
+        check: isCheck,
+      };
+      putShopCart(request)
         .then((res) => {
-          switch (res.data.code) {
-            case "001":
-              // “001”代表更新成功
-              // 更新vuex状态
-              this.updateShoppingCart({
-                key: key,
-                prop: "num",
-                val: currentValue,
-              });
-              // 提示更新成功信息
-              this.notifySucceed(res.data.msg);
-              break;
-            default:
-              // 提示更新失败信息
-              this.notifyError(res.data.msg);
+          if (res.code == 200) {
+            // 更新vuex状态
+            this.updateShoppingCart({
+              key: key,
+              prop: "amount",
+              val: currentValue,
+            });
+          } else {
+            // 提示更新失败信息
+            this.notifyError(res.message);
           }
         })
         .catch((err) => {
           return Promise.reject(err);
         });
     },
-    checkChange(val, key) {
+    checkChange(val, key, item) {
       // 更新vuex中购物车商品是否勾选的状态
-      this.updateShoppingCart({ key: key, prop: "check", val: val });
+      this.handleChange(item.amount, key, item, val);
     },
     // 向后端发起删除购物车的数据库信息请求
-    deleteItem(e, id, productID) {
-      this.$axios
-        .post("/api/user/shoppingCart/deleteShoppingCart", {
-          user_id: this.$store.getters.getUser.user_id,
-          product_id: productID,
-        })
+    deleteItem(e, id) {
+      let request = {
+        id: id,
+      };
+      deleteShopCart(request)
         .then((res) => {
-          switch (res.data.code) {
-            case "001":
-              // “001” 删除成功
-              // 更新vuex状态
-              this.deleteShoppingCart(id);
-              // 提示删除成功信息
-              this.notifySucceed(res.data.msg);
-              break;
-            default:
-              // 提示删除失败信息
-              this.notifyError(res.data.msg);
+          if (res.code == 200) {
+            // 更新vuex状态
+            this.deleteShoppingCart(id);
+            // 提示删除成功信息
+            this.notifySucceed("删除成功");
+          } else {
+            // 提示删除失败信息
+            this.notifyError(res.message);
           }
         })
         .catch((err) => {

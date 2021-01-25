@@ -49,12 +49,23 @@
         <p class="title">商品及优惠券</p>
         <div class="goods-list">
           <ul>
-            <li v-for="item in getCheckGoods" :key="item.id">
-              <img :src="$target + item.productImg" />
-              <span class="pro-name">{{ item.productName }}</span>
-              <span class="pro-price">{{ item.price }}元 x {{ item.num }}</span>
+            <li v-for="item in getCheckGoods" :key="item.goodsId">
+              <img :src="item.image" />
+              <el-tooltip
+                class="item"
+                effect="light"
+                :content="item.title"
+                placement="top"
+              >
+                <span class="pro-name">
+                  {{ item.title }}
+                </span>
+              </el-tooltip>
+              <span class="pro-price"
+                >{{ item.price }}元 x {{ item.amount }}</span
+              >
               <span class="pro-status"></span>
-              <span class="pro-total">{{ item.price * item.num }}元</span>
+              <span class="pro-total">{{ item.price * item.amount }}元</span>
             </li>
           </ul>
         </div>
@@ -133,8 +144,8 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { createOrder } from "@/api/OrderService";
 export default {
   name: "",
   data() {
@@ -145,15 +156,15 @@ export default {
       address: [
         {
           id: 1,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 广州市 白云区 江高镇 广东白云学院",
+          name: "沈同学",
+          phone: "15188888888",
+          address: "陕西省 西安市 雁塔区 太白南路 ****",
         },
         {
           id: 2,
-          name: "陈同学",
-          phone: "13580018623",
-          address: "广东 茂名市 化州市 杨梅镇 ***",
+          name: "沈同学",
+          phone: "15188888888",
+          address: "陕西省 西安市 雁塔区 太白南路 ****",
         },
       ],
     };
@@ -172,11 +183,13 @@ export default {
   methods: {
     ...mapActions(["deleteShoppingCart"]),
     addOrder() {
-      this.$axios
-        .post("/api/user/order/addOrder", {
-          user_id: this.$store.getters.getUser.user_id,
-          products: this.getCheckGoods,
-        })
+      console.log(this.getCheckGoods);
+      let request = this.getCheckGoods;
+      request.forEach((item) => {
+        item.money = item.price * item.amount;
+      });
+      console.log(request);
+      createOrder(this.request)
         .then((res) => {
           let products = this.getCheckGoods;
           switch (res.data.code) {
@@ -323,6 +336,9 @@ export default {
   float: left;
   width: 650px;
   line-height: 30px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .confirmOrder .content .section-goods .goods-list li .pro-price {
   float: left;

@@ -37,4 +37,9 @@ public class CarouselController {
         return ResponseEntity.status(HttpStatus.OK).body(JsonData.buildSuccess(carouselService.findAll(), ""));
     }
 
+    @DeleteMapping
+    public ResponseEntity<JsonData> delete(@RequestParam(name = "id") Integer id){
+        return ResponseEntity.status(HttpStatus.OK).body(carouselService.delete(id));
+    }
+
 }

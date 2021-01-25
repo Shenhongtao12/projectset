@@ -171,7 +171,7 @@ export default {
         getShopCart(request)
           .then((res) => {
             if (res.code == 200) {
-              // 001 为成功, 更新vuex购物车状态
+              //成功, 更新vuex购物车状态
               this.setShoppingCart(res.data.data);
             } else {
               // 提示失败信息

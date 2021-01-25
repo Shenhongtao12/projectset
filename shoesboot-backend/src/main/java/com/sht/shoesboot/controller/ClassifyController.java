@@ -25,7 +25,7 @@ public class ClassifyController extends BaseController{
         if (classifyService.save(classify)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR(400, "该分类已存在"));
+        return ResponseEntity.ok().body(ERROR(400, "该分类已存在"));
     }
 
     @GetMapping
@@ -39,7 +39,7 @@ public class ClassifyController extends BaseController{
         if (classifyService.update(classify)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }
-        return ResponseEntity.badRequest().body(ERROR(400, "该分类不存在"));
+        return ResponseEntity.ok().body(ERROR(400, "该分类不存在"));
     }
 
     @DeleteMapping
