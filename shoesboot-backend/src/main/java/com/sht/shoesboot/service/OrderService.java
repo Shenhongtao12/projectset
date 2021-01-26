@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.DTO.OrderDTO;
 import com.sht.shoesboot.entity.Order;
+import com.sht.shoesboot.entity.OrderGoods;
 import com.sht.shoesboot.entity.PageResult;
 import com.sht.shoesboot.mapper.GoodsMapper;
 import com.sht.shoesboot.mapper.OrderMapper;
@@ -40,36 +41,51 @@ public class OrderService {
 
     @Transactional
     public synchronized RestResponse createOrder(Order order) {
-        String inventory = redisService.getData("shoes_goods_" + order.getGoodsId());
-        if (StringUtils.isNotEmpty(inventory)) {
-            if (Integer.parseInt(inventory) >= order.getAmount()) {
-                order.setOrderNumber(OrderNumber.createOrderNumber());
-                order.setInDate(new Date());
-                try {
-                    orderMapper.insertSelective(order);
-                } catch (Exception e) {
-                    return new RestResponse(400, "创建订单失败,请重试");
+        for (OrderGoods orderGoods : order.getOrderGoodsList()) {
+            String inventory = redisService.getData("shoes_goods_" + orderGoods.getGoodsId());
+            if (StringUtils.isNotEmpty(inventory)) {
+                if (Integer.parseInt(inventory) >= orderGoods.getAmount()) {
+                    //删除购物车
+                    if (order.getCartId() != null && order.getCartId() != 0) {
+                        shopCartMapper.deleteByPrimaryKey(order.getCartId());
+                    }
+                    //更新redis库存
+                    redisService.setData("shoes_goods_" + orderGoods.getGoodsId(), (Integer.parseInt(inventory) - orderGoods.getAmount()) + "");
+                    //更新数据库库存
+                    goodsMapper.updateInventory(orderGoods.getGoodsId(), orderGoods.getAmount());
+                } else {
+                    return new RestResponse(400, orderGoods.getTitle() + "，库存不足");
                 }
-                //删除购物车
-                if (order.getCartId() != null && order.getCartId() != 0) {
-                    shopCartMapper.deleteByPrimaryKey(order.getCartId());
-                }
-                //更新redis库存
-                redisService.setData("shoes_goods_" + order.getGoodsId(), (Integer.parseInt(inventory) - order.getAmount()) + "");
-                //更新数据库库存
-                goodsMapper.updateInventory(order.getGoodsId(), order.getAmount());
-                return new RestResponse(200, "成功");
-            } else {
-                return new RestResponse(400, "库存不足");
+            }else {
+                return new RestResponse(400, orderGoods.getTitle() + "该商品已下架");
             }
         }
-        return new RestResponse(400, "该商品已下架");
+        try {
+            order.setOrderNumber(OrderNumber.createOrderNumber());
+            order.setInDate(new Date());
+            orderMapper.insertSelective(order);
+            order.getOrderGoodsList().forEach(item -> item.setOrderId(order.getId()));
+            orderMapper.batchInsert(order.getOrderGoodsList());
+            return new RestResponse(200, "下单成功");
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new RestResponse(400, "创建订单失败,请重试");
+        }
     }
 
-    public PageResult<OrderDTO> queryPage(String status, Integer userId, Integer page, Integer size) {
+    public PageResult<Order> queryPage(String status, Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        List<OrderDTO> dtoList = orderMapper.queryPage(status, userId);
-        Page<OrderDTO> dtoPage = (Page<OrderDTO>) dtoList;
+        List<Order> dtoList = orderMapper.queryPage(status, userId);
+        Page<Order> dtoPage = (Page<Order>) dtoList;
         return new PageResult<>(dtoPage.getTotal(), dtoPage.getPages(), dtoPage.getResult());
+    }
+
+    public boolean delete(Integer id) {
+        try {
+            orderMapper.deleteByPrimaryKey(id);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 }

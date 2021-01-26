@@ -6,34 +6,27 @@ import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Aaron
- * @date 2020/12/29 22:23
+ * @date 2021/1/26 21:35
  */
+@Table(name = "order_goods")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Order{
+public class OrderGoods {
 
     @Id
     @KeySql(useGeneratedKeys = true)
     private Integer id;
 
-    private BigDecimal money;
-
-    private String orderNumber;
-
-    private Integer cartId;
-
-    private String status;
-
-    private Integer userId;
-
-    private Date inDate;
-
-    private List<OrderGoods> orderGoodsList;
+    private Integer orderId;
+    private Integer goodsId;
+    private String title;
+    private BigDecimal price;
+    private Integer amount;
+    private String images;
 }

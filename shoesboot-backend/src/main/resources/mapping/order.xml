@@ -4,15 +4,41 @@
 
 <mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
 
-   <select id="queryPage" parameterType="string" resultType="com.sht.shoesboot.DTO.OrderDTO">
-       SELECT g.id AS goodsId,g.title AS title,g.images AS images,g.price AS price, o.id AS orderId,o.order_number AS orderNumber,o.status AS status,o.amount AS amount,o.money AS money,o.in_date AS inDate
-       FROM `order` o
-       INNER JOIN goods g
-       ON o.goods_id = g.id
-    <where>
-           <if test="status != '0'"> status = #{status} </if>
-           <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
-    </where>
-   </select>
+    <select id="queryPage" parameterType="string" resultType="com.sht.shoesboot.entity.Order">
+        SELECT g.goods_id AS goodsId,g.title AS title,g.images AS images,g.price AS price, o.id AS orderId,o.order_number AS orderNumber,o.status AS status,o.amount AS amount,o.money AS money,o.in_date AS inDate
+        FROM `order` o
+        INNER JOIN order_goods g
+        ON o.id= g.order_id
+        <where>
+            <if test="status != '0'"> status = #{status} </if>
+            <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
+        </where>
+    </select>
 
+    <insert id="batchInsert">
+        INSERT INTO order_goods (orderId, goodsId, title, price, amount, images)
+        VALUES
+        <foreach collection="orderGoodsList" item="order" separator=",">
+            (#{order.orderId}, #{order.goodsId}, #{order.title}, #{order.price}, #{order.amount}, #{order.images})
+        </foreach>
+    </insert>
+
+    <resultMap id="orderInfo" type="com.sht.shoesboot.entity.Order">
+        <id column="id" jdbcType="INTEGER" property="id"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="in_date" property="inDate"></result>
+        <result column="money" property="money"></result>
+        <result column="order_number" property="orderNumber"></result>
+        <result column="cart_d" property="cartId"></result>
+        <result column="status" property="status"></result>
+        <collection property="orderGoodsList" ofType="com.sht.shoesboot.entity.OrderGoods">
+            <id column="id" property="id"></id>
+            <result column="order_id" property="orderId"></result>
+            <result column="goods_id" property="goodsId"></result>
+            <result column="title" property="title"></result>
+            <result column="price" property="price"></result>
+            <result column="amount" property="amount"></result>
+            <result column="images" property="images"></result>
+        </collection>
+    </resultMap>
 </mapper>

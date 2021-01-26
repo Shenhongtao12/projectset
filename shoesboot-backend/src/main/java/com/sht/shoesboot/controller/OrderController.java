@@ -24,25 +24,11 @@ public class OrderController extends BaseController{
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private GoodsService goodsService;
 
     @PostMapping
-    public ResponseEntity<List<RestResponse>> createOrder(@Valid @RequestBody List<Order> orderList) {
-        List<RestResponse> responses = new ArrayList<>();
-        for (Order order : orderList) {
-            Map<String, Object> goods = goodsService.findById(order.getGoodsId());
-            double sumPrice = Double.parseDouble(goods.get("price").toString()) * order.getAmount();
-            /*if (order.getMoney().equals(new BigDecimal(sumPrice).setScale(2, BigDecimal.ROUND_CEILING))){
-                responses.add(ERROR("金额计算错误"));
-                continue;
-            }*/
-            order.setMoney(new BigDecimal(sumPrice).setScale(2, BigDecimal.ROUND_CEILING));
-            order.setUserId(userId);
-            RestResponse response = orderService.createOrder(order);
-            responses.add(response);
-        }
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<RestResponse> createOrder(@Valid @RequestBody Order order) {
+        order.setUserId(userId);
+        return ResponseEntity.ok(orderService.createOrder(order));
     }
 
     @GetMapping
@@ -51,5 +37,14 @@ public class OrderController extends BaseController{
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(name = "size", defaultValue = "20") Integer size) {
         return ResponseEntity.ok(SUCCESS(orderService.queryPage(status, userId, page, size)));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
+        if (orderService.delete(id)) {
+            return ResponseEntity.ok(SUCCESS("删除成功"));
+        }else {
+            return ResponseEntity.ok(ERROR("删除失败"));
+        }
     }
 }

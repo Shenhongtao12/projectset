@@ -2,6 +2,7 @@ package com.sht.shoesboot.mapper;
 
 import com.sht.shoesboot.DTO.OrderDTO;
 import com.sht.shoesboot.entity.Order;
+import com.sht.shoesboot.entity.OrderGoods;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
@@ -30,15 +31,11 @@ public interface OrderMapper extends Mapper<Order> {
      * @param user_id user id
      * @return list
      */
-    /*@Select("<script> " +
-            "SELECT g.id AS goodsId,g.title AS title,g.images AS images,g.price AS price, o.id AS orderId,o.order_number AS orderNumber,o.status AS status,o.amount AS amount,o.money AS money,o.in_date AS inDate\n" +
-            "FROM `order` o INNER JOIN goods g\n" +
-            "ON o.goods_id = g.id\n" +
-            " <where> " +
-            " <if test=\"status != '0'\"> status = #{status} </if> \n" +
-            " <if test=\"user_id != 0\"> AND o.user_id = #{user_id} </if>\n" +
-            " </where> \n" +
-            " </script> ")*/
+    List<Order> queryPage(String status, Integer user_id);
 
-    List<OrderDTO> queryPage(String status, Integer user_id);
+    /**
+     * 批量插入
+     * @param orderGoodsList
+     */
+    void batchInsert(List<OrderGoods> orderGoodsList);
 }
