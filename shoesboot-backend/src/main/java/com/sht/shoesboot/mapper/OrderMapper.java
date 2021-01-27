@@ -3,10 +3,7 @@ package com.sht.shoesboot.mapper;
 import com.sht.shoesboot.DTO.OrderDTO;
 import com.sht.shoesboot.entity.Order;
 import com.sht.shoesboot.entity.OrderGoods;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -37,5 +34,5 @@ public interface OrderMapper extends Mapper<Order> {
      * 批量插入
      * @param orderGoodsList
      */
-    void batchInsert(List<OrderGoods> orderGoodsList);
+    void batchInsert(@Param("orderGoodsList") List<OrderGoods> orderGoodsList);
 }

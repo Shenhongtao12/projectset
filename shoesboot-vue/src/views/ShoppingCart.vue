@@ -167,7 +167,7 @@ export default {
     // 修改商品数量的时候调用该函数
     handleChange(currentValue, key, item, isCheck) {
       // 当修改数量时，默认勾选
-      this.updateShoppingCart({ key: key, prop: "check", val: request.check });
+      this.updateShoppingCart({ key: key, prop: "check", val: isCheck });
       // 向后端发起更新购物车的数据库信息请求
       let request = {
         id: item.cartId,
@@ -177,7 +177,7 @@ export default {
       };
       putShopCart(request)
         .then((res) => {
-          if (res.code == 200) {
+          if (res.code === 200) {
             // 更新vuex状态
             this.updateShoppingCart({
               key: key,

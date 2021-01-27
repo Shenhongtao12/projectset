@@ -52,6 +52,7 @@ public class User {
         this.username = register.getUsername();
         this.password = register.getPassword();
         this.email = register.getEmail();
+        this.vip = register.getVip();
     }
 
     public User(Admin admin) {

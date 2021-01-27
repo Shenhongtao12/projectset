@@ -167,7 +167,7 @@ export default {
       }
       this.$axios
         .post("/api/user/shoppingCart/addShoppingCart", {
-          user_id: this.$store.getters.getUser.user_id,
+          user_id: this.$store.getters.getUser.id,
           product_id: this.productID,
         })
         .then((res) => {
@@ -203,7 +203,7 @@ export default {
       }
       this.$axios
         .post("/api/user/collect/addCollect", {
-          user_id: this.$store.getters.getUser.user_id,
+          user_id: this.$store.getters.getUser.id,
           product_id: this.productID,
         })
         .then((res) => {

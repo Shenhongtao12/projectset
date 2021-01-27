@@ -27,12 +27,15 @@ public class OrderController extends BaseController{
 
     @PostMapping
     public ResponseEntity<RestResponse> createOrder(@Valid @RequestBody Order order) {
-        order.setUserId(userId);
+        System.out.println("userID: " + userId);
+        if (userId != null) {
+            order.setUserId(userId);
+        }
         return ResponseEntity.ok(orderService.createOrder(order));
     }
 
     @GetMapping
-    public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", required = false, defaultValue = "0") String status,
+    public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", required = false) String status,
                                                   @RequestParam(name = "userId", required = false, defaultValue = "0") Integer userId,
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(name = "size", defaultValue = "20") Integer size) {

@@ -27,9 +27,9 @@
         <ul>
           <!-- 我的订单表头 -->
           <li class="order-info">
-            <div class="order-id">订单编号: {{ item[0].order_id }}</div>
+            <div class="order-id">订单编号: {{ item.orderNumber }}</div>
             <div class="order-time">
-              订单时间: {{ item[0].order_time | dateFormat }}
+              订单时间: {{ item.inDate | dateFormat }}
             </div>
           </li>
           <li class="header">
@@ -42,30 +42,34 @@
           <!-- 我的订单表头END -->
 
           <!-- 订单列表 -->
-          <li class="product-list" v-for="(product, i) in item" :key="i">
+          <li
+            class="product-list"
+            v-for="(goods, i) in item.orderGoodsList"
+            :key="i"
+          >
             <div class="pro-img">
               <router-link
                 :to="{
                   path: '/goods/details',
-                  query: { productID: product.product_id },
+                  query: { productID: goods.goodsId },
                 }"
               >
-                <img :src="$target + product.product_picture" />
+                <img :src="goods.image" />
               </router-link>
             </div>
             <div class="pro-name">
               <router-link
                 :to="{
                   path: '/goods/details',
-                  query: { productID: product.product_id },
+                  query: { productID: goods.goodsId },
                 }"
-                >{{ product.product_name }}</router-link
+                >{{ goods.title }}</router-link
               >
             </div>
-            <div class="pro-price">{{ product.product_price }}元</div>
-            <div class="pro-num">{{ product.product_num }}</div>
+            <div class="pro-price">{{ goods.price }}元</div>
+            <div class="pro-num">{{ goods.amount }}</div>
             <div class="pro-total pro-total-in">
-              {{ product.product_price * product.product_num }}元
+              {{ goods.price * goods.amount }}元
             </div>
           </li>
         </ul>
@@ -73,14 +77,16 @@
           <div class="order-bar-left">
             <span class="order-total">
               共
-              <span class="order-total-num">{{ total[index].totalNum }}</span>
+              <span class="order-total-num">{{
+                item.orderGoodsList.length
+              }}</span>
               件商品
             </span>
           </div>
           <div class="order-bar-right">
             <span>
               <span class="total-price-title">合计：</span>
-              <span class="total-price">{{ total[index].totalPrice }}元</span>
+              <span class="total-price">{{ item.money }}元</span>
             </span>
           </div>
           <!-- 订单列表END -->
@@ -118,7 +124,8 @@ export default {
     };
     getOrderList(request)
       .then((res) => {
-        if (res.code == 200) {
+        console.log(res);
+        if (res.code === 200) {
           this.orders = res.data.data;
         } else {
           this.notifyError(res.message);

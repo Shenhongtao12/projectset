@@ -6,6 +6,8 @@ import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "orders")
 public class Order{
 
     @Id
@@ -27,13 +30,15 @@ public class Order{
 
     private String orderNumber;
 
-    private Integer cartId;
-
+    /**
+     * 创建成功: C
+     */
     private String status;
 
     private Integer userId;
 
     private Date inDate;
 
+    @Transient
     private List<OrderGoods> orderGoodsList;
 }

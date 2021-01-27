@@ -36,4 +36,6 @@ public class Register {
     @NotNull(message = "验证码不能为空")
     @NotBlank
     private String emailCode;
+
+    private Boolean vip;
 }

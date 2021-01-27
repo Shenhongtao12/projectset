@@ -4,22 +4,22 @@
 
 <mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
 
-    <select id="queryPage" parameterType="string" resultType="com.sht.shoesboot.entity.Order">
-        SELECT g.goods_id AS goodsId,g.title AS title,g.images AS images,g.price AS price, o.id AS orderId,o.order_number AS orderNumber,o.status AS status,o.amount AS amount,o.money AS money,o.in_date AS inDate
-        FROM `order` o
+    <select id="queryPage" parameterType="string" resultMap="orderInfo">
+        SELECT g.goods_id, g.title AS title,g.image AS image,g.price AS price, o.id AS id,o.order_number, o.status, o.money AS money,o.in_date
+        FROM `orders` o
         INNER JOIN order_goods g
         ON o.id= g.order_id
         <where>
-            <if test="status != '0'"> status = #{status} </if>
+            <if test="status != null"> status = #{status} </if>
             <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
         </where>
     </select>
 
-    <insert id="batchInsert">
-        INSERT INTO order_goods (orderId, goodsId, title, price, amount, images)
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO order_goods (order_id, goods_id, cart_id, title, price, amount, image)
         VALUES
         <foreach collection="orderGoodsList" item="order" separator=",">
-            (#{order.orderId}, #{order.goodsId}, #{order.title}, #{order.price}, #{order.amount}, #{order.images})
+            (#{order.orderId}, #{order.goodsId}, #{order.cartId}, #{order.title}, #{order.price}, #{order.amount}, #{order.image})
         </foreach>
     </insert>
 
@@ -29,16 +29,16 @@
         <result column="in_date" property="inDate"></result>
         <result column="money" property="money"></result>
         <result column="order_number" property="orderNumber"></result>
-        <result column="cart_d" property="cartId"></result>
         <result column="status" property="status"></result>
         <collection property="orderGoodsList" ofType="com.sht.shoesboot.entity.OrderGoods">
             <id column="id" property="id"></id>
             <result column="order_id" property="orderId"></result>
             <result column="goods_id" property="goodsId"></result>
+            <result column="cart_id" property="cartId"></result>
             <result column="title" property="title"></result>
             <result column="price" property="price"></result>
             <result column="amount" property="amount"></result>
-            <result column="images" property="images"></result>
+            <result column="image" property="image"></result>
         </collection>
     </resultMap>
 </mapper>

@@ -25,8 +25,9 @@ public class OrderGoods {
 
     private Integer orderId;
     private Integer goodsId;
+    private Integer cartId;
     private String title;
     private BigDecimal price;
     private Integer amount;
-    private String images;
+    private String image;
 }

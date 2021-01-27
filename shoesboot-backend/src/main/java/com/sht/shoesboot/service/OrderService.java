@@ -46,8 +46,8 @@ public class OrderService {
             if (StringUtils.isNotEmpty(inventory)) {
                 if (Integer.parseInt(inventory) >= orderGoods.getAmount()) {
                     //删除购物车
-                    if (order.getCartId() != null && order.getCartId() != 0) {
-                        shopCartMapper.deleteByPrimaryKey(order.getCartId());
+                    if (orderGoods.getCartId() != null && orderGoods.getCartId() != 0) {
+                        shopCartMapper.deleteByPrimaryKey(orderGoods.getCartId());
                     }
                     //更新redis库存
                     redisService.setData("shoes_goods_" + orderGoods.getGoodsId(), (Integer.parseInt(inventory) - orderGoods.getAmount()) + "");
@@ -63,11 +63,13 @@ public class OrderService {
         try {
             order.setOrderNumber(OrderNumber.createOrderNumber());
             order.setInDate(new Date());
+            order.setStatus("C");
             orderMapper.insertSelective(order);
             order.getOrderGoodsList().forEach(item -> item.setOrderId(order.getId()));
             orderMapper.batchInsert(order.getOrderGoodsList());
             return new RestResponse(200, "下单成功");
         } catch (Exception e) {
+            e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new RestResponse(400, "创建订单失败,请重试");
         }

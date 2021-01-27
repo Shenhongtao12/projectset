@@ -92,7 +92,7 @@ export default {
       // 更新购物车
       // 可更新商品数量和是否勾选
       // 用于购物车点击勾选及加减商品数量
-      if (payload.prop == "amount") {
+      if (payload.prop === "amount") {
         // 判断效果的商品数量是否大于限购数量或小于1
         if (state.shoppingCart[payload.key].inventory < payload.val) {
           return;
