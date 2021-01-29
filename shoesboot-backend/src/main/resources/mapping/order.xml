@@ -5,7 +5,7 @@
 <mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
 
     <select id="queryPage" parameterType="string" resultMap="orderInfo">
-        SELECT g.goods_id, g.title AS title,g.image AS image,g.price AS price, o.id AS id,o.order_number, o.status, o.money AS money,o.in_date
+        SELECT g.goods_id, g.title AS title, g.amount, g.image AS image,g.price AS price, o.id AS id,o.order_number, o.status, o.money AS money,o.in_date
         FROM `orders` o
         INNER JOIN order_goods g
         ON o.id= g.order_id

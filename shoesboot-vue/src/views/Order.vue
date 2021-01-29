@@ -63,8 +63,16 @@
                   path: '/goods/details',
                   query: { productID: goods.goodsId },
                 }"
-                >{{ goods.title }}</router-link
               >
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  :content="goods.title"
+                  placement="top"
+                >
+                  <p class="title">{{ goods.title }}</p>
+                </el-tooltip>
+              </router-link>
             </div>
             <div class="pro-price">{{ goods.price }}元</div>
             <div class="pro-num">{{ goods.amount }}</div>
@@ -108,6 +116,7 @@
 </template>
 <script>
 import { getOrderList } from "@/api/OrderService";
+
 export default {
   data() {
     return {
@@ -161,6 +170,7 @@ export default {
   background-color: #f5f5f5;
   padding-bottom: 20px;
 }
+
 /* 我的订单头部CSS */
 .order .order-header {
   height: 64px;
@@ -168,10 +178,12 @@ export default {
   background-color: #fff;
   margin-bottom: 20px;
 }
+
 .order .order-header .order-header-content {
   width: 1225px;
   margin: 0 auto;
 }
+
 .order .order-header p {
   font-size: 28px;
   line-height: 58px;
@@ -179,6 +191,7 @@ export default {
   font-weight: normal;
   color: #424242;
 }
+
 /* 我的订单头部CSS END */
 .order .content {
   width: 1225px;
@@ -192,6 +205,7 @@ export default {
   color: #424242;
   line-height: 85px;
 }
+
 /* 我的订单表头CSS */
 .order .content ul .order-info {
   height: 60px;
@@ -200,10 +214,12 @@ export default {
   color: #424242;
   border-bottom: 1px solid #ff6700;
 }
+
 .order .content ul .order-info .order-id {
   float: left;
   color: #ff6700;
 }
+
 .order .content ul .order-info .order-time {
   float: right;
 }
@@ -213,6 +229,7 @@ export default {
   padding-right: 26px;
   color: #424242;
 }
+
 /* 我的订单表头CSS END */
 
 /* 订单列表CSS */
@@ -221,43 +238,52 @@ export default {
   padding: 15px 26px 15px 0;
   border-top: 1px solid #e0e0e0;
 }
+
 .order .content ul .pro-img {
   float: left;
   height: 85px;
   width: 120px;
   padding-left: 80px;
 }
+
 .order .content ul .pro-img img {
   height: 80px;
   width: 80px;
 }
+
 .order .content ul .pro-name {
   float: left;
   width: 380px;
 }
+
 .order .content ul .pro-name a {
   color: #424242;
 }
+
 .order .content ul .pro-name a:hover {
   color: #ff6700;
 }
+
 .order .content ul .pro-price {
   float: left;
   width: 160px;
   padding-right: 18px;
   text-align: center;
 }
+
 .order .content ul .pro-num {
   float: left;
   width: 190px;
   text-align: center;
 }
+
 .order .content ul .pro-total {
   float: left;
   width: 160px;
   padding-right: 81px;
   text-align: right;
 }
+
 .order .content ul .pro-total-in {
   color: #ff6700;
 }
@@ -270,26 +296,33 @@ export default {
   line-height: 50px;
   background-color: #fff;
 }
+
 .order .order-bar .order-bar-left {
   float: left;
 }
+
 .order .order-bar .order-bar-left .order-total {
   color: #757575;
 }
+
 .order .order-bar .order-bar-left .order-total-num {
   color: #ff6700;
 }
+
 .order .order-bar .order-bar-right {
   float: right;
 }
+
 .order .order-bar .order-bar-right .total-price-title {
   color: #ff6700;
   font-size: 14px;
 }
+
 .order .order-bar .order-bar-right .total-price {
   color: #ff6700;
   font-size: 30px;
 }
+
 /* 订单列表CSS END */
 
 /* 订单为空的时候显示的内容CSS */
@@ -297,6 +330,7 @@ export default {
   width: 1225px;
   margin: 0 auto;
 }
+
 .order .order-empty .empty {
   height: 300px;
   padding: 0 0 130px 558px;
@@ -305,13 +339,22 @@ export default {
   color: #b0b0b0;
   overflow: hidden;
 }
+
 .order .order-empty .empty h2 {
   margin: 70px 0 15px;
   font-size: 36px;
 }
+
 .order .order-empty .empty p {
   margin: 0 0 20px;
   font-size: 20px;
 }
+
+.title {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* 订单为空的时候显示的内容CSS END */
 </style>

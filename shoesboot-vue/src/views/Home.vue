@@ -10,12 +10,8 @@
     <!-- 轮播图 -->
     <div class="block">
       <el-carousel height="460px">
-        <el-carousel-item v-for="item in carousel" :key="item.carousel_id">
-          <img
-            style="height: 460px"
-            :src="$target + item.imgPath"
-            :alt="item.describes"
-          />
+        <el-carousel-item v-for="item in carousel" :key="item.id">
+          <img style="height: 460px" :src="item.url" :alt="item.title" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -121,12 +117,13 @@
   </div>
 </template>
 <script>
-import { getGoods } from "@/api/GoodsService";
+import { getGoods, getCarousel, getCheapGoods } from "@/api/GoodsService";
+
 export default {
   data() {
     return {
       carousel: "", // 轮播图数据
-      phoneList: "", // 手机商品列表
+      cheapGoodsList: "", // 特价商品列表
       miTvList: "", // 小米电视商品列表
       applianceList: "", // 家电商品列表
       applianceHotList: "", //热门家电商品列表
@@ -182,16 +179,21 @@ export default {
   },
   created() {
     // 获取轮播图数据
-    this.$axios
-      .post("/api/resources/carousel", {})
+    getCarousel()
       .then((res) => {
-        this.carousel = res.data.carousel;
+        this.carousel = res.data;
       })
       .catch((err) => {
         return Promise.reject(err);
       });
     // 获取各类商品数据
-    this.getPromo("手机", "phoneList");
+    //this.getPromo("手机", "phoneList");
+    let request = {
+      status: true,
+      page: 1,
+      rows: 20,
+    };
+    getCheapGoods(request);
     this.getPromo("电视机", "miTvList");
     this.getPromo("保护套", "protectingShellList");
     this.getPromo("充电器", "chargerList");
@@ -214,6 +216,16 @@ export default {
     // 获取配件模块子组件传过来的数据
     getChildMsg2(val) {
       this.accessoryActive = val;
+    },
+    //特价商品
+    getCheapGoods(data) {
+      getCheapGoods(data)
+        .then((res) => {
+          this.cheapGoodsList = res.data.data;
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
     },
     // 获取各类商品数据方法封装
     getPromo(categoryName, val, api) {

@@ -194,4 +194,8 @@ public class GoodsService {
     public List<Goods> queryShelfGoods(Integer userId) {
         return goodsMapper.queryShelfGoods(userId);
     }
+
+    public Goods findByID(Integer id) {
+        return goodsMapper.selectByPrimaryKey(id);
+    }
 }
