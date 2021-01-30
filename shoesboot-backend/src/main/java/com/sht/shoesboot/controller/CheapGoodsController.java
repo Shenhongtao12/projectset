@@ -29,7 +29,7 @@ public class CheapGoodsController extends BaseController {
     @GetMapping("cheap-goods")
     public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", defaultValue = "true") Boolean status,
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
-                                                  @RequestParam(name = "page", defaultValue = "20") Integer rows) {
+                                                  @RequestParam(name = "rows", defaultValue = "20") Integer rows) {
 
         return ResponseEntity.ok(SUCCESS(cheapGoodsService.queryPage(status, page, rows), ""));
     }

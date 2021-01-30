@@ -101,7 +101,21 @@
         </div>
       </div>
       <div style="margin-top: -40px"></div>
+      <div class="block">
+        <el-pagination
+          :hide-on-single-page="page.total < 10"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="page.pageNum"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size.sync="page.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total.sync="page.total"
+        >
+        </el-pagination>
+      </div>
     </div>
+
     <!-- 我的订单主要内容END -->
 
     <!-- 订单为空的时候显示的内容 -->
@@ -118,32 +132,52 @@
 import { getOrderList } from "@/api/OrderService";
 
 export default {
+  methods: {
+    handleSizeChange(val) {
+      this.page.pageSize = val;
+      this.activated();
+    },
+    handleCurrentChange(val) {
+      this.page.pageNum = val;
+      this.activated();
+    },
+    activated() {
+      // 获取订单数据
+      let request = {
+        userId: this.$store.getters.getUser.id,
+        page: this.page.pageNum,
+        rows: this.page.pageSize,
+      };
+      getOrderList(request)
+        .then((res) => {
+          console.log(res);
+          if (res.code === 200) {
+            this.orders = res.data.data;
+            this.page.total = res.data.total;
+          } else {
+            this.notifyError(res.message);
+          }
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
+    },
+  },
   data() {
     return {
       orders: [], // 订单列表
       total: [], // 每个订单的商品数量及总价列表
+      page: {
+        total: 0,
+        pageNum: 1,
+        pageSize: 10,
+      },
     };
   },
-  activated() {
-    // 获取订单数据
-    let request = {
-      userId: this.$store.getters.getUser.id,
-      page: 1,
-      rows: 10,
-    };
-    getOrderList(request)
-      .then((res) => {
-        console.log(res);
-        if (res.code === 200) {
-          this.orders = res.data.data;
-        } else {
-          this.notifyError(res.message);
-        }
-      })
-      .catch((err) => {
-        return Promise.reject(err);
-      });
+  created() {
+    this.activated();
   },
+
   watch: {
     // 通过订单信息，计算出每个订单的商品数量及总价
     orders: function (val) {
@@ -354,6 +388,10 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.block {
+  margin-left: 35%;
 }
 
 /* 订单为空的时候显示的内容CSS END */

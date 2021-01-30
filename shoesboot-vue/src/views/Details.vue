@@ -10,7 +10,7 @@
     <!-- 头部 -->
     <div class="page-header">
       <div class="title">
-        <p>{{ productDetails.product_name }}</p>
+        <p>{{ productDetails.title }}</p>
         <div class="list">
           <ul>
             <li>
@@ -34,18 +34,14 @@
       <div class="block">
         <el-carousel height="560px" v-if="productPicture.length > 1">
           <el-carousel-item v-for="item in productPicture" :key="item.id">
-            <img
-              style="height: 560px"
-              :src="$target + item.product_picture"
-              :alt="item.intro"
-            />
+            <img style="height: 560px" :src="item" />
           </el-carousel-item>
         </el-carousel>
         <div v-if="productPicture.length == 1">
           <img
             style="height: 560px"
-            :src="$target + productPicture[0].product_picture"
-            :alt="productPicture[0].intro"
+            :src="productPicture[0]"
+            :alt="productPicture[0]"
           />
         </div>
       </div>
@@ -53,42 +49,39 @@
 
       <!-- 右侧内容区 -->
       <div class="content">
-        <h1 class="name">{{ productDetails.product_name }}</h1>
-        <p class="intro">{{ productDetails.product_intro }}</p>
-        <p class="store">小米自营</p>
+        <h1 class="name">{{ productDetails.title }}</h1>
+        <p class="intro"></p>
+        <p class="store">{{ productDetails.brand }}</p>
         <div class="price">
-          <span>{{ productDetails.product_selling_price }}元</span>
+          <span>{{ productDetails.price }}元</span>
           <span
             v-show="
               productDetails.product_price !=
               productDetails.product_selling_price
             "
             class="del"
-            >{{ productDetails.product_price }}元</span
+            >{{ productDetails.price }}元</span
           >
         </div>
         <div class="pro-list">
-          <span class="pro-name">{{ productDetails.product_name }}</span>
+          <span class="pro-name">{{ productDetails.title }}</span>
           <span class="pro-price">
-            <span>{{ productDetails.product_selling_price }}元</span>
-            <span
-              v-show="
+            <span>{{ productDetails.price }}元</span>
+            <!--<span
+                    v-show="
                 productDetails.product_price !=
                 productDetails.product_selling_price
               "
-              class="pro-del"
-              >{{ productDetails.product_price }}元</span
-            >
+                    class="pro-del"
+            >{{ productDetails.price }}元</span>-->
           </span>
-          <p class="price-sum">
-            总计 : {{ productDetails.product_selling_price }}元
-          </p>
+          <p class="price-sum">总计 : {{ productDetails.price }}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
           <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart"
-            >加入购物车</el-button
-          >
+            >加入购物车
+          </el-button>
           <el-button class="like" @click="addCollect">喜欢</el-button>
         </div>
         <!-- 内容区底部按钮END -->
@@ -108,6 +101,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { getOneGoods } from "@/api/GoodsService";
+
 export default {
   data() {
     return {
@@ -127,32 +122,16 @@ export default {
     // 监听商品id的变化，请求后端获取商品数据
     productID: function (val) {
       this.getDetails(val);
-      this.getDetailsPicture(val);
     },
   },
   methods: {
     ...mapActions(["unshiftShoppingCart", "addShoppingCartNum"]),
     // 获取商品详细信息
     getDetails(val) {
-      this.$axios
-        .post("/api/product/getDetails", {
-          productID: val,
-        })
+      getOneGoods(val)
         .then((res) => {
-          this.productDetails = res.data.Product[0];
-        })
-        .catch((err) => {
-          return Promise.reject(err);
-        });
-    },
-    // 获取商品图片
-    getDetailsPicture(val) {
-      this.$axios
-        .post("/api/product/getDetailsPicture", {
-          productID: val,
-        })
-        .then((res) => {
-          this.productPicture = res.data.ProductPicture;
+          this.productDetails = res.data;
+          this.productPicture = res.data.images.split(",");
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -233,6 +212,7 @@ export default {
   -webkit-box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.07);
 }
+
 #details .page-header .title {
   width: 1225px;
   height: 64px;
@@ -242,25 +222,31 @@ export default {
   color: #212121;
   margin: 0 auto;
 }
+
 #details .page-header .title p {
   float: left;
 }
+
 #details .page-header .title .list {
   height: 64px;
   float: right;
 }
+
 #details .page-header .title .list li {
   float: left;
   margin-left: 20px;
 }
+
 #details .page-header .title .list li a {
   font-size: 14px;
   color: #616161;
 }
+
 #details .page-header .title .list li a:hover {
   font-size: 14px;
   color: #ff6700;
 }
+
 /* 头部CSS END */
 
 /* 主要内容CSS */
@@ -270,19 +256,23 @@ export default {
   padding-top: 30px;
   margin: 0 auto;
 }
+
 #details .main .block {
   float: left;
   width: 560px;
   height: 560px;
 }
+
 #details .el-carousel .el-carousel__indicator .el-carousel__button {
   background-color: rgba(163, 163, 163, 0.8);
 }
+
 #details .main .content {
   float: left;
   margin-left: 25px;
   width: 640px;
 }
+
 #details .main .content .name {
   height: 30px;
   line-height: 30px;
@@ -290,14 +280,17 @@ export default {
   font-weight: normal;
   color: #212121;
 }
+
 #details .main .content .intro {
   color: #b0b0b0;
   padding-top: 10px;
 }
+
 #details .main .content .store {
   color: #ff6700;
   padding-top: 10px;
 }
+
 #details .main .content .price {
   display: block;
   font-size: 18px;
@@ -305,37 +298,45 @@ export default {
   border-bottom: 1px solid #e0e0e0;
   padding: 25px 0 25px;
 }
+
 #details .main .content .price .del {
   font-size: 14px;
   margin-left: 10px;
   color: #b0b0b0;
   text-decoration: line-through;
 }
+
 #details .main .content .pro-list {
   background: #f9f9fa;
   padding: 30px 60px;
   margin: 50px 0 50px;
 }
+
 #details .main .content .pro-list span {
   line-height: 30px;
   color: #616161;
 }
+
 #details .main .content .pro-list .pro-price {
   float: right;
 }
+
 #details .main .content .pro-list .pro-price .pro-del {
   margin-left: 10px;
   text-decoration: line-through;
 }
+
 #details .main .content .pro-list .price-sum {
   color: #ff6700;
   font-size: 24px;
   padding-top: 20px;
 }
+
 #details .main .content .button {
   height: 55px;
   margin: 10px 0 20px 0;
 }
+
 #details .main .content .button .el-button {
   float: left;
   height: 55px;
@@ -344,10 +345,12 @@ export default {
   border: none;
   text-align: center;
 }
+
 #details .main .content .button .shop-cart {
   width: 340px;
   background-color: #ff6700;
 }
+
 #details .main .content .button .shop-cart:hover {
   background-color: #f25807;
 }
@@ -357,13 +360,16 @@ export default {
   margin-left: 40px;
   background-color: #b0b0b0;
 }
+
 #details .main .content .button .like:hover {
   background-color: #757575;
 }
+
 #details .main .content .pro-policy li {
   float: left;
   margin-right: 20px;
   color: #b0b0b0;
 }
+
 /* 主要内容CSS END */
 </style>

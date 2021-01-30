@@ -21,16 +21,18 @@
         <!-- 手机商品展示区域 -->
         <div class="phone">
           <div class="box-hd">
-            <div class="title">手机</div>
+            <div class="title">特惠商品</div>
           </div>
           <div class="box-bd">
             <div class="promo-list">
               <router-link to>
-                <img :src="$target + 'public/imgs/phone/phone.png'" />
+                <img
+                  :src="'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/cb1bd61ad71c45a4f67f09b075463944.jpeg?thumb=1&w=293&h=768&f=webp&q=90'"
+                />
               </router-link>
             </div>
             <div class="list">
-              <MyList :list="phoneList" :isMore="true"></MyList>
+              <MyList :list="cheapGoodsList" :isMore="true"></MyList>
             </div>
           </div>
         </div>
@@ -39,7 +41,7 @@
         <!-- 家电商品展示区域 -->
         <div class="appliance" id="promo-menu">
           <div class="box-hd">
-            <div class="title">家电</div>
+            <div class="title">NIKE</div>
             <div class="more" id="more">
               <MyMenu :val="2" @fromChild="getChildMsg">
                 <span slot="1">热门</span>
@@ -52,16 +54,12 @@
               <ul>
                 <li>
                   <img
-                    :src="
-                      $target + 'public/imgs/appliance/appliance-promo1.png'
-                    "
+                    :src="'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/116fc43816b87192be4e67cf762e8da5.jpeg?thumb=1&w=293&h=375&f=webp&q=90'"
                   />
                 </li>
                 <li>
                   <img
-                    :src="
-                      $target + 'public/imgs/appliance/appliance-promo2.png'
-                    "
+                    :src="'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7e03c0fe4af4d613603f22aaa8e0ea00.jpg?thumb=1&w=293&h=375&f=webp&q=90'"
                   />
                 </li>
               </ul>
@@ -90,17 +88,13 @@
               <ul>
                 <li>
                   <img
-                    :src="
-                      $target + 'public/imgs/accessory/accessory-promo1.png'
-                    "
+                    :src="'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ffe114f73fac3a45e5622c3eff56106b.jpg?thumb=1&w=293&h=375&f=webp&q=90'"
                     alt
                   />
                 </li>
                 <li>
                   <img
-                    :src="
-                      $target + 'public/imgs/accessory/accessory-promo2.png'
-                    "
+                    :src="'https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/a660ce095e8f553a9ed1515265f4e9fc.jpg?thumb=1&w=293&h=375&f=webp&q=90'"
                     alt
                   />
                 </li>
@@ -187,26 +181,12 @@ export default {
         return Promise.reject(err);
       });
     // 获取各类商品数据
-    //this.getPromo("手机", "phoneList");
-    let request = {
-      status: true,
-      page: 1,
-      rows: 20,
-    };
-    getCheapGoods(request);
-    this.getPromo("电视机", "miTvList");
-    this.getPromo("保护套", "protectingShellList");
-    this.getPromo("充电器", "chargerList");
-    this.getPromo(
-      ["电视机", "空调", "洗衣机"],
-      "applianceList",
-      "/api/product/getHotProduct"
-    );
-    this.getPromo(
-      ["保护套", "保护膜", "充电器", "充电宝"],
-      "accessoryList",
-      "/api/product/getHotProduct"
-    );
+    this.getCheapGoodsList(); //特价
+    this.getPromo("NIKE耐克", "miTvList");
+    this.getPromo("运动鞋", "protectingShellList");
+    this.getPromo("休闲鞋", "chargerList");
+    this.getPromo("NIKE休闲鞋", "applianceList");
+    this.getPromo("NIKE", "accessoryList");
   },
   methods: {
     // 获取家电模块子组件传过来的数据
@@ -228,15 +208,30 @@ export default {
         });
     },
     // 获取各类商品数据方法封装
-    getPromo(categoryName, val, api) {
-      //api = api != undefined ? api : "/api/product/getPromoProduct";
+    getPromo(categoryName, val) {
       let request = {
+        keyword: categoryName,
         page: 1,
-        rows: 10,
+        size: 7,
       };
       getGoods(request)
         .then((res) => {
           this[val] = res.data;
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
+    },
+
+    getCheapGoodsList() {
+      let request = {
+        status: true,
+        page: 1,
+        rows: 7,
+      };
+      getCheapGoods(request)
+        .then((res) => {
+          this.cheapGoodsList = res.data.data;
         })
         .catch((err) => {
           return Promise.reject(err);

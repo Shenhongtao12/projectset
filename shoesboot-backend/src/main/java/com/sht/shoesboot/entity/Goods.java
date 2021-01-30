@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -43,6 +44,9 @@ public class Goods {
     public String brand;
 
     public Boolean shelf;
+
+    @Transient
+    public BigDecimal originalPrice;
 
     public Goods (GoodsHistory history) {
         this.id = history.getId();

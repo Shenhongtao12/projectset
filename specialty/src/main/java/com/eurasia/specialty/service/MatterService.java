@@ -32,7 +32,6 @@ public class MatterService {
 
 
     public JsonData save(Matter matter) {
-
         try {
             if (matter.getId() == null) {
                 matter.setCreateTime(DateUtils.dateToString());
@@ -42,10 +41,10 @@ public class MatterService {
                 JpaUtils.copyNotNullProperties(matter, one);
                 matterRepository.save(matter);
             }
+            return JsonData.buildSuccess("成功");
         } catch (Exception e) {
             return JsonData.buildError("发生异常，请稍后重试");
         }
-        return JsonData.buildSuccess("成功");
     }
 
     public JsonData delete(Integer id) {

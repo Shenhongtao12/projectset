@@ -35,10 +35,10 @@ public class GoodsController {
 
 
     @GetMapping({"findByPage"})
-    public ResponseEntity<PageResult<Goods>> findByPage(@RequestParam(value = "id", defaultValue = "") Integer id, //二级分类id
-                                                        @RequestParam(value = "classify", defaultValue = "") Integer classify,
+    public ResponseEntity<PageResult<Goods>> findByPage(@RequestParam(value = "id", required = false) Integer id, //二级分类id
+                                                        @RequestParam(value = "classify", required = false) Integer classify,
                                                         @RequestParam(value = "orderBy", defaultValue = "id", required = false) String orderBy,
-                                                        @RequestParam(value = "status", defaultValue = "") String status,
+                                                        @RequestParam(value = "status", required = false) String status,
                                                         @RequestParam(value = "goodsName", required = false) String goodsName,
                                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                         @RequestParam(value = "rows", defaultValue = "20") Integer rows) {

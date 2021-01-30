@@ -24,3 +24,11 @@ export function getCheapGoods(data) {
     params: data,
   });
 }
+
+//特价商品
+export function getOneGoods(data) {
+  return request({
+    url: "goods/" + data,
+    method: "get",
+  });
+}
