@@ -1,8 +1,8 @@
 <!--
  * @Description: 项目根组件
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-04-05 13:14:48
  -->
 <template>
@@ -110,7 +110,7 @@
             </div>
           </div>
           <div class="github">
-            <a href="https://github.com/hai-27/vue-store" target="_blank">
+            <a href="https://github.com/Aaron.Shen/vue-store" target="_blank">
               <div class="github-but"></div>
             </a>
           </div>

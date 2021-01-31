@@ -1,8 +1,8 @@
 <!--
  * @Description: 商品详情页面组件
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-16 20:20:26
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-03-07 21:59:26
  -->
 <template>
@@ -54,26 +54,26 @@
         <p class="store">{{ productDetails.brand }}</p>
         <div class="price">
           <span>{{ productDetails.price }}元</span>
-          <span
-            v-show="
+          <!-- <span
+                            v-show="
               productDetails.product_price !=
               productDetails.product_selling_price
             "
-            class="del"
-            >{{ productDetails.price }}元</span
-          >
+                            class="del"
+                    >{{ productDetails.price }}元</span
+                    >-->
         </div>
         <div class="pro-list">
           <span class="pro-name">{{ productDetails.title }}</span>
           <span class="pro-price">
             <span>{{ productDetails.price }}元</span>
             <!--<span
-                    v-show="
-                productDetails.product_price !=
-                productDetails.product_selling_price
-              "
-                    class="pro-del"
-            >{{ productDetails.price }}元</span>-->
+                                v-show="
+                            productDetails.product_price !=
+                            productDetails.product_selling_price
+                          "
+                                class="pro-del"
+                        >{{ productDetails.price }}元</span>-->
           </span>
           <p class="price-sum">总计 : {{ productDetails.price }}元</p>
         </div>
@@ -87,8 +87,8 @@
         <!-- 内容区底部按钮END -->
         <div class="pro-policy">
           <ul>
-            <li><i class="el-icon-circle-check"></i> 小米自营</li>
-            <li><i class="el-icon-circle-check"></i> 小米发货</li>
+            <li><i class="el-icon-circle-check"></i> 官方自营</li>
+            <li><i class="el-icon-circle-check"></i> 平台发货</li>
             <li><i class="el-icon-circle-check"></i> 7天无理由退货</li>
             <li><i class="el-icon-circle-check"></i> 7天价格保护</li>
           </ul>
@@ -100,8 +100,10 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { getOneGoods } from "@/api/GoodsService";
+import { putShopCart } from "@/api/ShopCartService";
+import { postFavorite } from "@/api/FavoriteService";
 
 export default {
   data() {
@@ -124,6 +126,9 @@ export default {
       this.getDetails(val);
     },
   },
+  computed: {
+    ...mapGetters(["getShoppingCart"]),
+  },
   methods: {
     ...mapActions(["unshiftShoppingCart", "addShoppingCartNum"]),
     // 获取商品详细信息
@@ -144,30 +149,45 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
-        .post("/api/user/shoppingCart/addShoppingCart", {
-          user_id: this.$store.getters.getUser.id,
-          product_id: this.productID,
-        })
+      let request = {
+        id: null,
+        goodsId: this.productID,
+        amount: 1,
+        userId: this.$store.getters.getUser.id,
+      };
+      if (this.getShoppingCart.length > 0) {
+        this.getShoppingCart.forEach((goods) => {
+          if (goods.goodsId === this.productID) {
+            request.id = this.productID;
+            request.amount = goods.amount + 1;
+          }
+        });
+      }
+      putShopCart(request)
         .then((res) => {
-          switch (res.data.code) {
-            case "001":
-              // 新加入购物车成功
-              this.unshiftShoppingCart(res.data.shoppingCartData[0]);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "002":
+          if (res.code === 200) {
+            if (request.id !== null) {
               // 该商品已经在购物车，数量+1
               this.addShoppingCartNum(this.productID);
-              this.notifySucceed(res.data.msg);
-              break;
-            case "003":
-              // 商品数量达到限购数量
-              this.dis = true;
-              this.notifyError(res.data.msg);
-              break;
-            default:
-              this.notifyError(res.data.msg);
+            } else {
+              // 新加入购物车成功
+              let goods = {
+                goodsId: this.productDetails.goodsId,
+                title: this.productDetails.title,
+                image: this.productPicture[0],
+                price: this.productDetails.price,
+
+                cartId: res.data.cartId,
+                amount: 1,
+                inventory: res.data.inventory,
+                check: false,
+              };
+              this.unshiftShoppingCart(goods);
+            }
+            this.notifySucceed("已成功加入购物车");
+          } else {
+            // 提示更新失败信息
+            this.notifyError(res.message);
           }
         })
         .catch((err) => {
@@ -180,18 +200,17 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
-      this.$axios
-        .post("/api/user/collect/addCollect", {
-          user_id: this.$store.getters.getUser.id,
-          product_id: this.productID,
-        })
+      postFavorite({
+        userId: this.$store.getters.getUser.id,
+        goodsId: this.productID,
+      })
         .then((res) => {
-          if (res.data.code == "001") {
+          if (res.code === 200) {
             // 添加收藏成功
-            this.notifySucceed(res.data.msg);
+            this.notifySucceed(res.message);
           } else {
             // 添加收藏失败
-            this.notifyError(res.data.msg);
+            this.notifyError(res.message);
           }
         })
         .catch((err) => {

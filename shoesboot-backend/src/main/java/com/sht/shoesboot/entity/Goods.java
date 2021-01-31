@@ -1,9 +1,6 @@
 package com.sht.shoesboot.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -21,6 +18,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Goods {
 
     @Id
@@ -49,7 +47,7 @@ public class Goods {
     public BigDecimal originalPrice;
 
     public Goods (GoodsHistory history) {
-        this.id = history.getId();
+        this.id = history.getGoodsId();
         this.title = history.getTitle();
         this.price = history.getPrice();
         this.inventory = history.getInventory();

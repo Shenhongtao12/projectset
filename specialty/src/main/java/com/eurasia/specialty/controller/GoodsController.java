@@ -2,6 +2,7 @@ package com.eurasia.specialty.controller;
 
 import com.eurasia.specialty.entity.Goods;
 import com.eurasia.specialty.service.GoodsService;
+import com.eurasia.specialty.utils.JsonData;
 import com.eurasia.specialty.utils.PageResult;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +36,18 @@ public class GoodsController {
 
 
     @GetMapping({"findByPage"})
-    public ResponseEntity<PageResult<Goods>> findByPage(@RequestParam(value = "id", required = false) Integer id, //二级分类id
-                                                        @RequestParam(value = "classify", required = false) Integer classify,
-                                                        @RequestParam(value = "orderBy", defaultValue = "id", required = false) String orderBy,
-                                                        @RequestParam(value = "status", required = false) String status,
-                                                        @RequestParam(value = "goodsName", required = false) String goodsName,
-                                                        @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                        @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
-        return ResponseEntity.ok(this.goodsService.findByPage(id, classify, orderBy, status, goodsName, page, rows));
+    public ResponseEntity<JsonData> findByPage(@RequestParam(value = "id", required = false) Integer id, //二级分类id
+                                               @RequestParam(value = "classify", required = false) Integer classify,
+                                               @RequestParam(value = "orderBy", defaultValue = "id", required = false) String orderBy,
+                                               @RequestParam(value = "status", required = false) String status,
+                                               @RequestParam(value = "goodsName", required = false) String goodsName,
+                                               @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                               @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
+        return ResponseEntity.ok(JsonData.buildSuccess(this.goodsService.findByPage(id, classify, orderBy, status, goodsName, page, rows), ""));
     }
 
 
-    @GetMapping({"deleteGoods"})
+    @DeleteMapping({"deleteGoods"})
     public ResponseEntity deleteGoods(Integer id) {
         return ResponseEntity.ok(this.goodsService.deleteGoods(id));
     }

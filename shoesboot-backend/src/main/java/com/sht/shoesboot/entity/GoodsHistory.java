@@ -22,7 +22,7 @@ public class GoodsHistory extends Goods{
     @KeySql(useGeneratedKeys = true)
     private Integer id;
 
-    private int goodsId;
+    private Integer goodsId;
 
     private Date inDate;
 

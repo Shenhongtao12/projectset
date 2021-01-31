@@ -1,8 +1,8 @@
 <!--
  * @Description: 首页组件
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-02-27 13:36:12
  -->
 <template>
@@ -41,11 +41,11 @@
         <!-- 家电商品展示区域 -->
         <div class="appliance" id="promo-menu">
           <div class="box-hd">
-            <div class="title">NIKE</div>
+            <div class="title">Nike</div>
             <div class="more" id="more">
               <MyMenu :val="2" @fromChild="getChildMsg">
                 <span slot="1">热门</span>
-                <span slot="2">电视影音</span>
+                <span slot="2">Air Jordan</span>
               </MyMenu>
             </div>
           </div>
@@ -74,12 +74,12 @@
         <!-- 配件商品展示区域 -->
         <div class="accessory" id="promo-menu">
           <div class="box-hd">
-            <div class="title">配件</div>
+            <div class="title">Adidas</div>
             <div class="more" id="more">
               <MyMenu :val="3" @fromChild="getChildMsg2">
                 <span slot="1">热门</span>
-                <span slot="2">保护套</span>
-                <span slot="3">充电器</span>
+                <span slot="2">Yeezy</span>
+                <span slot="3">三叶草</span>
               </MyMenu>
             </div>
           </div>
@@ -182,11 +182,11 @@ export default {
       });
     // 获取各类商品数据
     this.getCheapGoodsList(); //特价
-    this.getPromo("NIKE耐克", "miTvList");
-    this.getPromo("运动鞋", "protectingShellList");
-    this.getPromo("休闲鞋", "chargerList");
+    this.getPromo("Air Jordan", "miTvList");
+    this.getPromo("Yeezy", "protectingShellList");
+    this.getPromo("三叶草", "chargerList");
     this.getPromo("NIKE休闲鞋", "applianceList");
-    this.getPromo("NIKE", "accessoryList");
+    this.getPromo("adidas", "accessoryList");
   },
   methods: {
     // 获取家电模块子组件传过来的数据

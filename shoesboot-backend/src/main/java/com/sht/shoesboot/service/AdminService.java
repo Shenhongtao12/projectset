@@ -51,7 +51,7 @@ public class AdminService {
     public Admin login(Admin admin) {
         Example example = new Example(Admin.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("admin_name", admin.getAdminName());
+        criteria.andEqualTo("adminName", admin.getAdminName());
         criteria.andEqualTo("password", admin.getPassword());
         return adminMapper.selectOneByExample(example);
     }

@@ -1,8 +1,8 @@
 <!--
  * @Description: 关于我们页面组件，未完成
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-03-12 19:36:46
  -->
 <template>

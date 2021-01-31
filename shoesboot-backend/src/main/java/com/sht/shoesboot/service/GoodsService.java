@@ -188,6 +188,7 @@ public class GoodsService {
     public void delete(Integer id) {
         Goods goods = goodsMapper.selectByPrimaryKey(id);
         goodsMapper.deleteByPrimaryKey(id);
+        goods.setId(id);
         historyMapper.insertSelective(new GoodsHistory(goods));
     }
 

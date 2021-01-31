@@ -1,8 +1,8 @@
 <!--
  * @Description: 菜单组件，用于首页商品展示模块的右上角菜单
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-07 16:23:00
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-02-26 22:52:35
  -->
 <template>

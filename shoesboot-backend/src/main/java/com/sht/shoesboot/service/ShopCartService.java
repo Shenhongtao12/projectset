@@ -53,6 +53,7 @@ public class ShopCartService {
         Example example = new Example(ShopCart.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("userId", userId);
+        example.setOrderByClause("id DESC");
         Page<ShopCart> carts = (Page<ShopCart>) shopCartMapper.selectByExample(example);
         Map<Integer, ShopCart> map = carts.getResult().stream().collect(Collectors.toMap(ShopCart::getGoodsId, shopCart -> shopCart));
         List<ShopCartDTO> shopCartDto = new ArrayList<>();
@@ -86,9 +87,9 @@ public class ShopCartService {
         return new PageResult<>(carts.getTotal(), carts.getPages(), shopCartDto);
     }
 
-    public void save(ShopCart shopCart) {
+    public Integer save(ShopCart shopCart) {
         shopCart.setCheck(false);
-        shopCartMapper.insertSelective(shopCart);
+        return shopCartMapper.insertSelective(shopCart);
     }
 
     public Boolean delete(Integer id) {

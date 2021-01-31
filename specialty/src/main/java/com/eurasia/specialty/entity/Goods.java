@@ -35,6 +35,9 @@ public class Goods implements Serializable
 	private Integer state;
 	private Integer classifyId;
 
+	@Transient
+	private String classifyName;
+
 	/**
 	 * 判断用户是否收藏该产品
 	 */

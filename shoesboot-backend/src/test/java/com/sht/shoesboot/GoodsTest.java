@@ -23,7 +23,7 @@ public class GoodsTest {
     public void test1() {
 
         //System.out.println(goodsService.queryShelfGoods(1));
-        for (int i = 0; i < 50; i++) {
+        for (int i = 453; i < 243 + 453; i++) {
              redisService.setData("shoes_goods_" + (453 + i), "100");
         }
     }

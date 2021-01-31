@@ -1,5 +1,6 @@
 package com.sht.shoesboot.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.entity.ShopCart;
 import com.sht.shoesboot.service.RedisService;
 import com.sht.shoesboot.service.ShopCartService;
@@ -28,12 +29,15 @@ public class ShopCartController extends BaseController{
         String inventory = redisService.getData("shoes_goods_" + shopCart.getGoodsId());
         if (StringUtils.isNoneEmpty(inventory)) {
             if (Integer.parseInt(inventory) >= shopCart.getAmount()) {
+                JSONObject response = new JSONObject();
+                response.put("inventory", inventory);
                 if (shopCart.getId() != null) {
                     shopCartService.update(shopCart);
+                    response.put("cartId", shopCart.getId());
                 }else {
-                    shopCartService.save(shopCart);
+                    response.put("cartId", shopCartService.save(shopCart));
                 }
-                return ResponseEntity.ok(SUCCESS(Integer.valueOf(inventory), "成功"));
+                return ResponseEntity.ok(SUCCESS(response, "成功"));
             }
             else {
                 return ResponseEntity.ok().body(ERROR(400, "库存不足"));

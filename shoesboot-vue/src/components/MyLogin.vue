@@ -1,8 +1,8 @@
 <!--
  * @Description: 登录组件
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-19 20:55:17
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-03-01 15:34:08
  -->
 <template>

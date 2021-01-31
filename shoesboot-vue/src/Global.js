@@ -1,8 +1,8 @@
 /*
  * @Description: 全局变量
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-23 13:40:18
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-03-05 01:41:50
  */
 exports.install = function (Vue) {

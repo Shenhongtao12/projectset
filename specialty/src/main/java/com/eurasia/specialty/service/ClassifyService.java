@@ -35,4 +35,8 @@ public class ClassifyService {
         classifyRepository.save(classify);
         return JsonData.buildSuccess("成功");
     }
+
+    public void delete(Integer id) {
+        classifyRepository.deleteById(id);
+    }
 }

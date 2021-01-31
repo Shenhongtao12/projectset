@@ -44,8 +44,8 @@ public class FavoriteService {
     public Integer exists(Favorite favorite) {
         Example example = new Example(Favorite.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("goods_id", favorite.getGoodsId());
-        criteria.andEqualTo("user_id", favorite.getUserId());
+        criteria.andEqualTo("goodsId", favorite.getGoodsId());
+        criteria.andEqualTo("userId", favorite.getUserId());
         Favorite byExample = favoriteMapper.selectOneByExample(example);
         return byExample != null ? byExample.getId() : 0;
     }
@@ -64,7 +64,7 @@ public class FavoriteService {
         PageHelper.startPage(page, size);
         Example example = new Example(Favorite.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("user_id", userId);
+        criteria.andEqualTo("userId", userId);
         Page<Favorite> favoritePage = (Page<Favorite>) favoriteMapper.selectByExample(example);
 
         List<Goods> goodsList = new ArrayList<>();

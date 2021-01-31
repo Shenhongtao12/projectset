@@ -1,6 +1,7 @@
 package com.eurasia.specialty.service;
 
 
+import com.eurasia.specialty.entity.Classify;
 import com.eurasia.specialty.entity.Goods;
 import com.eurasia.specialty.repository.GoodsRepository;
 import com.eurasia.specialty.repository.UserRepository;
@@ -19,17 +20,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
 public class GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
-    private UploadService uploadService;
+    private ClassifyService classifyService;
 
     public Map<String, Object> add(Goods goods) throws Exception {
         Map<String, Object> result = new HashMap<>(2);
@@ -93,6 +93,10 @@ public class GoodsService {
             }
         };
         Page<Goods> goodsPage = (Page<Goods>) this.goodsRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.DESC,orderBy)));
+        if (goodsPage.getContent().size() > 0) {
+            Map<Integer, String> classifyMap = classifyService.findAll().stream().collect(Collectors.toMap(Classify::getId, Classify::getName));
+            goodsPage.getContent().forEach( item -> item.setClassifyName(classifyMap.get(item.getClassifyId())));
+        }
 
         return new PageResult<>(goodsPage.getTotalElements(), goodsPage.getTotalPages(), goodsPage.getContent());
     }

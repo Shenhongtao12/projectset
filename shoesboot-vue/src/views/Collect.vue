@@ -1,8 +1,8 @@
 <!--
  * @Description: 我的收藏页面组件
- * @Author: hai-27
+ * @Author: Aaron.Shen
  * @Date: 2020-02-20 17:22:56
- * @LastEditors: hai-27
+ * @LastEditors: Aaron.Shen
  * @LastEditTime: 2020-03-12 19:34:00
  -->
 <template>

@@ -34,7 +34,7 @@ public class GoodsController extends BaseController {
     public ResponseEntity<RestResponse> jsoupSave(@Valid @RequestBody Goods goods) {
         goods.setId(null);
         int id = goodsService.save(goods);
-        goods.setId(id);
+        goods.setId(goods.getId());
         if (goods.getShelf()) {
             kafkaProducer.send(goods);
             redisService.setData("shoes_goods_" + id, goods.getInventory().toString());

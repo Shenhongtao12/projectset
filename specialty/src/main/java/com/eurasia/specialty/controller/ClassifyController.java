@@ -40,4 +40,10 @@ public class ClassifyController {
     public ResponseEntity<JsonData> findAll(){
         return ResponseEntity.ok(JsonData.buildSuccess(classifyService.findAll(), ""));
     }
+
+    @DeleteMapping
+    public ResponseEntity<JsonData> delete(@RequestParam(name = "id") Integer id){
+        classifyService.delete(id);
+        return ResponseEntity.ok(JsonData.buildSuccess("成功"));
+    }
 }

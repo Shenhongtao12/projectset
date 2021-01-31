@@ -79,10 +79,10 @@ public class UserController extends BaseController{
     }
 
     @GetMapping("queryPage")
-    public ResponseEntity<PageResult<User>> findByPage(
+    public ResponseEntity<JsonData> findByPage(
                                                         @RequestParam(value = "name", required = false) String name,
                                                         @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                         @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
-        return ResponseEntity.ok(this.userService.findByPage( name, page, rows));
+        return ResponseEntity.ok(JsonData.buildSuccess(this.userService.findByPage( name, page, rows),""));
     }
 }
