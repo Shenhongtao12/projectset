@@ -114,7 +114,7 @@ public class UserService {
             userRepository.save(user);
         } catch (Exception e) {
             e.printStackTrace();
-            data.setCode(502);
+            data.setCode(500);
             data.setMsg("服务异常，请稍后重试");
             return data;
         }

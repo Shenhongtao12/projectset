@@ -25,9 +25,9 @@ public class ClassifyController {
     public ResponseEntity<JsonData> save(@RequestBody Classify classify) {
         Classify save = classifyService.save(classify);
         JsonData jsonData = new JsonData();
-        jsonData.setCode(0);
+        jsonData.setCode(200);
         if (save.getId() == null){
-            jsonData.setCode(-1);
+            jsonData.setCode(400);
         }
         return ResponseEntity.status(HttpStatus.OK).body(jsonData);
     }

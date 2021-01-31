@@ -42,10 +42,10 @@ public class GoodsService {
         goods.setCreateTime(new Date());
         try {
             this.goodsRepository.save(goods);
-            result.put("code", 0);
+            result.put("code", 200);
             result.put("msg", "添加成功");
         } catch (Exception e) {
-            result.put("code", 500);
+            result.put("code", 400);
             result.put("msg", "添加失败");
         }
         return result;
@@ -59,10 +59,10 @@ public class GoodsService {
             Goods info = goodsRepository.findById(goods.getId()).get();
             JpaUtils.copyNotNullProperties(goods, info);
             this.goodsRepository.save(goods);
-            result.put("code", 0);
+            result.put("code", 200);
             result.put("msg", "成功");
         } catch (Exception e) {
-            result.put("code", 500);
+            result.put("code", 400);
             result.put("msg", "失败");
         }
         return result;
