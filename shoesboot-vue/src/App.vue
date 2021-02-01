@@ -110,7 +110,10 @@
             </div>
           </div>
           <div class="github">
-            <a href="https://github.com/Aaron.Shen/vue-store" target="_blank">
+            <a
+              href="https://github.com/Shenhongtao12/shoesboot/tree/master/shoesboot-vue"
+              target="_blank"
+            >
               <div class="github-but"></div>
             </a>
           </div>
@@ -122,7 +125,7 @@
               <span>|</span>
               <router-link to="/about">关于我们</router-link>
             </p>
-            <p class="coty">商城版权所有 &copy; 2012-2021</p>
+            <p class="coty">商城版权所有 &copy; 2017-2021</p>
           </div>
         </div>
       </el-footer>
@@ -206,10 +209,10 @@ export default {
     },
     // 点击搜索按钮
     searchClick() {
-      if (this.search != "") {
+      if (this.search !== "") {
         // 跳转到全部商品页面,并传递搜索条件
         this.$router.push({ path: "/goods", query: { search: this.search } });
-        this.search = "";
+        //this.search = "";
       }
     },
   },

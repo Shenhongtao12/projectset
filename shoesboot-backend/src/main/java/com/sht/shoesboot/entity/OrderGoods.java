@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class OrderGoods {
 
     @Id
     @KeySql(useGeneratedKeys = true)
+    @Column(name = "o_id")
     private Integer id;
 
     private Integer orderId;

@@ -4,6 +4,7 @@ import com.eurasia.specialty.entity.Comment;
 import com.eurasia.specialty.service.CommentService;
 import com.eurasia.specialty.utils.JsonData;
 import io.swagger.annotations.Api;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +37,11 @@ public class CommentController extends BaseController{
     public ResponseEntity<JsonData> findBySort(@RequestParam(name = "postId") Integer postId,
                                                @RequestParam(name = "sortName") String sortName){
         return ResponseEntity.ok(JsonData.buildSuccess(commentService.findByPostId(postId, userId, sortName),""));
+    }
+
+    @GetMapping("findMessagePage")
+    public ResponseEntity<JsonData> findMessagePage(@RequestParam(name = "page")Integer page,
+                                                    @RequestParam(name = "rows") Integer rows) {
+        return ResponseEntity.ok(JsonData.buildSuccess(commentService.findMessagePage(page, rows), ""));
     }
 }

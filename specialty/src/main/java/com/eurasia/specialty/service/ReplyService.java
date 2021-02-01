@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.criteria.*;
 
@@ -38,8 +39,16 @@ public class ReplyService {
     private FansService fansService;
 
 
+    @Transactional
     public int deleteByCommentId(Integer comid) {
-        return replyRepository.deleteByCommentId(comid);
+        try {
+            int num = replyRepository.deleteRepliesByCommentId(comid);
+            return num;
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return 0;
+        }
     }
 
 
@@ -71,6 +80,7 @@ public class ReplyService {
         return replyRepository.findById(id).get();
     }
 
+    @Transactional
     public JsonData delete(Integer id) {
         Reply reply = findById(id);
         if (reply.getParentId() != 0) {
@@ -81,9 +91,17 @@ public class ReplyService {
                 replyRepository.save(byId);
             }
         }
-        praiseRepository.deleteByTypeAndTypeId("reply", id);
-        this.replyRepository.deleteById(id);
-        return JsonData.buildSuccess("成功");
+        try {
+            praiseRepository.deleteByTypeAndTypeId("reply", id);
+            replyRepository.deleteRepliesByParentId(reply.getId());
+
+            this.replyRepository.deleteById(id);
+            return JsonData.buildSuccess("成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return JsonData.buildError("失败");
+        }
     }
 
 

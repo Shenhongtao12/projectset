@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -34,7 +35,7 @@ public class ShopCart {
 
     public Integer userId;
 
-    public Date inDate;
+    public LocalDateTime inDate;
 
     @Column(name = "is_check")
     public Boolean check;

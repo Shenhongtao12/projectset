@@ -193,7 +193,6 @@ export default {
         userId: this.$store.getters.getUser.id,
         orderGoodsList: this.getCheckGoods,
       };
-      console.log(request);
       createOrder(request)
         .then((res) => {
           let products = this.getCheckGoods;

@@ -116,7 +116,6 @@ export default {
           };
           login(request)
             .then((res) => {
-              console.log(res);
               if (res.code === 200) {
                 // 隐藏登录组件
                 this.isLogin = false;

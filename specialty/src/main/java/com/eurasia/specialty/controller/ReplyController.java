@@ -16,13 +16,13 @@ public class ReplyController extends BaseController{
     @Autowired
     private ReplyService replyService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<JsonData> save(@RequestBody Reply reply) throws Exception {
         reply.setUserId(userId);
         return ResponseEntity.ok(this.replyService.save(reply));
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<JsonData> delete(@RequestParam(name = "id") Integer id) {
         return ResponseEntity.ok(this.replyService.delete(id));
     }

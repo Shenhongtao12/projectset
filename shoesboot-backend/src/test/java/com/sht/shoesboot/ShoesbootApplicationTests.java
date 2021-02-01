@@ -65,8 +65,7 @@ class ShoesbootApplicationTests {
 
     @Test
     public void testQueryEs() throws IOException {
-        List<Map<String, Object>> nike = goodsService.findByPage(1, 30, "nike");
-        System.out.println(nike);
+        System.out.println(goodsService.findByPage(1, 30, "nike"));
     }
 
 }

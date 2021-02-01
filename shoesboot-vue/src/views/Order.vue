@@ -103,11 +103,11 @@
       <div style="margin-top: -40px"></div>
       <div class="block">
         <el-pagination
-          :hide-on-single-page="page.total < 10"
+          :hide-on-single-page="page.total < 5"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="page.pageNum"
-          :page-sizes="[10, 20, 30, 50]"
+          :page-sizes="[5, 10, 20, 30]"
           :page-size.sync="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total.sync="page.total"
@@ -135,13 +135,14 @@ export default {
   methods: {
     handleSizeChange(val) {
       this.page.pageSize = val;
-      this.activated();
+      this.page.pageNum = 1;
+      this.getOrderList();
     },
     handleCurrentChange(val) {
       this.page.pageNum = val;
-      this.activated();
+      this.getOrderList();
     },
-    activated() {
+    getOrderList() {
       // 获取订单数据
       let request = {
         userId: this.$store.getters.getUser.id,
@@ -150,7 +151,6 @@ export default {
       };
       getOrderList(request)
         .then((res) => {
-          console.log(res);
           if (res.code === 200) {
             this.orders = res.data.data;
             this.page.total = res.data.total;
@@ -170,12 +170,15 @@ export default {
       page: {
         total: 0,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 5,
       },
     };
   },
   created() {
-    this.activated();
+    this.getOrderList();
+  },
+  activated() {
+    this.getOrderList();
   },
 
   watch: {
@@ -391,7 +394,8 @@ export default {
 }
 
 .block {
-  margin-left: 35%;
+  height: 50px;
+  text-align: center;
 }
 
 /* 订单为空的时候显示的内容CSS END */

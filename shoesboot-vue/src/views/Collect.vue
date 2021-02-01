@@ -16,7 +16,9 @@
     </div>
     <div class="content">
       <div class="goods-list" v-if="collectList.length > 0">
-        <MyList :list="collectList" :isDelete="true"></MyList>
+        <div>
+          <MyList :list="collectList" :isDelete="true"></MyList>
+        </div>
       </div>
       <!-- 收藏列表为空的时候显示的内容 -->
       <div v-else class="collect-empty">
@@ -27,29 +29,67 @@
       </div>
       <!--  收藏列表为空的时候显示的内容END -->
     </div>
+    <div class="block">
+      <el-pagination
+        :hide-on-single-page="page.total < 10"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="page.pageNum"
+        :page-sizes="[10, 20, 30, 50]"
+        :page-size.sync="page.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total.sync="page.total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
+import { getFavorite } from "@/api/FavoriteService";
+
 export default {
+  created() {
+    this.getFavorite();
+  },
+  activated() {
+    this.getFavorite();
+  },
+  methods: {
+    getFavorite() {
+      // 获取收藏数据
+      getFavorite({
+        page: this.page.pageNum,
+        size: this.page.pageSize,
+      })
+        .then((res) => {
+          if (res.code === 200) {
+            this.collectList = res.data.data;
+            this.page.total = res.data.total;
+          }
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
+    },
+    handleSizeChange(val) {
+      this.page.pageSize = val;
+      this.page.pageNum = 1;
+      this.getFavorite();
+    },
+    handleCurrentChange(val) {
+      this.page.pageNum = val;
+      this.getFavorite();
+    },
+  },
   data() {
     return {
       collectList: [],
+      page: {
+        total: 0,
+        pageNum: 1,
+        pageSize: 10,
+      },
     };
-  },
-  activated() {
-    // 获取收藏数据
-    this.$axios
-      .post("/api/user/collect/getCollect", {
-        user_id: this.$store.getters.getUser.id,
-      })
-      .then((res) => {
-        if (res.data.code === "001") {
-          this.collectList = res.data.collectList;
-        }
-      })
-      .catch((err) => {
-        return Promise.reject(err);
-      });
   },
 };
 </script>
@@ -57,11 +97,13 @@ export default {
 .collect {
   background-color: #f5f5f5;
 }
+
 .collect .collect-header {
   height: 64px;
   background-color: #fff;
   border-bottom: 2px solid #ff6700;
 }
+
 .collect .collect-header .collect-title {
   width: 1225px;
   margin: 0 auto;
@@ -69,20 +111,24 @@ export default {
   line-height: 58px;
   font-size: 28px;
 }
+
 .collect .content {
   padding: 20px 0;
   width: 1225px;
   margin: 0 auto;
 }
+
 .collect .content .goods-list {
   margin-left: -13.7px;
   overflow: hidden;
 }
+
 /* 收藏列表为空的时候显示的内容CSS */
 .collect .collect-empty {
   width: 1225px;
   margin: 0 auto;
 }
+
 .collect .collect-empty .empty {
   height: 300px;
   padding: 0 0 130px 558px;
@@ -91,13 +137,21 @@ export default {
   color: #b0b0b0;
   overflow: hidden;
 }
+
 .collect .collect-empty .empty h2 {
   margin: 70px 0 15px;
   font-size: 36px;
 }
+
 .collect .collect-empty .empty p {
   margin: 0 0 20px;
   font-size: 20px;
 }
+
+.collect .block {
+  height: 50px;
+  text-align: center;
+}
+
 /* 收藏列表为空的时候显示的内容CSS END */
 </style>

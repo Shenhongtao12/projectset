@@ -21,7 +21,7 @@
         <!-- 手机商品展示区域 -->
         <div class="phone">
           <div class="box-hd">
-            <div class="title">特惠商品</div>
+            <div class="title">限时抢购</div>
           </div>
           <div class="box-bd">
             <div class="promo-list">
@@ -32,7 +32,7 @@
               </router-link>
             </div>
             <div class="list">
-              <MyList :list="cheapGoodsList" :isMore="true"></MyList>
+              <MyList :list="cheapGoodsList" :isMore="false"></MyList>
             </div>
           </div>
         </div>
@@ -101,7 +101,11 @@
               </ul>
             </div>
             <div class="list">
-              <MyList :list="accessoryList" :isMore="true"></MyList>
+              <MyList
+                :list="accessoryList"
+                :isMore="true"
+                :category-name="categoryName"
+              ></MyList>
             </div>
           </div>
         </div>
@@ -127,6 +131,7 @@ export default {
       chargerList: "", //充电器商品列表
       applianceActive: 1, // 家电当前选中的商品分类
       accessoryActive: 1, // 配件当前选中的商品分类
+      categoryName: "",
     };
   },
   watch: {
@@ -138,12 +143,12 @@ export default {
         this.applianceHotList = this.applianceList;
       }
       if (val == 1) {
-        // 1为热门商品
+        this.categoryName = "NIKE";
         this.applianceList = this.applianceHotList;
         return;
       }
       if (val == 2) {
-        // 2为电视商品
+        this.categoryName = "Air%20Jordan";
         this.applianceList = this.miTvList;
         return;
       }
@@ -156,16 +161,17 @@ export default {
       }
       if (val == 1) {
         // 1为热门商品
+        this.categoryName = "adidas";
         this.accessoryList = this.accessoryHotList;
         return;
       }
       if (val == 2) {
-        // 2为保护套商品
+        this.categoryName = "Yeezy";
         this.accessoryList = this.protectingShellList;
         return;
       }
       if (val == 3) {
-        //3 为充电器商品
+        this.categoryName = "三叶草";
         this.accessoryList = this.chargerList;
         return;
       }
@@ -197,16 +203,6 @@ export default {
     getChildMsg2(val) {
       this.accessoryActive = val;
     },
-    //特价商品
-    getCheapGoods(data) {
-      getCheapGoods(data)
-        .then((res) => {
-          this.cheapGoodsList = res.data.data;
-        })
-        .catch((err) => {
-          return Promise.reject(err);
-        });
-    },
     // 获取各类商品数据方法封装
     getPromo(categoryName, val) {
       let request = {
@@ -216,7 +212,7 @@ export default {
       };
       getGoods(request)
         .then((res) => {
-          this[val] = res.data;
+          this[val] = res.data.data;
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -227,7 +223,7 @@ export default {
       let request = {
         status: true,
         page: 1,
-        rows: 7,
+        rows: 8,
       };
       getCheapGoods(request)
         .then((res) => {

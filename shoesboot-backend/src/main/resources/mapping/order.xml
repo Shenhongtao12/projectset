@@ -4,11 +4,11 @@
 
 <mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
 
-    <select id="queryPage" parameterType="string" resultMap="orderInfo">
+    <select id="queryPage" resultMap="orderInfo">
         SELECT g.goods_id, g.title AS title, g.amount, g.image AS image,g.price AS price, o.id AS id,o.order_number, o.status, o.money AS money,o.in_date
         FROM `orders` o
         INNER JOIN order_goods g
-        ON o.id= g.order_id
+        ON o.id = g.order_id
         <where>
             <if test="status != null"> status = #{status} </if>
             <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
@@ -30,8 +30,9 @@
         <result column="money" property="money"></result>
         <result column="order_number" property="orderNumber"></result>
         <result column="status" property="status"></result>
+
         <collection property="orderGoodsList" ofType="com.sht.shoesboot.entity.OrderGoods">
-            <id column="id" property="id"></id>
+            <id column="o_id" property="id"></id>
             <result column="order_id" property="orderId"></result>
             <result column="goods_id" property="goodsId"></result>
             <result column="cart_id" property="cartId"></result>

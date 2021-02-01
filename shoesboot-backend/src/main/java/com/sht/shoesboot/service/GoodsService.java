@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.entity.GoodsHistory;
+import com.sht.shoesboot.entity.PageResult;
 import com.sht.shoesboot.mapper.GoodsHistoryMapper;
 import com.sht.shoesboot.mapper.GoodsMapper;
 import com.sht.shoesboot.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -95,14 +97,14 @@ public class GoodsService {
     /**
      * 分页查询数据
      */
-    public List<Map<String, Object>> findByPage(int page, int size, String keyword) throws IOException {
+    public PageResult<Map<String, Object>> findByPage(int page, int size, String keyword) throws IOException {
         if (page <= 1) {
             page = 1;
         }
         SearchRequest searchRequest = new SearchRequest("shoes_goods");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         //分页
-        sourceBuilder.from(page);
+        sourceBuilder.from((page - 1) * size);
         sourceBuilder.size(size);
         //matchQuery
         if (StringUtils.isNoneEmpty(keyword)) {
@@ -142,7 +144,9 @@ public class GoodsService {
 
             list.add(sourceAsMap);
         }
-        return list;
+        long total = search.getHits().getTotalHits().value;
+        int pages = Math.toIntExact(total) / size;
+        return new PageResult<>(total, pages + 1, list);
     }
 
     public int save(Goods goods) {

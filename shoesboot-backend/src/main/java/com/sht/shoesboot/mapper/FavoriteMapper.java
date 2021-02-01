@@ -1,6 +1,7 @@
 package com.sht.shoesboot.mapper;
 
 import com.sht.shoesboot.entity.Favorite;
+import org.apache.ibatis.annotations.Delete;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

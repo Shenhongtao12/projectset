@@ -3,10 +3,12 @@ package com.eurasia.specialty.service;
 import com.eurasia.specialty.entity.Comment;
 import com.eurasia.specialty.entity.Post;
 import com.eurasia.specialty.entity.Reply;
+import com.eurasia.specialty.entity.User;
 import com.eurasia.specialty.repository.CommentRepository;
 import com.eurasia.specialty.repository.PraiseRepository;
 import com.eurasia.specialty.utils.DateUtils;
 import com.eurasia.specialty.utils.JsonData;
+import com.eurasia.specialty.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -111,5 +113,11 @@ public class CommentService {
     //根据postId查找对应的commentNum
     public Integer countByPostId(Integer postId){
         return commentRepository.countByPostId(postId);
+    }
+
+    public PageResult<Comment> findMessagePage(Integer page, Integer rows) {
+        Page<Comment> commentPage = commentRepository.findAll(PageRequest.of(page, rows));
+        commentPage.getContent().forEach(item -> item = findOneComment(item.getCommentId(), item.getUserId()));
+        return new PageResult<>(commentPage.getTotalElements(), commentPage.getTotalPages(), commentPage.getContent());
     }
 }

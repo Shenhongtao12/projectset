@@ -32,6 +32,14 @@
           }"
         >
           <img :src="item.images" alt />
+          <!--<el-tooltip
+                  class="item"
+                  effect="light"
+                  :content="item.title"
+                  placement="top"
+          >
+            <h2 class="title">{{ item.title }}</h2>
+          </el-tooltip>-->
           <h2 v-html="item.title"></h2>
           <h3>{{ item.brand }}</h3>
           <p>
@@ -54,11 +62,12 @@
   </div>
 </template>
 <script>
+import { deleteFavorite } from "@/api/FavoriteService";
 export default {
   name: "MyList",
   // list为父组件传过来的商品列表
   // isMore为是否显示“浏览更多”
-  props: ["list", "isMore", "isDelete"],
+  props: ["list", "isMore", "isDelete", "categoryName"],
   data() {
     return {};
   },
@@ -69,10 +78,10 @@ export default {
       if (this.list != "") {
         for (let i = 0; i < this.list.length; i++) {
           this.list[i].images = this.list[i].images.split(",")[0];
-          const id = this.list[i].category_id;
-          if (!categoryID.includes(id)) {
-            categoryID.push(id);
-          }
+        }
+        const id = this.categoryName;
+        if (!categoryID.includes(id)) {
+          categoryID.push(id);
         }
       }
       return categoryID;
@@ -80,28 +89,25 @@ export default {
   },
   methods: {
     deleteCollect(product_id) {
-      this.$axios
-        .post("/api/user/collect/deleteCollect", {
-          user_id: this.$store.getters.getUser.id,
-          product_id: product_id,
-        })
+      deleteFavorite({
+        userId: this.$store.getters.getUser.id,
+        goodsId: product_id,
+      })
         .then((res) => {
-          switch (res.data.code) {
-            case "001":
-              // 删除成功
-              // 删除删除列表中的该商品信息
-              for (let i = 0; i < this.list.length; i++) {
-                const temp = this.list[i];
-                if (temp.product_id == product_id) {
-                  this.list.splice(i, 1);
-                }
+          if (res.code === 200) {
+            // 删除成功
+            // 删除删除列表中的该商品信息
+            for (let i = 0; i < this.list.length; i++) {
+              const temp = this.list[i];
+              if (temp.product_id == product_id) {
+                this.list.splice(i, 1);
               }
-              // 提示删除成功信息
-              this.notifySucceed(res.data.msg);
-              break;
-            default:
-              // 提示删除失败信息
-              this.notifyError(res.data.msg);
+            }
+            // 提示删除成功信息
+            this.notifySucceed(res.message);
+          } else {
+            // 提示删除失败信息
+            this.notifyError(res.message);
           }
         })
         .catch((err) => {

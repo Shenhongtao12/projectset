@@ -11,9 +11,9 @@ import java.util.List;
 public interface ReplyRepository extends JpaRepository<Reply, Integer>, JpaSpecificationExecutor<Reply> {
     List<Reply> findByCommentId(Integer id);
 
-    Integer deleteByCommentId(Integer id);
+    int deleteRepliesByCommentId(Integer id);
 
     Integer countByParentId(Integer id);
 
-
+    Integer deleteRepliesByParentId(Integer id);
 }

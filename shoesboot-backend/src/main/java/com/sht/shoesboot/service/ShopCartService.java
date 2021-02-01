@@ -99,4 +99,12 @@ public class ShopCartService {
         }
         return false;
     }
+
+    public ShopCart checkCar(Integer goodsId, Integer userId) {
+        Example example = new Example(ShopCart.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("goodsId", goodsId);
+        criteria.andEqualTo("userId", userId);
+        return shopCartMapper.selectOneByExample(example);
+    }
 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.entity.Favorite;
 import com.sht.shoesboot.entity.Goods;
+import com.sht.shoesboot.entity.PageResult;
 import com.sht.shoesboot.mapper.FavoriteMapper;
 import com.sht.shoesboot.mapper.GoodsHistoryMapper;
 import com.sht.shoesboot.mapper.GoodsMapper;
@@ -60,7 +61,7 @@ public class FavoriteService {
         }
     }
 
-    public List<Goods> queryFavorite(Integer userId, Integer page, Integer size) {
+    public PageResult<Goods> queryFavorite(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
         Example example = new Example(Favorite.class);
         Example.Criteria criteria = example.createCriteria();
@@ -73,7 +74,7 @@ public class FavoriteService {
         if (favoritePage.getTotal() > 0) {
             MultiGetRequest request = new MultiGetRequest();
             for (Favorite favorite : favoritePage.getResult()) {
-                request.add(new MultiGetRequest.Item("shoes", favorite.getGoodsId().toString()));
+                request.add(new MultiGetRequest.Item("shoes_goods", favorite.getGoodsId().toString()));
             }
             try {
                 MultiGetResponse itemResponses = restHighLevelClient.mget(request, RequestOptions.DEFAULT);
@@ -93,7 +94,7 @@ public class FavoriteService {
 //        if (flag) {
 //            goodsList.addAll(goodsService.queryShelfGoods(userId));
 //        }
-        return goodsList;
+        return new PageResult<>(favoritePage.getTotal(), favoritePage.getPages(), goodsList);
     }
 
     public void batchDelete(List<Integer> ids) {
@@ -107,5 +108,13 @@ public class FavoriteService {
         }else {
             return goods;
         }
+    }
+
+    public void delete(Integer userId, Integer goodsId) {
+        Example example = new Example(Favorite.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("goodsId", goodsId);
+        favoriteMapper.deleteByExample(example);
     }
 }

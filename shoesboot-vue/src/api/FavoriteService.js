@@ -7,3 +7,19 @@ export function postFavorite(data) {
     data: data,
   });
 }
+
+export function getFavorite(data) {
+  return request({
+    url: "favorite",
+    method: "get",
+    params: data,
+  });
+}
+
+export function deleteFavorite(data) {
+  return request({
+    url: "favorite",
+    method: "delete",
+    params: data,
+  });
+}

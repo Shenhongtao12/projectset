@@ -135,8 +135,16 @@ export default {
     getDetails(val) {
       getOneGoods(val)
         .then((res) => {
-          this.productDetails = res.data;
-          this.productPicture = res.data.images.split(",");
+          if (res.code === 200) {
+            this.productDetails = res.data;
+            this.productPicture = res.data.images.split(",");
+          } else if (res.code === 404) {
+            this.notifyError("该商品已下架");
+            this.$router.push("/collect");
+          } else {
+            this.notifyError(res.message);
+            this.$router.push("/collect");
+          }
         })
         .catch((err) => {
           return Promise.reject(err);
@@ -163,6 +171,7 @@ export default {
           }
         });
       }
+      console.log(request);
       putShopCart(request)
         .then((res) => {
           if (res.code === 200) {

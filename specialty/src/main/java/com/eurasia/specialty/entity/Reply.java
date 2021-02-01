@@ -23,7 +23,10 @@ public class Reply implements Serializable {
 	private String createTime;
 	private String content;
 	private Integer number;
-	private Integer leaf;   //等于0时就是一个树的末尾
+	/**
+	 * 等于0时就是一个树的末尾
+	 */
+	private Integer leaf;
 	/**
 	 * 发布回复的人id
 	 */

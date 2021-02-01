@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Aaron
  * @date 2020/12/27 23:39
@@ -30,8 +32,14 @@ public class ShopCartController extends BaseController{
         if (StringUtils.isNoneEmpty(inventory)) {
             if (Integer.parseInt(inventory) >= shopCart.getAmount()) {
                 JSONObject response = new JSONObject();
-                response.put("inventory", inventory);
-                if (shopCart.getId() != null) {
+                response.put("inventory", Integer.parseInt(inventory));
+                ShopCart isCheck = shopCartService.checkCar(shopCart.getGoodsId(), shopCart.getUserId());
+                shopCart.setInDate(LocalDateTime.now());
+                if (isCheck != null) {
+                    if (shopCart.getId() == null) {
+                        shopCart.setId(isCheck.getId());
+                        shopCart.setAmount(isCheck.getAmount() + shopCart.getAmount());
+                    }
                     shopCartService.update(shopCart);
                     response.put("cartId", shopCart.getId());
                 }else {

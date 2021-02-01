@@ -23,5 +23,6 @@ public class StringTest {
     public void testOrderNumber() {
         System.out.println(System.currentTimeMillis());
         System.out.println(OrderNumber.createOrderNumber());
+        System.out.println(Math.toIntExact(26L) / 10);
     }
 }

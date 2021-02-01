@@ -25,10 +25,18 @@ export function getCheapGoods(data) {
   });
 }
 
-//特价商品
 export function getOneGoods(data) {
   return request({
     url: "goods/" + data,
     method: "get",
+  });
+}
+
+//分类
+export function getClassify(data) {
+  return request({
+    url: "classify",
+    method: "get",
+    params: data,
   });
 }

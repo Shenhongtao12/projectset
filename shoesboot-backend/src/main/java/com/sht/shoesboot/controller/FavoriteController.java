@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -32,9 +34,17 @@ public class FavoriteController extends BaseController {
         return ResponseEntity.ok().body(SUCCESS(favoriteService.queryFavorite(userId, page, size)));
     }
 
-    @DeleteMapping
+    @DeleteMapping("ids")
     public ResponseEntity<RestResponse> batchDelete(@RequestParam(name = "ids")List<Integer> ids) {
         favoriteService.batchDelete(ids);
         return ResponseEntity.ok().body(SUCCESS("成功"));
     }
+
+    @DeleteMapping
+    public ResponseEntity<RestResponse> delete(@Valid @NotNull(message = "userId not is null") @RequestParam(name = "userId")Integer userId,
+                                               @Valid @NotNull(message = "goodsId not is null") @RequestParam(name = "goodsId") Integer goodsId) {
+        favoriteService.delete(userId, goodsId);
+        return ResponseEntity.ok().body(SUCCESS("删除成功"));
+    }
+
 }
