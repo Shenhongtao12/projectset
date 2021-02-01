@@ -110,7 +110,11 @@ public class CommentService {
         return commentRepository.findById(id).get();
     }
 
-    //根据postId查找对应的commentNum
+    /**
+     * 根据postId查找对应的commentNum
+     * @param postId post id
+     * @return result
+     */
     public Integer countByPostId(Integer postId){
         return commentRepository.countByPostId(postId);
     }

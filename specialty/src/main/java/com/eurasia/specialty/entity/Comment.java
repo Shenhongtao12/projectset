@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 留言
+ * @author Administrator
  */
 @Data
 @Table(name = "sp_comment")
@@ -20,9 +21,15 @@ public class Comment implements Serializable {
 	private String content;
 	private String createTime;
 	private Integer number;
-	private Integer userId;  //留言的发布人id
+	/**
+	 * 留言的发布人id
+	 */
+	private Integer userId;
 	private Integer postId;
-	private Integer leaf;  //null 用来区分留言和回复
+	/**
+	 *  null 用来区分留言和回复
+	 */
+	private Integer leaf;
 
 	@Transient
 	private Object state;  //判断点赞

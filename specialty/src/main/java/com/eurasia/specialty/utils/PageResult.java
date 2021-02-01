@@ -8,9 +8,18 @@ import java.util.List;
 @Getter
 @Setter
 public class PageResult<T> {
-	private Long total; //总条数
-	private Integer Pages; //总页数
-	private List<T> data; //当前页数据
+	/**
+	 * 总条数
+	 */
+	private Long total;
+	/**
+	 * 总页数
+	 */
+	private Integer pages;
+	/**
+	 * 当前页数据
+	 */
+	private List<T> data;
 
 	public PageResult() {
 	}
@@ -20,9 +29,9 @@ public class PageResult<T> {
 		this.data = data;
 	}
 
-	public PageResult(Long total, Integer Pages, List<T> data) {
+	public PageResult(Long total, Integer pages, List<T> data) {
 		this.total = total;
-		this.Pages = Pages;
+		this.pages = pages;
 		this.data = data;
 	}
 }
