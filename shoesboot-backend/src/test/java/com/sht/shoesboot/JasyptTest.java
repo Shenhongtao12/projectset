@@ -37,8 +37,8 @@ public class JasyptTest {
     public void decryptionTest() {
         StandardPBEStringEncryptor stringEncryptor = new StandardPBEStringEncryptor();
         stringEncryptor.setPassword("841b54a7a45883874c36d59ab6e7d80c");
-        stringEncryptor.setAlgorithm("PBEWithMD5AndDES");
-        String username = stringEncryptor.encrypt("jdbc:mysql://47.98.128.88:3306/shoes?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true");
+        stringEncryptor.setAlgorithm("PBEWithMD5AndDES");//172.24.77.44
+        String username = stringEncryptor.encrypt("jdbc:mysql://172.24.77.44:3306/shoes?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true");
         String password = stringEncryptor.encrypt("sht123");
         String pass = stringEncryptor.decrypt(password);
         String a = stringEncryptor.decrypt("30e0oszTKPLunfLvDo8sQgSM3KFn3Zxydy6xww+sEuXeqQf/7bUZSPiYAtnpZE8YSZna1rFp5X42nSR+vJalNQDF6f/sGcTjpvoaPc0I4DyTIWhes2KQq+kpYJZwtAdm8OgU+vprMSPBthN34o4BWfXJeYit6O+QQ1OMKbYBHiVBQvyyBtdiag==");
