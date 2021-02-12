@@ -44,7 +44,7 @@ public class BaseController {
     }
 
     public RestResponse ERROR(String message) {
-        return new RestResponse(500, message);
+        return new RestResponse(400, message);
     }
 
     public RestResponse ERROR(Integer code, String message) {
