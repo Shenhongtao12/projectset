@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ENC(vaVC07EXXlW3dFiYKZDY6TasgOMDGG76yKum7xF/4VOCkLQT87kwE8i9FcrPqbYZdvX8pnwa/2aS+IciPVfwijVu9jJK8SklEbXGh8YOiq5A9j+XVvQZnFUS6bPMeVXSvHXcPBowEsIfqIM7TK4MQR3l5M/+9GZjYmyPoFqQr/A7U6cqFLMrfQ==)
+    url: ENC(mxceYq69oKooRhaDDCvhTKuEygNaGhNeG12BGQS5x39PqGNRIwfaNx70Ev7EtGnlrwsYQPw3mE4075mk4D6DJf/ftttuFkXaziShmzdyZN0z/Aqw6q21kIu+68A49j3N8q0LgOozw2PQ9jSKe18t7pDQFx7atThb4/qxVYDTdnYjeJKEWAeijA==)
     username: ENC(2Io83MWwLR/etZSrMIVNMw==)
     password: ENC(SU6acVIzxPtmSHKoZDnC2BcrFIfRFrZJ)
     #使用阿里巴巴Druid数据源
@@ -14,5 +14,5 @@ spring:
     timeout: 5000
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql语句包括查询结果
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql语句包括查询结果
     map-underscore-to-camel-case: true #下划线转驼峰配置

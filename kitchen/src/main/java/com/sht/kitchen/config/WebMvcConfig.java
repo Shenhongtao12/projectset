@@ -1,38 +1,24 @@
-package com.eurasia.specialty.config;
+package com.sht.kitchen.config;
 
-import com.eurasia.specialty.interceptor.JwtInterceptor;
+import com.sht.kitchen.interceptor.JwtInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 
-//@Configuration
-//public class InterceptorConfig extends WebMvcConfigurationSupport {
-//
-//    @Autowired
-//    private JwtInterceptor jwtInterceptor;
-//
-//    /**
-//     * 添加拦截器的配置
-//     */
-//    @Override
-//    protected void addInterceptors(InterceptorRegistry registry) {
-//        //1.添加自定义拦截器
-//        registry.addInterceptor(jwtInterceptor).
-//                addPathPatterns("/api/*/**").//2.指定拦截器的url地址
-//                excludePathPatterns("/api/user/login","/api/user/init","/eurasia/**");//3.指定不拦截的url地址
-//    }
-//}
-
+/**
+ * @author Aaron
+ */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Resource
     private CorsInterceptor corsInterceptor;
-
+    /**
+     * 拦截器配置
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
@@ -42,7 +28,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/user/**",
+                //配置不拦截的api
+                .excludePathPatterns(
+                        "/api/user/**",
                         "/api/admin/login",
                         "/api/goods/findByPage",
                         "api/post/findByClassifyOrMatter",
@@ -50,20 +38,21 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "api/matter/**",
                         "api/upload/**",
                         "api/classify/"
-                );
+                )
+        ;
 
         WebMvcConfigurer.super.addInterceptors(registry);
     }
+
+    /**
+     * 跨域处理
+     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
                 .allowCredentials(true).maxAge(3600);
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/eurasia/**").addResourceLocations("file:/eurasia/");
-    }
 }
