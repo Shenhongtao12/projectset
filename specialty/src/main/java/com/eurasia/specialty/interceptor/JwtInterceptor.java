@@ -67,11 +67,11 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
                     request.setAttribute("user_claims",claims);
                     return true;
                 }else {
-                    sendJsonMessage(response, JsonData.buildError("鉴权失败"));
+                    sendJsonMessage(response, new JsonData(401, null, "鉴权失败，token错误"));
                 }
             }
         }
-        sendJsonMessage(response, JsonData.buildError("请登录！"));
+        sendJsonMessage(response, new JsonData(401, null, "请登录！"));
         return false;
     }
 
