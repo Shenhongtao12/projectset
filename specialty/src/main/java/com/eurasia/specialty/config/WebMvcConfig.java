@@ -48,7 +48,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "api/post/findByClassifyOrMatter",
                         "api/goods/findById",
                         "api/matter/**",
-                        "api/upload/**"
+                        "api/upload/**",
+                        "api/classify/"
                 );
 
         WebMvcConfigurer.super.addInterceptors(registry);
@@ -60,6 +61,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
                 .allowCredentials(true).maxAge(3600);
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/eurasia/**").addResourceLocations("file:/eurasia/");

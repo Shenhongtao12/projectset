@@ -56,8 +56,9 @@ public class UserService {
         } else {
             data.setCode(200);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("user", user);
-            jsonObject.put("token", JwtUtils.geneJsonWebToken(user));
+            info.setPassword("******");
+            jsonObject.put("user", info);
+            jsonObject.put("token", JwtUtils.geneJsonWebToken(info));
             data.setData(jsonObject);
         }
         return data;
@@ -109,6 +110,12 @@ public class UserService {
                 User one = userRepository.getOne(user.getId());
                 JpaUtils.copyNotNullProperties(user, one);
             }else {
+                User info = userRepository.findUserByNickName(user.getNickName());
+                if (info != null) {
+                    data.setMsg("用户名已存在");
+                    data.setCode(400);
+                    return data;
+                }
                 user.setCreateTime(new Date());
             }
             userRepository.save(user);
