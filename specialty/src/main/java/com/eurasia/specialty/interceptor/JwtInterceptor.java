@@ -68,6 +68,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
                     return true;
                 }else {
                     sendJsonMessage(response, new JsonData(401, null, "鉴权失败，token错误"));
+                    return false;
                 }
             }
         }

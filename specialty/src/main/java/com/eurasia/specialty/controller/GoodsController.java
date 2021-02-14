@@ -24,8 +24,8 @@ public class GoodsController {
 
 
     @GetMapping({"findById"})
-    public ResponseEntity<Goods> findById(@RequestParam("id") Integer id, @RequestParam(value = "userid", defaultValue = "1") Integer userid) throws Exception {
-        return ResponseEntity.ok(this.goodsService.findById(id, userid));
+    public ResponseEntity<JsonData> findById(@RequestParam("id") Integer id) throws Exception {
+        return ResponseEntity.ok(JsonData.buildSuccess(this.goodsService.findById(id), ""));
     }
 
 

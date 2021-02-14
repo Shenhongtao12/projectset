@@ -68,7 +68,7 @@ public class GoodsService {
         return result;
     }
 
-    public Goods findById(Integer id, Integer userid) throws Exception {
+    public Goods findById(Integer id) throws Exception {
         return goodsRepository.findById(id).get();
     }
 
@@ -87,7 +87,7 @@ public class GoodsService {
                     list.add(criteriaBuilder.equal(root.get("status"), status));
                 }
                 if (goodsName != null) {
-                    list.add(criteriaBuilder.like(root.get("goodsName"),"%" + goodsName + "%"));
+                    list.add(criteriaBuilder.like(root.get("name"),"%" + goodsName + "%"));
                 }
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }
