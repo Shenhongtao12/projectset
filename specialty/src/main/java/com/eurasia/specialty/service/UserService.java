@@ -108,6 +108,7 @@ public class UserService {
         try {
             if (user.getId() != null) {
                 User one = userRepository.getOne(user.getId());
+                user.setPassword(null);
                 JpaUtils.copyNotNullProperties(user, one);
             }else {
                 User info = userRepository.findUserByNickName(user.getNickName());

@@ -16,8 +16,15 @@ import java.util.stream.Stream;
  */
 public class JpaUtils {
 
-    public static void copyNotNullProperties(Object src, Object target) {
-        BeanUtils.copyProperties(src, target, getNullField(src));
+    /**
+     * 新   旧
+     * 旧   新
+     *  BeanUtils.copyProperties(oldData, entity,getNotNullPropertyNames(entity))
+     * @param src
+     * @param oldData
+     */
+    public static void copyNotNullProperties(Object src, Object oldData) {
+        BeanUtils.copyProperties(oldData, src, getNullField(src));
     }
 
     private static String[] getNullPropertyNames(Object object) {
@@ -35,15 +42,15 @@ public class JpaUtils {
      *    * @return
      *    
      */
-    private static String[] getNullField(Object target) {
-        BeanWrapper beanWrapper = new BeanWrapperImpl(target);
+    private static String[] getNullField(Object object) {
+        BeanWrapper beanWrapper = new BeanWrapperImpl(object);
         PropertyDescriptor[] propertyDescriptors = beanWrapper.getPropertyDescriptors();
         Set<String> notNullFieldSet = new HashSet<>();
         if (propertyDescriptors.length > 0) {
             for (PropertyDescriptor p : propertyDescriptors) {
                 String name = p.getName();
                 Object value = beanWrapper.getPropertyValue(name);
-                if (Objects.isNull(value)) {
+                if (!Objects.isNull(value)) {
                     notNullFieldSet.add(name);
                 }
             }

@@ -81,7 +81,7 @@ public class GoodsService {
                     list.add(criteriaBuilder.equal(root.get("id"), id));
                 }
                 if (classify != null) {
-                    list.add(criteriaBuilder.equal(root.get("classify"), classify));
+                    list.add(criteriaBuilder.equal(root.get("classifyId"), classify));
                 }
                 if (status != null) {
                     list.add(criteriaBuilder.equal(root.get("status"), status));
