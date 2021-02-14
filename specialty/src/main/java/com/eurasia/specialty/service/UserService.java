@@ -118,20 +118,20 @@ public class UserService {
                 }
                 user.setCreateTime(new Date());
             }
-            userRepository.save(user);
+            User save = userRepository.save(user);
+            Map<String, Object> jsonObject = new HashMap<>(4);
+            jsonObject.put("user", save);
+            jsonObject.put("token", JwtUtils.geneJsonWebToken(save));
+            data.setCode(200);
+            data.setMsg("成功");
+            data.setData(jsonObject);
+            return data;
         } catch (Exception e) {
             e.printStackTrace();
             data.setCode(500);
             data.setMsg("服务异常，请稍后重试");
             return data;
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("user", user);
-        jsonObject.put("token", JwtUtils.geneJsonWebToken(user));
-        data.setCode(200);
-        data.setMsg("成功");
-        data.setData(jsonObject);
-        return data;
     }
 
     public PageResult<User> findByPage(String name, Integer page, Integer rows) {
