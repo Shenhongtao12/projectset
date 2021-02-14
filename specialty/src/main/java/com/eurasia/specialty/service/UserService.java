@@ -125,8 +125,12 @@ public class UserService {
             data.setMsg("服务异常，请稍后重试");
             return data;
         }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("user", user);
+        jsonObject.put("token", JwtUtils.geneJsonWebToken(user));
         data.setCode(200);
         data.setMsg("成功");
+        data.setData(jsonObject);
         return data;
     }
 
