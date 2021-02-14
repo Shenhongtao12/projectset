@@ -6,19 +6,17 @@ import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import sun.net.www.content.image.gif;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 public class UploadService {
     //private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
-
 
     public JsonData upload(MultipartFile[] fileArray, String site) {
         try {
@@ -44,7 +42,15 @@ public class UploadService {
                 }
                 //原图
                 String fileName = file.getOriginalFilename();
-                String suffixName = fileName.substring(fileName.lastIndexOf(".")); //截取图片后缀名
+                //截取图片后缀名
+                String suffixName = fileName.substring(fileName.lastIndexOf("."));
+
+                String str = ".jpg, .jpeg, .png, .gif, .JPG, .JPEG, .PNG, .GIF";
+                if (!str.contains(suffixName)) {
+                    log.error("格式错误: " + suffixName);
+                    return JsonData.buildError("请上传文件格式 'jpg, jpeg, png, gif' 的图片");
+                }
+
                 UUID uuid = UUID.randomUUID();
                 fileName = uuid + suffixName;
 
@@ -79,7 +85,7 @@ public class UploadService {
             result.put("thumbnailUrl", url);
             return JsonData.buildSuccess(result, "上传成功");
         } catch (Exception e) {
-            return JsonData.buildError(e, "上传失败，其他错误");
+            return JsonData.buildError(e.getMessage(), "上传失败，其他错误");
         }
     }
 
