@@ -1,6 +1,7 @@
 package com.sht.vehicle.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sht.vehicle.common.PageResult;
 import com.sht.vehicle.common.RestResponse;
 import com.sht.vehicle.entity.User;
 import com.sht.vehicle.repository.UserRepository;
@@ -8,11 +9,20 @@ import com.sht.vehicle.utils.JpaUtils;
 import com.sht.vehicle.utils.JwtUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Aaron
@@ -81,5 +91,21 @@ public class UserService {
         response.setMessage("用户名不存在");
         response.setCode(400);
         return response;
+    }
+
+    public PageResult<User> findByPage(Boolean driver, Integer page, Integer size) {
+        Specification<User> spec = new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                List<Predicate> list = new ArrayList<>();
+                if (driver) {
+                    list.add(criteriaBuilder.equal(root.get("drive"), 1));
+                }
+                return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            }
+        };
+        Page<User> userPage = userRepository.findAll(spec, PageRequest.of(page, size));
+        return new PageResult<>(userPage.getTotalElements(), userPage.getTotalPages(), userPage.getContent());
     }
 }

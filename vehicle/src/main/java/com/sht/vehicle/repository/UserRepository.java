@@ -4,6 +4,8 @@ import com.sht.vehicle.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 /**
  * @author Aaron
  * @date 2021/2/12 12:37
@@ -19,8 +21,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     /**
      * user
-     * @param username
-     * @return
+     * @param username username
+     * @return user
      */
     User findUserByUsername(String username);
 }

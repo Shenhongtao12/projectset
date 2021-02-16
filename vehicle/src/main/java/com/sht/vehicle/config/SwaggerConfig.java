@@ -43,7 +43,7 @@ public class SwaggerConfig {
                 .enable(true)
                 .select()
                 //配置扫描的包  RequestHandlerSelectors.any()  扫描全部
-                .apis(RequestHandlerSelectors.basePackage("com.sht.shoesboot.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sht.vehicle.controller"))
                 //过滤的路径  .paths(PathSelectors.ant("path"))
                 .paths(PathSelectors.any())
                 .build();
@@ -60,7 +60,7 @@ public class SwaggerConfig {
         Contact contact = new Contact("Aaron", "http://used.eurasia.plus/doc.html", "shenhongtao12@aliyun.com");
 
         return new ApiInfoBuilder()
-                .title("廉政灶 APIs")
+                .title("校园车辆管理系统 APIs")
                 //描述
                 .description("api接口文档")
                 .termsOfServiceUrl("http://used.eurasia.plus/doc.html")

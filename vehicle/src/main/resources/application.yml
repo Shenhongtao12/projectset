@@ -15,16 +15,9 @@ spring:
     multipart:
       max-file-size: 10MB
       enabled: true
-  redis:
-    #host: 172.17.240.99
-    host: 47.98.128.88
-    port: 6379
-    database: 0
-    password: sht123
-    timeout: 5000
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   jackson:
     default-property-inclusion: non_null
