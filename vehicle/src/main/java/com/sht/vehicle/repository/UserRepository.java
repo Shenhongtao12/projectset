@@ -25,4 +25,10 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
      * @return user
      */
     User findUserByUsername(String username);
+
+    /**
+     * batch delete
+     * @param ids ids
+     */
+    void deleteUserByIdIn(List<Integer> ids);
 }

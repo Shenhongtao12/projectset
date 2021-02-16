@@ -48,7 +48,7 @@ public class UserController extends BaseController{
     }
 
     @DeleteMapping
-    public ResponseEntity<RestResponse> delete(@RequestParam(name = "ids") List<Integer> ids) {
-        return ResponseEntity.ok(SUCCESS());
+    public ResponseEntity<RestResponse> batchDelete(@RequestParam(name = "ids") List<Integer> ids) {
+        return ResponseEntity.ok(userService.batchDelete(ids));
     }
 }

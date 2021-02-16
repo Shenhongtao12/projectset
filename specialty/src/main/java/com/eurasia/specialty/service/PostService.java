@@ -58,6 +58,7 @@ public class PostService {
         }
         post.setNumber(0);
         post.setViews(0);
+        post.setClassifyId(1);
         post.setCreateTime(DateUtils.dateToString());
         postRepository.save(post);
         return JsonData.buildSuccess("成功");

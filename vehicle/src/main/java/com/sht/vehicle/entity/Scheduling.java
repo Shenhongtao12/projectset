@@ -3,6 +3,7 @@ package com.sht.vehicle.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +38,11 @@ public class Scheduling {
     @JoinColumn(name = "u_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    /**
+     * 可选属性optional=false,表示author不能为空。删除文章，不影响用户
+     */
+    @Getter(AccessLevel.NONE)
+    @ManyToOne(targetEntity = Car.class, cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
     @JoinColumn(name = "c_id")
     private Car car;
 

@@ -27,19 +27,19 @@ public class Car {
     /**
      * 汽车品牌
      */
-    @ApiModelProperty(name = "汽车品牌")
+    @ApiModelProperty(notes = "汽车品牌")
     private String brand;
 
     /**
      * 备注
      */
-    @ApiModelProperty(name = "备注")
+    @ApiModelProperty(notes = "备注")
     private String note;
 
     /**
      * 限载人数
      */
-    @ApiModelProperty(name = "限载人数")
+    @ApiModelProperty(notes = "限载人数")
     private Integer number;
 
     /**
@@ -48,7 +48,11 @@ public class Car {
     @ApiModelProperty(name = "入库时间", notes = "由新增汽车时，后台自动录入")
     private LocalDate inDate;
 
-    @OneToMany(targetEntity = Scheduling.class)
-    @JoinColumn(name = "c_id", referencedColumnName = "id")
+    /**
+     * //级联保存、更新、删除、刷新;延迟加载。当删除用户，会级联删除该用户的所有文章
+     * //拥有mappedBy注解的实体类为关系被维护端
+     * //mappedBy="author"中的author是Article中的author属性
+     */
+    @OneToMany(mappedBy = "car", targetEntity = Scheduling.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Scheduling> schedulingSet = new HashSet<>();
 }
