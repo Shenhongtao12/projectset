@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,7 +20,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Car {
+public class Car<T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +54,9 @@ public class Car {
      * //级联保存、更新、删除、刷新;延迟加载。当删除用户，会级联删除该用户的所有文章
      * //拥有mappedBy注解的实体类为关系被维护端
      * //mappedBy="author"中的author是Article中的author属性
+     * @OneToMany(mappedBy = "car", targetEntity = Scheduling.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+     * private Set<Scheduling> schedulingSet = new HashSet<>();
      */
-    @OneToMany(mappedBy = "car", targetEntity = Scheduling.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Scheduling> schedulingSet = new HashSet<>();
+    @Transient
+    private List<T> list;
 }

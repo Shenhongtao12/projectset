@@ -41,4 +41,20 @@ public class CarService {
         Page<Car> carPage = carRepository.findAll(PageRequest.of(page, size));
         return new PageResult<>(carPage.getTotalElements(), carPage.getTotalPages(), carPage.getContent());
     }
+
+    public RestResponse findById(Integer id, String type) {
+        if (!carRepository.existsById(id)){
+            return new RestResponse(400, "不存在该id: " + id);
+        }
+        Car car = carRepository.findById(id).get();
+        return new RestResponse(200, car);
+    }
+
+    public RestResponse deleteById(Integer id) {
+        if (!carRepository.existsById(id)){
+            return new RestResponse(400, "不存在该id: " + id);
+        }
+        carRepository.deleteById(id);
+        return new RestResponse(200, "删除成功");
+    }
 }
