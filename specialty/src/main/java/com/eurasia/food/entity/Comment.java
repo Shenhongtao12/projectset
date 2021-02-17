@@ -17,6 +17,7 @@ public class Comment implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "comment_id")
 	private Integer commentId;
 	private String content;
 	private String createTime;
@@ -26,6 +27,9 @@ public class Comment implements Serializable {
 	 */
 	private Integer userId;
 	private Integer postId;
+
+	private Integer matterId;
+	private Boolean isShow;
 	/**
 	 *  null 用来区分留言和回复
 	 */

@@ -1,5 +1,6 @@
 package com.eurasia.food.service;
 
+import com.eurasia.food.entity.Comment;
 import com.eurasia.food.repository.MatterRepository;
 import com.eurasia.food.utils.DateUtils;
 import com.eurasia.food.utils.JpaUtils;
@@ -29,6 +30,8 @@ import java.util.List;
 public class MatterService {
     @Autowired
     private MatterRepository matterRepository;
+    @Autowired
+    private CommentService commentService;
 
 
     public JsonData save(Matter matter) {
@@ -51,6 +54,7 @@ public class MatterService {
         if (!matterRepository.existsById(id)) {
             return JsonData.buildError("不存在的资源");
         }
+        commentService.deleteByMatterId(id);
         matterRepository.deleteById(id);
         return JsonData.buildSuccess("成功");
     }
@@ -72,5 +76,15 @@ public class MatterService {
 
         Page<Matter> matterPage = matterRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.DESC,"id")));
         return new PageResult<>(matterPage.getTotalElements(), matterPage.getTotalPages(), matterPage.getContent());
+    }
+
+    public JsonData findById(Integer id) {
+        if (!matterRepository.existsById(id)){
+            return JsonData.buildError("不存在该id: " + id);
+        }
+        Matter matter = matterRepository.findById(id).get();
+        List<Comment> commentList = commentService.findByMatterId(id, true);
+        matter.setCommentList(commentList);
+        return JsonData.buildSuccess(matter, "");
     }
 }

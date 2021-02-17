@@ -14,4 +14,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer>, JpaSpeci
     Integer countByParentId(Integer id);
 
     Integer deleteRepliesByParentId(Integer id);
+
+    List<Reply> findRepliesByCommentId(Integer id);
 }

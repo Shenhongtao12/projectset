@@ -1,7 +1,6 @@
 package com.eurasia.food.service;
 
 import com.eurasia.food.repository.PostRepository;
-import com.eurasia.food.repository.PraiseRepository;
 import com.eurasia.food.utils.JsonData;
 import com.eurasia.food.utils.PageResult;
 import com.eurasia.food.entity.Comment;
@@ -36,8 +35,6 @@ public class PostService {
     private CommentService commentService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PraiseRepository praiseRepository;
 
     public PageResult<Post> init(){
         Page<Post> page = postRepository.findAll(PageRequest.of(0, 30, Sort.by(Sort.Direction.DESC, "createTime")));
@@ -88,7 +85,6 @@ public class PostService {
         post.setCommentList(commentList);
         post.setUser(userService.findUserById(post.getUserId()));
         post.setCommentNum(commentList.size());
-        post.setStatus(praiseRepository.findPraiseByTypeAndTypeIdAndUserId("post",post.getId(), userId) == null ? "false" : "true");
         return post;
     }
 

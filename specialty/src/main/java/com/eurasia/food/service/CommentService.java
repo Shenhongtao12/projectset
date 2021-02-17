@@ -1,7 +1,7 @@
 package com.eurasia.food.service;
 
+import com.eurasia.food.entity.Reply;
 import com.eurasia.food.repository.CommentRepository;
-import com.eurasia.food.repository.PraiseRepository;
 import com.eurasia.food.utils.DateUtils;
 import com.eurasia.food.utils.JsonData;
 import com.eurasia.food.utils.PageResult;
@@ -36,17 +36,22 @@ public class CommentService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PraiseRepository praiseRepository;
 
     //添加留言
     public JsonData save(Comment comment) {
+        if (comment.getMatterId() != null) {
+            comment.setIsShow(false);
+        }else {
+            comment.setMatterId(0);
+        }
         comment.setCreateTime(DateUtils.dateToString());
         comment.setNumber(0);
         commentRepository.save(comment);
-        Post post = postService.findUserIdByPostId(comment.getPostId());
-        if (!comment.getUserId().equals(post.getUserId())) {
-            this.redisTemplate.boundValueOps("eurasia_" + post.getUserId()).increment(1);
+        if (comment.getPostId() != null) {
+            Post post = postService.findUserIdByPostId(comment.getPostId());
+            if (!comment.getUserId().equals(post.getUserId())) {
+                this.redisTemplate.boundValueOps("eurasia_" + post.getUserId()).increment(1);
+            }
         }
         return JsonData.buildSuccess("成功");
     }
@@ -54,9 +59,12 @@ public class CommentService {
     //删除留言和留言的回复
     public JsonData delete(Integer id) {
         int num = replyService.deleteByCommentId(id);
-        praiseRepository.deleteByTypeAndTypeId("comment", id);
         commentRepository.deleteById(id);
         return JsonData.buildSuccess("删除成功,并删除"+ num + "条回复内容");
+    }
+
+    public Void deleteByMatterId(Integer id) {
+        return commentRepository.deleteCommentsByMatterId(id);
     }
 
     //根据postId查询留言回复
@@ -74,8 +82,7 @@ public class CommentService {
         for (Comment comment : commentList) {
             comment.setUser(userService.findUserById(comment.getUserId()));
             comment.setReplyList(replyService.getTreeReply(comment.getCommentId(), userId));
-            comment.setState(praiseRepository.findPraiseByTypeAndTypeIdAndUserId("comment", comment.getCommentId(), userId) == null ? "false" : "true");
-        }
+           }
         return commentList;
     }
 
@@ -83,7 +90,6 @@ public class CommentService {
     public Comment findOneComment(Integer id, Integer userId){
         Comment comment = findById(id);
         comment.setReplyList(replyService.getTreeReply(comment.getCommentId(), userId));
-        comment.setState(praiseRepository.findPraiseByTypeAndTypeIdAndUserId("comment", comment.getCommentId(), userId) == null ? "false" : "true");
         return comment;
     }
 
@@ -119,6 +125,46 @@ public class CommentService {
     public PageResult<Comment> findMessagePage(Integer page, Integer rows) {
         Page<Comment> commentPage = commentRepository.findAll(PageRequest.of(page, rows));
         commentPage.getContent().forEach(item -> item = findOneComment(item.getCommentId(), item.getUserId()));
+        return new PageResult<>(commentPage.getTotalElements(), commentPage.getTotalPages(), commentPage.getContent());
+    }
+
+    public Boolean exists(Integer id) {
+        return commentRepository.existsById(id);
+    }
+
+    public List<Comment> findByMatterId(Integer matterId, Boolean show) {
+        List<Comment> commentList = commentRepository.findCommentsByMatterIdAndIsShow(matterId, show);
+        commentList.forEach(comment ->
+            comment.setReplyList(replyService.findByComId(comment.getCommentId()))
+        );
+
+        return commentList;
+    }
+
+    public JsonData updateShow(Integer id) {
+        if (commentRepository.existsById(id)) {
+            Comment comment = commentRepository.findById(id).get();
+            comment.setIsShow(true);
+            commentRepository.save(comment);
+            return JsonData.buildSuccess("审批通过");
+        }
+        return JsonData.buildError("不存在该留言");
+    }
+
+    public PageResult<Comment> findByPage(Integer page, Integer size, String type){
+        Specification<Comment> spec = new Specification<Comment>() {
+            @Override
+            public Predicate toPredicate(Root<Comment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+                //根据属性名获取查询对象的属性
+                list.add(criteriaBuilder.notEqual(root.get("matterId"), 0));
+                if (type != null) {
+                    list.add(criteriaBuilder.equal(root.get("isShow"), "1".equals(type)));
+                }
+                return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
+            }
+        };
+        Page<Comment> commentPage = commentRepository.findAll(spec, PageRequest.of(page, size));
         return new PageResult<>(commentPage.getTotalElements(), commentPage.getTotalPages(), commentPage.getContent());
     }
 }

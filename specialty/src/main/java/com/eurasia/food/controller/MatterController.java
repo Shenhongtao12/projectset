@@ -41,4 +41,9 @@ public class MatterController {
         return ResponseEntity.ok(JsonData.buildSuccess(matterService.findByPage(id, title, page, rows), ""));
     }
 
+    @GetMapping("findById")
+    public ResponseEntity<JsonData> findById(Integer id) {
+        return ResponseEntity.ok(matterService.findById(id));
+    }
+
 }

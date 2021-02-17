@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 熱門事件
@@ -23,5 +24,6 @@ public class Matter implements Serializable {
     private String matterUrl;
     private String createTime;
 
-
+    @Transient
+    private List<Comment> commentList;
 }

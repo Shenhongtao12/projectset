@@ -4,6 +4,8 @@ import com.eurasia.food.entity.Comment;
 import com.eurasia.food.service.CommentService;
 import com.eurasia.food.utils.JsonData;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +44,17 @@ public class CommentController extends BaseController{
     public ResponseEntity<JsonData> findMessagePage(@RequestParam(name = "page")Integer page,
                                                     @RequestParam(name = "rows") Integer rows) {
         return ResponseEntity.ok(JsonData.buildSuccess(commentService.findMessagePage(page, rows), ""));
+    }
+
+    @PutMapping
+    public ResponseEntity<JsonData> isShow(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(commentService.updateShow(id));
+    }
+
+    @GetMapping("approval")
+    public ResponseEntity<JsonData> approval(@RequestParam(name = "page", defaultValue = "0")Integer page,
+                                             @RequestParam(name = "rows", defaultValue = "10") Integer rows,
+                                             @ApiParam(name = "type", value = "不传该参数就查询所有, '1': isShow=true  '2':isShow=false") @RequestParam(name = "type", required = false) String type) {
+        return ResponseEntity.ok(JsonData.buildSuccess(commentService.findByPage(page, rows, type), ""));
     }
 }

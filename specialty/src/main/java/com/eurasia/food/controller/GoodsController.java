@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping({"api/goods"})
-@Api(tags = "土特产")
+@Api(tags = "美食")
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;

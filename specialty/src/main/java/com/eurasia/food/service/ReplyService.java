@@ -6,9 +6,7 @@ import java.util.List;
 
 import com.eurasia.food.entity.Comment;
 import com.eurasia.food.entity.Post;
-import com.eurasia.food.entity.Praise;
 import com.eurasia.food.entity.Reply;
-import com.eurasia.food.repository.PraiseRepository;
 import com.eurasia.food.repository.ReplyRepository;
 import com.eurasia.food.utils.JsonData;
 import com.eurasia.food.utils.MessageUtils;
@@ -38,8 +36,6 @@ public class ReplyService {
     @Autowired
     private UserService userService;
     @Autowired
-    private PraiseRepository praiseRepository;
-    @Autowired
     private CommentService commentService;
 
 
@@ -57,6 +53,9 @@ public class ReplyService {
 
 
     public JsonData save(Reply reply) throws Exception {
+        if (commentService.exists(reply.getCommentId())) {
+            return JsonData.buildError("暂不允许再次回复");
+        }
 
         reply.setCreateTime(DateUtils.dateToString());
 
@@ -84,6 +83,10 @@ public class ReplyService {
         return replyRepository.findById(id).get();
     }
 
+    public List<Reply> findByComId(Integer id) {
+        return replyRepository.findRepliesByCommentId(id);
+    }
+
     @Transactional
     public JsonData delete(Integer id) {
         Reply reply = findById(id);
@@ -96,7 +99,6 @@ public class ReplyService {
             }
         }
         try {
-            praiseRepository.deleteByTypeAndTypeId("reply", id);
             replyRepository.deleteRepliesByParentId(reply.getId());
 
             this.replyRepository.deleteById(id);
@@ -161,39 +163,6 @@ public class ReplyService {
                     }
                 }
                 break;
-            case "praise":
-                //将点赞信息装进集合
-                List<Praise> praiseList = praiseRepository.findByTypeUserId(userId);
-                for (Praise praise : praiseList) {
-                    MessageUtils message = new MessageUtils();
-                    message.setCreateTime(praise.getCreateTime());
-                    message.setUser(userService.findUserById(praise.getUserId()));
-                    if ("reply".equals(praise.getType())) {
-                        Reply reply = replyRepository.findById(praise.getTypeId()).get();
-                        Post post = postService.findPostById(reply.getPostId());
-                        message.setName(post.getTitle());
-                        message.setContent(reply.getContent());
-                        message.setImages(post.getImagesUrl().split(",")[0]);
-                        message.setType("comment");
-                        message.setPostId(post.getId());
-                    } else if ("comment".equals(praise.getType())) {
-                        Comment comment = commentService.findById(praise.getTypeId());
-                        Post post = postService.findPostById(comment.getPostId());
-                        message.setContent(comment.getContent());
-                        message.setName(post.getTitle());
-                        message.setImages(post.getImagesUrl().split(",")[0]);
-                        message.setType("comment");
-                        message.setPostId(post.getId());
-                    } else {
-                        Post post = postService.findPostById(praise.getTypeId());
-                        message.setName(post.getTitle());
-                        message.setImages(post.getImagesUrl().split(",")[0]);
-                        message.setType("post");
-                        message.setPostId(post.getId());
-                    }
-                    messageUtilsList.add(message);
-                }
-                break;
             default:
                 break;
 
@@ -223,9 +192,7 @@ public class ReplyService {
         List<Reply> list = this.replyRepository.findByCommentId(id);
         for (Reply reply : list) {
             reply.setUser(userService.findUserById(reply.getUserId()));
-            //判断是否对回复点赞
-            reply.setState(praiseRepository.findPraiseByTypeAndTypeIdAndUserId("reply", reply.getId(), userId) == null ? "false" : "true");
-        }
+            }
 
         connectReply(list);
 
