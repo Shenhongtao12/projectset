@@ -1,14 +1,10 @@
 server:
   port: 8888
-database:
-  url: jdbc:mysql://47.98.128.88:3306/specialty?useUnicode=true&characterEncoding=utf-8&useSSL=false
-  username: root
-  password: kindy0916
 spring:
   datasource:
-    url: ${database.url}
-    username: ${database.username}
-    password: ${database.password}
+    url: jdbc:mysql://47.98.128.88:3306/food?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: kindy0916
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
@@ -16,7 +12,6 @@ spring:
       max-file-size: 10MB
       enabled: true
   redis:
-    #host: 172.17.240.99
     host: 47.98.128.88
     port: 6379
     database: 0
