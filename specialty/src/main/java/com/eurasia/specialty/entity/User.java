@@ -1,6 +1,7 @@
 package com.eurasia.specialty.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,8 @@ import java.util.Date;
 @Table(name = "sp_user")
 @Entity
 @NoArgsConstructor
-public class User implements Serializable {
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
+public class User {
 
     /**
      * ID
@@ -56,7 +58,6 @@ public class User implements Serializable {
     /**
      * 手机号
      */
-    @Transient
     private String phone;
 
 
