@@ -32,12 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/user/**",
                         "/api/admin/login",
-                        "/api/goods/findByPage",
-                        "api/post/findByClassifyOrMatter",
-                        "api/goods/findById",
-                        "api/matter/**",
-                        "api/upload/**",
-                        "api/classify/"
+                        "/api/car/findByPage"
                 )
         ;
 

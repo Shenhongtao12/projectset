@@ -1,21 +1,23 @@
 package com.sht.vehicle.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Aaron
  * @date 2021/2/15 10:56
  */
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @Entity
 public class Upkeep {
 
@@ -23,15 +25,20 @@ public class Upkeep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate inDate;
+    private BigDecimal money;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ApiModelProperty(notes = "备注")
+    private String notes;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime inDate;
+
+    @ManyToOne(targetEntity = User.class, optional = false)
     @JoinColumn(name = "u_id")
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Car.class, optional = false)
     @JoinColumn(name = "c_id")
     private Car car;
 }

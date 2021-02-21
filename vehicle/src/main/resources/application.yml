@@ -16,7 +16,7 @@ spring:
       max-file-size: 10MB
       enabled: true
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
   jackson:

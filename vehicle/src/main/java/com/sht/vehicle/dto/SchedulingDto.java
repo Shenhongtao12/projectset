@@ -1,17 +1,16 @@
-package com.sht.vehicle.entity;
+package com.sht.vehicle.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sht.vehicle.dto.SchedulingDto;
+import com.sht.vehicle.entity.Car;
+import com.sht.vehicle.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -21,9 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
-@ApiModel("申请车辆使用")
-public class Scheduling{
+public class SchedulingDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -49,19 +46,4 @@ public class Scheduling{
     @Column(name = "c_id")
     private Integer cId;
 
-    @Transient
-    private User user;
-
-    @Transient
-    private Car car;
-
-    public Scheduling(SchedulingDto schedulingDto) {
-        this.id = schedulingDto.getId();
-        this.notes = schedulingDto.getNotes();
-        this.status = schedulingDto.getStatus();
-        this.startDateTime = schedulingDto.getStartDateTime();
-        this.endDateTime = schedulingDto.getEndDateTime();
-        this.cId = schedulingDto.getCId();
-        this.uId = schedulingDto.getUId();
-    }
 }

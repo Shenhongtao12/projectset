@@ -3,7 +3,9 @@ package com.sht.vehicle.service;
 import com.sht.vehicle.common.PageResult;
 import com.sht.vehicle.common.RestResponse;
 import com.sht.vehicle.entity.Refuel;
+import com.sht.vehicle.entity.Upkeep;
 import com.sht.vehicle.repository.RefuelRepository;
+import com.sht.vehicle.repository.UpkeepRepository;
 import com.sht.vehicle.repository.UserRepository;
 import com.sht.vehicle.utils.JpaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +28,22 @@ import java.util.Objects;
  * @date 2021/2/17 16:49
  */
 @Service
-public class RefuelService {
+public class UpkeepService {
 
     @Autowired
-    private RefuelRepository refuelRepository;
+    private UpkeepRepository upkeepRepository;
 
     @Autowired
     private CarService carService;
     @Autowired
     private UserRepository userRepository;
 
-    public RestResponse save(Refuel refuel) {
-        if (refuel.getId() != null && refuelRepository.existsById(refuel.getId())) {
-            JpaUtils.copyNotNullProperties(refuel, refuelRepository.findById(refuel.getId()).get());
+    public RestResponse save(Upkeep upkeep) {
+        if (upkeep.getId() != null && upkeepRepository.existsById(upkeep.getId())) {
+            JpaUtils.copyNotNullProperties(upkeep, upkeepRepository.findById(upkeep.getId()).get());
         }
-
         try {
-            refuelRepository.save(refuel);
+            upkeepRepository.save(upkeep);
             return new RestResponse(200, "成功");
         } catch (Exception e) {
             return new RestResponse(400, e.getMessage(), "失败");
@@ -52,15 +53,15 @@ public class RefuelService {
 
     public RestResponse delete(Integer id) {
         try {
-            refuelRepository.deleteById(id);
+            upkeepRepository.deleteById(id);
             return new RestResponse(200, "删除成功");
         }catch (Exception e) {
             return new RestResponse(400, "删除失败");
         }
     }
 
-    public PageResult<Refuel> findByPage(LocalDateTime startDate, LocalDateTime endDate, Integer userId, Integer carId, Integer page, Integer size) {
-        Specification<Refuel> spec = new Specification<Refuel>() {
+    public PageResult<Upkeep> findByPage(LocalDateTime startDate, LocalDateTime endDate, Integer userId, Integer carId, Integer page, Integer size) {
+        Specification<Upkeep> spec = new Specification<Upkeep>() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<>();
@@ -82,17 +83,17 @@ public class RefuelService {
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }
         };
-        Page<Refuel> refuelPage = refuelRepository.findAll(spec, PageRequest.of(page, size));
+        Page<Upkeep> refuelPage = upkeepRepository.findAll(spec, PageRequest.of(page, size));
         return new PageResult<>(refuelPage.getTotalElements(), refuelPage.getTotalPages(), refuelPage.getContent());
     }
 
     public RestResponse findById(Integer id, String type) {
-        List<Refuel> refuels = new ArrayList<>();
+        List<Upkeep> refuels = new ArrayList<>();
         if ("car".equals(type) && carService.exists(id)) {
-            refuels = refuelRepository.findAllByCarEquals(carService.findById(id));
+            refuels = upkeepRepository.findAllByCarEquals(carService.findById(id));
         }
         if ("user".equals(type) && userRepository.existsById(id)){
-            refuels = refuelRepository.findAllByUser(userRepository.findById(id).get());
+            refuels = upkeepRepository.findAllByUser(userRepository.findById(id).get());
         }
         return new RestResponse(200, refuels);
     }

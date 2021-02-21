@@ -4,6 +4,8 @@ import com.sht.vehicle.common.RestResponse;
 import com.sht.vehicle.entity.User;
 import com.sht.vehicle.service.UserService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/user")
 @Validated
+@Api(tags = "用户管理")
 public class UserController extends BaseController{
 
     @Autowired
@@ -51,4 +54,5 @@ public class UserController extends BaseController{
     public ResponseEntity<RestResponse> batchDelete(@RequestParam(name = "ids") List<Integer> ids) {
         return ResponseEntity.ok(userService.batchDelete(ids));
     }
+
 }

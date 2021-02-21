@@ -123,4 +123,8 @@ public class UserService {
             return new RestResponse(400, e.getMessage(),"删除失败，用户关联有其他数据");
         }
     }
+
+    public User findById(Integer id) {
+        return userRepository.findById(id).get();
+    }
 }
