@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -57,14 +58,16 @@ public class CommentService {
     }
 
     //删除留言和留言的回复
+    @Transactional
     public JsonData delete(Integer id) {
         int num = replyService.deleteByCommentId(id);
         commentRepository.deleteById(id);
         return JsonData.buildSuccess("删除成功,并删除"+ num + "条回复内容");
     }
 
-    public Void deleteByMatterId(Integer id) {
-        return commentRepository.deleteCommentsByMatterId(id);
+    @Transactional
+    public void deleteByMatterId(Integer id) {
+        commentRepository.deleteCommentsByMatterId(id);
     }
 
     //根据postId查询留言回复

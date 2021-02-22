@@ -33,7 +33,7 @@ public class AdminService {
         if (admin == null) {
             return false;
         }
-        return StringUtils.equals("admin", admin.getRole()) || StringUtils.equals("经理", admin.getRole());
+        return StringUtils.equals("超级管理员", admin.getRole());
     }
 
     public Boolean add(Admin admin) {

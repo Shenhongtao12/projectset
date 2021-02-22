@@ -12,6 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>, JpaS
 
     List<Comment> findCommentsByMatterIdAndIsShow(Integer matterId, Boolean show);
 
-    Void deleteCommentsByMatterId(Integer id);
+    void deleteCommentsByMatterId(Integer id);
 
 }

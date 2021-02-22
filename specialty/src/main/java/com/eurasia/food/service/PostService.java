@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -72,6 +73,7 @@ public class PostService {
         return JsonData.buildSuccess("更新成功");
     }
 
+    @Transactional
     public JsonData delete(Integer id) {
         postRepository.deleteById(id);
         return JsonData.buildSuccess("删除成功");
