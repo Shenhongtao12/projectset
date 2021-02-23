@@ -16,4 +16,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer>, JpaSpeci
     Integer deleteRepliesByParentId(Integer id);
 
     List<Reply> findRepliesByCommentId(Integer id);
+
+    Boolean existsReplyByCommentId(Integer commentId);
 }

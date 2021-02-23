@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Id;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -37,6 +38,9 @@ public class CommentService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MatterService matterService;
 
     //添加留言
     public JsonData save(Comment comment) {
@@ -144,10 +148,10 @@ public class CommentService {
         return commentList;
     }
 
-    public JsonData updateShow(Integer id) {
+    public JsonData updateShow(Integer id, Boolean type) {
         if (commentRepository.existsById(id)) {
             Comment comment = commentRepository.findById(id).get();
-            comment.setIsShow(true);
+            comment.setIsShow(type);
             commentRepository.save(comment);
             return JsonData.buildSuccess("审批通过");
         }
@@ -168,6 +172,10 @@ public class CommentService {
             }
         };
         Page<Comment> commentPage = commentRepository.findAll(spec, PageRequest.of(page, size));
+        commentPage.getContent().forEach(x -> {
+            x.setTitle(matterService.byId(x.getMatterId()).getTitle());
+            x.setUser(userService.findUserById(x.getUserId()));
+        });
         return new PageResult<>(commentPage.getTotalElements(), commentPage.getTotalPages(), commentPage.getContent());
     }
 }

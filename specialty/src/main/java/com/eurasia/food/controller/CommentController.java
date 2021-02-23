@@ -47,8 +47,9 @@ public class CommentController extends BaseController{
     }
 
     @PutMapping
-    public ResponseEntity<JsonData> isShow(@RequestParam(name = "id") Integer id) {
-        return ResponseEntity.ok(commentService.updateShow(id));
+    public ResponseEntity<JsonData> isShow(@RequestParam(name = "id") Integer id,
+                                           @RequestParam(name = "type") Boolean type) {
+        return ResponseEntity.ok(commentService.updateShow(id, type));
     }
 
     @GetMapping("approval")

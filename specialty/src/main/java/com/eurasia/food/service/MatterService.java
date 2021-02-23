@@ -87,4 +87,8 @@ public class MatterService {
         matter.setCommentList(commentList);
         return JsonData.buildSuccess(matter, "");
     }
+
+    public Matter byId(Integer id) {
+        return matterRepository.findById(id).get();
+    }
 }

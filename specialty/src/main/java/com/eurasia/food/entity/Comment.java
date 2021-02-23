@@ -36,7 +36,7 @@ public class Comment implements Serializable {
 	private Integer leaf;
 
 	@Transient
-	private Object state;  //判断点赞
+	private String title;
 	@Transient
 	private User user;
 	@Transient
