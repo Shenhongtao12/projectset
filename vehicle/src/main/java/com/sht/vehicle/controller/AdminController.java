@@ -23,9 +23,9 @@ public class AdminController extends BaseController{
     @Autowired
     private SchedulingService schedulingService;
 
-    @PostMapping
+    @PostMapping("login")
     public ResponseEntity<RestResponse> login(@RequestBody Admin admin) {
-        if (StringUtils.equals(admin.getUsername(), "admin") || "admin".equals(admin.getPassword())) {
+        if (!StringUtils.equals(admin.getUsername(), "admin") || !"admin".equals(admin.getPassword())) {
             return ResponseEntity.ok(ERROR("用户名或密码错误"));
         }
         JSONObject jsonObject = new JSONObject();

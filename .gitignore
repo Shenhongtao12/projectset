@@ -10,3 +10,5 @@
 /specialty/mvnw.cmd
 #shoesboot-vue
 /shoesboot-vue/node_modules/
+#shoesboot-admin
+/shoesboot-admin/node_modules/
