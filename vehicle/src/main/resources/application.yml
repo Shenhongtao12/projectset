@@ -1,0 +1,23 @@
+server:
+  port: 6789
+database:
+  url: jdbc:mysql://47.98.128.88:3306/vehicle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  username: root
+  password: kindy0916
+spring:
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      enabled: true
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  jackson:
+    default-property-inclusion: non_null
