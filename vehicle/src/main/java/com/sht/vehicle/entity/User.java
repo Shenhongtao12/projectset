@@ -3,6 +3,7 @@ package com.sht.vehicle.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sht.vehicle.dto.UserDto;
 import javafx.beans.binding.When;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -91,4 +92,15 @@ public class User{
     @JsonBackReference
     @OneToMany(targetEntity = Upkeep.class, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Upkeep> upkeepList;
+
+    public User(UserDto userDto) {
+        this.id = userDto.getId();
+        this.username = userDto.getUsername();
+        this.avatarUrl = userDto.getAvatarUrl();
+        this.password = userDto.getPassword();
+        this.level = userDto.getLevel();
+        this.driver = userDto.getDriver();
+        this.birthday = userDto.getBirthday();
+        this.phone = userDto.getPhone();
+    }
 }

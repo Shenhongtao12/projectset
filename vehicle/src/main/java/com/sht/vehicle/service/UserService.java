@@ -113,13 +113,13 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public RestResponse batchDelete(List<Integer> ids) {
-        Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint();
+        //Object savePoint = TransactionAspectSupport.currentTransactionStatus().createSavepoint()
         try {
             userRepository.deleteUserByIdIn(ids);
             return new RestResponse(200,null, "删除成功");
         } catch (Exception e) {
-            // TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
-            TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            //TransactionAspectSupport.currentTransactionStatus().rollbackToSavepoint(savePoint)
             return new RestResponse(400, e.getMessage(),"删除失败，用户关联有其他数据");
         }
     }

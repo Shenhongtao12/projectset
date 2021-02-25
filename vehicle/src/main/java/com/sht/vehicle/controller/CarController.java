@@ -1,6 +1,7 @@
 package com.sht.vehicle.controller;
 
 import com.sht.vehicle.common.RestResponse;
+import com.sht.vehicle.dto.CarDto;
 import com.sht.vehicle.entity.Car;
 import com.sht.vehicle.service.CarService;
 import io.swagger.annotations.Api;
@@ -23,8 +24,8 @@ public class CarController extends BaseController{
     private CarService carService;
 
     @PostMapping
-    public ResponseEntity<RestResponse> save(@RequestBody Car car) {
-        return ResponseEntity.ok(carService.save(car));
+    public ResponseEntity<RestResponse> save(@RequestBody CarDto car) {
+        return ResponseEntity.ok(carService.save(new Car(car)));
     }
 
     @GetMapping("findByPage")

@@ -1,6 +1,7 @@
 package com.sht.vehicle.controller;
 
 import com.sht.vehicle.common.RestResponse;
+import com.sht.vehicle.dto.UserDto;
 import com.sht.vehicle.entity.User;
 import com.sht.vehicle.service.UserService;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -27,13 +28,13 @@ public class UserController extends BaseController{
     private UserService userService;
 
     @PostMapping("login")
-    public ResponseEntity<RestResponse> login(@RequestBody User user) {
-        return ResponseEntity.ok(userService.login(user));
+    public ResponseEntity<RestResponse> login(@RequestBody UserDto user) {
+        return ResponseEntity.ok(userService.login(new User(user)));
     }
 
     @PostMapping
-    public ResponseEntity<RestResponse> registerOrUpdate(@RequestBody User user) {
-        return ResponseEntity.ok(userService.save(user));
+    public ResponseEntity<RestResponse> registerOrUpdate(@RequestBody UserDto user) {
+        return ResponseEntity.ok(userService.save(new User(user)));
     }
 
     @GetMapping("refresh-token")

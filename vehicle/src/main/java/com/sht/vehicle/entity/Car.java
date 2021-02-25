@@ -2,6 +2,7 @@ package com.sht.vehicle.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sht.vehicle.dto.CarDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -90,5 +91,13 @@ public class Car{
 
     @Transient
     private List<Refuel> refuels;
+
+    public Car(CarDto carDto) {
+        this.id = carDto.getId();
+        this.brand = carDto.getBrand();
+        this.notes = carDto.getNotes();
+        this.number = carDto.getNumber();
+        this.inDate = carDto.getInDate();
+    }
 
 }
