@@ -60,11 +60,11 @@ public class Car{
      * @OneToMany(mappedBy = "car", targetEntity = Scheduling.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
      * private Set<Scheduling> schedulingSet = new HashSet<>();
      */
-    @JsonBackReference
+    @JsonBackReference(value = "car-refuel")
     @OneToMany(targetEntity = Refuel.class, mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Refuel> refuelSet = new HashSet<>();
 
-    @JsonBackReference
+    @JsonBackReference(value = "car-upkeep")
     @OneToMany(targetEntity = Upkeep.class, mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Upkeep> upkeepSet = new HashSet<>();
 

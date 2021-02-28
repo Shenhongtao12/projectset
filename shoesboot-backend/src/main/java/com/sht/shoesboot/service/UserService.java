@@ -10,6 +10,7 @@ import com.sht.shoesboot.enums.UrlEnum;
 import com.sht.shoesboot.mapper.UserMapper;
 import com.sht.shoesboot.utils.JwtUtils;
 import com.sht.shoesboot.utils.RestResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +61,7 @@ public class UserService {
     }
 
     public void save(User user) {
+        user.setInDate(LocalDateTime.now());
         userMapper.insertSelective(user);
     }
 
@@ -71,12 +74,20 @@ public class UserService {
         if (user == null || !user.getPassword().equals(password)) {
             return null;
         }else {
+            updateLoginDate(user.getId());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("token", JwtUtils.geneJsonWebToken(user));
             jsonObject.put("user", user);
             return jsonObject;
         }
 
+    }
+
+    public void updateLoginDate(Integer id) {
+        User user = new User();
+        user.setId(id);
+        user.setLastLoginDate(LocalDateTime.now());
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     public User queryUserByEmail(String email) {
@@ -100,9 +111,14 @@ public class UserService {
         }
     }
 
-    public PageResult<User> userPage(Integer page, Integer rows) {
+    public PageResult<User> userPage(String  name, Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
-        Page<User> users = (Page<User>) userMapper.selectAll();
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotEmpty(name)) {
+            criteria.andEqualTo("username", name);
+        }
+        Page<User> users = (Page<User>) userMapper.selectByExample(example);
         return new PageResult<>(users.getTotal(), users.getPages(), users.getResult());
     }
 }

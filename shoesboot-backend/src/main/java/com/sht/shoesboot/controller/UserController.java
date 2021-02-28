@@ -70,6 +70,7 @@ public class UserController extends BaseController {
             return ResponseEntity.ok().body(ERROR(400, "验证码错误"));
         }
         User user = userService.queryUserByEmail(email);
+        userService.updateLoginDate(user.getId());
         JSONObject response = new JSONObject();
         response.put("user", user);
         response.put("token", JwtUtils.geneJsonWebToken(user));
@@ -89,7 +90,9 @@ public class UserController extends BaseController {
 
     @PutMapping
     public ResponseEntity<RestResponse> update(@Validated @RequestBody User user) {
-        user.setId(userId);
+        if (user.getId() == null) {
+            user.setId(userId);
+        }
         user.setPassword(null);
         if (userService.update(user)) {
             return ResponseEntity.ok(SUCCESS("成功"));
@@ -107,10 +110,10 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("userPage")
-    public ResponseEntity<RestResponse> userPage(
+    public ResponseEntity<RestResponse> userPage(@RequestParam(name = "name",required = false) String name,
                                                  @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                  @RequestParam(name = "rows", defaultValue = "10") Integer rows) {
-        PageResult<User> userPageResult = userService.userPage(page, rows);
+        PageResult<User> userPageResult = userService.userPage(name, page, rows);
         return ResponseEntity.ok(SUCCESS(userPageResult));
     }
 }

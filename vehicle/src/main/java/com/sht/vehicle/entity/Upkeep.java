@@ -1,8 +1,6 @@
 package com.sht.vehicle.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -19,7 +16,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-public class Upkeep {
+@NoArgsConstructor
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
+public class Upkeep implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +33,13 @@ public class Upkeep {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime inDate;
 
+    //cascade={CascadeType.MERGE,CascadeType.REFRESH},
     @ManyToOne(targetEntity = User.class, optional = false)
     @JoinColumn(name = "u_id")
     private User user;
 
-    @ManyToOne(targetEntity = Car.class, optional = false)
+    @ManyToOne(targetEntity = Car.class, optional=false)
     @JoinColumn(name = "c_id")
     private Car car;
+
 }

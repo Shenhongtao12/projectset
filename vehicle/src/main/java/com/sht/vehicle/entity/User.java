@@ -85,11 +85,11 @@ public class User{
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
-    @JsonBackReference
+    @JsonBackReference(value = "user-refuel")
     @OneToMany(targetEntity = Refuel.class, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Refuel> refuelList;
 
-    @JsonBackReference
+    @JsonBackReference(value = "user-upkeep")
     @OneToMany(targetEntity = Upkeep.class, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Upkeep> upkeepList;
 

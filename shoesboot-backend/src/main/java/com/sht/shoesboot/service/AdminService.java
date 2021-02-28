@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Aaron.H.Shen
  * @date 1/6/2021 10:10 AM
@@ -48,6 +50,13 @@ public class AdminService {
         return true;
     }
 
+    public void updateLastDate(Integer id) {
+        Admin admin = new Admin();
+        admin.setId(id);
+        admin.setLastLoginDate(LocalDateTime.now());
+        adminMapper.updateByPrimaryKeySelective(admin);
+    }
+
     public Admin login(Admin admin) {
         Example example = new Example(Admin.class);
         Example.Criteria criteria = example.createCriteria();
@@ -56,12 +65,15 @@ public class AdminService {
         return adminMapper.selectOneByExample(example);
     }
 
-    public PageResult<Admin> queryPage(String role, Integer page, Integer rows) {
+    public PageResult<Admin> queryPage(String role, String adminName, Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
         Example example = new Example(Admin.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotEmpty(role)) {
             criteria.andEqualTo("role", role);
+        }
+        if (StringUtils.isNotEmpty(adminName)) {
+            criteria.andEqualTo("adminName", adminName);
         }
         Page<Admin> adminPage = (Page<Admin>) adminMapper.selectByExample(example);
         return new PageResult<>(adminPage.getTotal(), adminPage.getPages(), adminPage.getResult());

@@ -5,6 +5,7 @@ import com.sht.vehicle.common.RestResponse;
 import com.sht.vehicle.entity.Scheduling;
 import com.sht.vehicle.repository.SchedulingRepository;
 import com.sht.vehicle.utils.JpaUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,7 @@ import java.util.Objects;
  */
 @Service
 public class SchedulingService {
-    
+
     @Autowired
     private SchedulingRepository schedulingRepository;
 
@@ -40,8 +41,18 @@ public class SchedulingService {
         if (scheduling.getId() != null && schedulingRepository.existsById(scheduling.getId())) {
             JpaUtils.copyNotNullProperties(scheduling, schedulingRepository.findById(scheduling.getId()).get());
         }else {
+            if (scheduling.getStartDateTime().isAfter(scheduling.getEndDateTime())) {
+                return new RestResponse(400, "开始时间不能小于结束时间");
+            }
+            if (scheduling.getStartDateTime().isBefore(LocalDateTime.now())) {
+                return new RestResponse(400, "预约时间不能小于当前时间");
+            }
             if (schedulingRepository.existsScheduling(scheduling.getStartDateTime(), scheduling.getEndDateTime(),scheduling.getCId(), "2") != null) {
                 return new RestResponse(400, "该时间段已经有人预约");
+            }
+            String byUser = schedulingRepository.existsSchedulingByUser(scheduling.getStartDateTime(), scheduling.getEndDateTime(), scheduling.getCId(), scheduling.getUId());
+            if (byUser != null) {
+                return new RestResponse(400, "您已预约该时间段！");
             }
             scheduling.setStatus("1");
         }
@@ -64,16 +75,16 @@ public class SchedulingService {
         }
     }
 
-    public PageResult<Scheduling> findByPage(LocalDateTime startDate, LocalDateTime endDate, Integer userId, Integer carId, Integer page, Integer size) {
+    public PageResult<Scheduling> findByPage(LocalDateTime startDate, LocalDateTime endDate, Integer userId, Integer carId, String status, Integer page, Integer size) {
         Specification<Scheduling> spec = new Specification<Scheduling>() {
             @Override
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<>();
                 if (Objects.nonNull(startDate)) {
-                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate));
+                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startDateTime"), startDate));
                 }
                 if (Objects.nonNull(endDate)) {
-                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), endDate));
+                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("endDateTime"), endDate));
                 }
 
                 if (userId != null) {
@@ -82,6 +93,9 @@ public class SchedulingService {
 
                 if (!Objects.isNull(carId)) {
                     list.add(criteriaBuilder.equal(root.get("cId"), carId));
+                }
+                if (!Objects.isNull(status)) {
+                    list.add(criteriaBuilder.equal(root.get("status"), status));
                 }
 
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));

@@ -27,8 +27,9 @@ public class AdminController extends BaseController {
      */
     @PostMapping("add")
     public ResponseEntity<RestResponse> add(@RequestBody Admin admin) {
+
         if (!adminService.checkRole(userId)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ERROR("您无权限添加管理员"));
+            return ResponseEntity.status(HttpStatus.OK).body(ERROR("您无权限添加管理员"));
         }
         if (!adminService.add(admin)) {
             return ResponseEntity.ok().body(ERROR("数据异常"));
@@ -36,15 +37,17 @@ public class AdminController extends BaseController {
         return ResponseEntity.ok(SUCCESS(""));
     }
 
-    @PostMapping
+    @PostMapping("login")
     public ResponseEntity<RestResponse> login(@RequestBody Admin admin) {
         Admin adminInfo = adminService.login(admin);
         if (adminInfo == null) {
             return ResponseEntity.ok().body(ERROR("用户名或密码错误"));
         }
+        //更新上次登录时间
+        adminService.updateLastDate(adminInfo.getId());
         JSONObject response = new JSONObject();
         response.put("admin", adminInfo);
-        response.put("token", JwtUtils.geneJsonWebToken(new User(admin)));
+        response.put("token", JwtUtils.geneJsonWebToken(new User(adminInfo)));
         return ResponseEntity.ok(SUCCESS(response));
     }
 
@@ -59,14 +62,15 @@ public class AdminController extends BaseController {
 
     @GetMapping
     public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "role", required = false) String role,
+                                                  @RequestParam(name = "adminName", required = false) String adminName,
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(name = "rows", defaultValue = "10") Integer rows) {
-        return ResponseEntity.ok(SUCCESS(adminService.queryPage(role, page, rows)));
+        return ResponseEntity.ok(SUCCESS(adminService.queryPage(role, adminName, page, rows)));
     }
 
     @PutMapping
     public ResponseEntity<RestResponse> update(@RequestBody Admin admin) {
-        admin.setPassword(null);
+        //admin.setPassword(null);
         if (adminService.update(admin)) {
             return ResponseEntity.ok(SUCCESS("成功"));
         }

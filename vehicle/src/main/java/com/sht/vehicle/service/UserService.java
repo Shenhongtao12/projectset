@@ -68,6 +68,7 @@ public class UserService {
             return response;
         } catch (Exception e) {
             response.setCode(500);
+            response.setData(e.getMessage());
             response.setMessage("服务异常，请稍后重试");
             return response;
         }

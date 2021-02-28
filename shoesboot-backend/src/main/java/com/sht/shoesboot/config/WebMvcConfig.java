@@ -19,10 +19,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(new JwtInterceptor())
-                .addPathPatterns("/api/token/*/**")
+                .addPathPatterns("/api/**")
                 //配置不拦截的api
-                .excludePathPatterns("/**")
-        ;
+                .excludePathPatterns("/api/user/*",
+                        "/api/admin/login",
+                        "/api/goods/**",
+                        "/api/classify/*",
+                        "api/carousel/*"
+                );
 
         WebMvcConfigurer.super.addInterceptors(registry);
     }

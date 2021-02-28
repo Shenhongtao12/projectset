@@ -1,6 +1,8 @@
 package com.sht.shoesboot;
 
+import com.sht.shoesboot.utils.JwtUtils;
 import com.sht.shoesboot.utils.OrderNumber;
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -24,5 +26,11 @@ public class StringTest {
         System.out.println(System.currentTimeMillis());
         System.out.println(OrderNumber.createOrderNumber());
         System.out.println(Math.toIntExact(26L) / 10);
+    }
+
+    @Test
+    public void testToken() {
+        Claims claims = JwtUtils.checkJWT("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaHREZWFsIiwiaWQiOjEsImlhdCI6MTYxNDQ5NDAyNywiZXhwIjoxNjE1MDk4ODI3fQ.HritrE6ek02-4hFexcXcA0gsw_06iNTYe68SuxZmYDs");
+        System.out.println(claims.get("id"));
     }
 }

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Refuel {
+public class Refuel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

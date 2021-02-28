@@ -3,6 +3,7 @@ package com.sht.shoesboot.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.sht.shoesboot.controller.BaseController;
 import com.sht.shoesboot.utils.JwtUtils;
+import com.sht.shoesboot.utils.RestResponse;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.handler.HandlerMethod;
@@ -57,11 +58,11 @@ public class JwtInterceptor extends BaseController implements HandlerInterceptor
                 //通过claims获取到当前用户的可访问API权限字符串
                 Integer id = (Integer) claims.get("id");
                 //通过handler
-                HandlerMethod h = (HandlerMethod) handler;
+                //HandlerMethod h = (HandlerMethod) handler;
                 //获取接口上的reqeustmapping注解
-                RequestMapping annotation = h.getMethodAnnotation(RequestMapping.class);
+                //RequestMapping annotation = h.getMethodAnnotation(RequestMapping.class);
                 //获取当前请求接口中的name属性
-                String name = annotation.name();
+                //String name = annotation.name();
                 //判断当前用户是否具有响应的请求权限
                 if(id != null) {
                     request.setAttribute("user_claims",claims);
@@ -71,7 +72,7 @@ public class JwtInterceptor extends BaseController implements HandlerInterceptor
                 }
             }
         }
-        sendJsonMessage(response, ERROR("请登录！"));
+        sendJsonMessage(response, new RestResponse(401, "请登录"));
         return false;
     }
 

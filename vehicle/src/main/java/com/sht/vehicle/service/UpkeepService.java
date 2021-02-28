@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,14 @@ public class UpkeepService {
     public RestResponse save(Upkeep upkeep) {
         if (upkeep.getId() != null && upkeepRepository.existsById(upkeep.getId())) {
             JpaUtils.copyNotNullProperties(upkeep, upkeepRepository.findById(upkeep.getId()).get());
+        }else {
+            upkeep.setInDate(LocalDateTime.now());
         }
         try {
             upkeepRepository.save(upkeep);
             return new RestResponse(200, "成功");
         } catch (Exception e) {
-            return new RestResponse(400, e.getMessage(), "失败");
+            return new RestResponse(400, e.getMessage(), "失败,请刷新重试");
         }
 
     }
@@ -66,10 +69,10 @@ public class UpkeepService {
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<>();
                 if (Objects.nonNull(startDate)) {
-                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate));
+                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("inDate"), startDate));
                 }
                 if (Objects.nonNull(endDate)) {
-                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), endDate));
+                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("inDate"), endDate));
                 }
 
                 if (Objects.nonNull(carId)) {

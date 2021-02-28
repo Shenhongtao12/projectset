@@ -6,6 +6,7 @@ import lombok.Setter;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 /**
  * @author Aaron
@@ -29,4 +30,10 @@ public class Admin {
     private String image;
 
     private String description;
+
+    private LocalDateTime lastLoginDate;
+
+    private Integer status;
+
+    private String name;
 }

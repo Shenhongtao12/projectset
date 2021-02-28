@@ -9,6 +9,7 @@ import tk.mybatis.mapper.annotation.KeySql;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
  * @author Aaron
@@ -27,4 +28,6 @@ public class Classify {
     @NotNull(message = "分类名不能为空")
     @Length(min = 1, max = 30, message = "分类名长度应大于1，小于30")
     private String name;
+
+    private LocalDateTime inDate;
 }

@@ -6,6 +6,7 @@ import com.sht.vehicle.entity.Scheduling;
 import com.sht.vehicle.service.SchedulingService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @RequestMapping("api/car/scheduling")
 @Api(tags = "车辆申请/调度管理")
 public class SchedulingController extends BaseController {
-    
+
     @Autowired
     private SchedulingService schedulingService;
 
@@ -35,13 +36,14 @@ public class SchedulingController extends BaseController {
 
     @GetMapping
     public ResponseEntity<RestResponse> findByPage(
-            @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
-            @RequestParam(name = "endDate", required = false) LocalDateTime endDate,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(name = "endDate", required = false) LocalDateTime endDate,
             @RequestParam(name = "userId", required = false) Integer userId,
             @RequestParam(name = "carId", required = false) Integer carId,
+            @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "rows", defaultValue = "20") Integer size
     ) {
-        return ResponseEntity.ok(SUCCESS(schedulingService.findByPage(startDate, endDate, userId, carId, page, size)));
+        return ResponseEntity.ok(SUCCESS(schedulingService.findByPage(startDate, endDate, userId, carId, status, page, size)));
     }
 }

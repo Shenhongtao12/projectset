@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.time.LocalDateTime;
+
 /**
  * @author Aaron
  * @date 2020/12/27 19:47
@@ -26,6 +28,7 @@ public class ClassifyService {
         if (classifyMapper.selectOneByExample(example) != null) {
             return false;
         } else {
+            classify.setInDate(LocalDateTime.now());
             classifyMapper.insertSelective(classify);
             return true;
         }

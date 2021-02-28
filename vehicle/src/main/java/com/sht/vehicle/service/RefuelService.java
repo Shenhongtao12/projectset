@@ -39,6 +39,8 @@ public class RefuelService {
     public RestResponse save(Refuel refuel) {
         if (refuel.getId() != null && refuelRepository.existsById(refuel.getId())) {
             JpaUtils.copyNotNullProperties(refuel, refuelRepository.findById(refuel.getId()).get());
+        }else {
+            refuel.setInDate(LocalDateTime.now());
         }
 
         try {
@@ -65,10 +67,10 @@ public class RefuelService {
             public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> list = new ArrayList<>();
                 if (Objects.nonNull(startDate)) {
-                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate));
+                    list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("inDate"), startDate));
                 }
                 if (Objects.nonNull(endDate)) {
-                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), endDate));
+                    list.add(criteriaBuilder.lessThanOrEqualTo(root.get("inDate"), endDate));
                 }
 
                 if (Objects.nonNull(carId)) {

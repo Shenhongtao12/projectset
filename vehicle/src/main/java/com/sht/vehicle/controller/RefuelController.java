@@ -6,6 +6,7 @@ import com.sht.vehicle.service.RefuelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class RefuelController extends BaseController{
 
     @GetMapping
     public ResponseEntity<RestResponse> findByPage(
-            @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
-            @RequestParam(name = "endDate", required = false) LocalDateTime endDate,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(name = "endDate", required = false) LocalDateTime endDate,
             @RequestParam(name = "carId", required = false) Integer carId,
             @RequestParam(name = "userId", required = false) Integer userId,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
