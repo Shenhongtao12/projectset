@@ -32,6 +32,7 @@ public class GoodsHistory extends Goods{
         this.images = goods.getImages();
         this.brand = goods.getBrand();
         this.price = goods.getPrice();
+        this.salesVolume = goods.getSalesVolume();
         this.inDate = new Date();
     }
 }

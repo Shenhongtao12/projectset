@@ -28,6 +28,9 @@
           <!-- 我的订单表头 -->
           <li class="order-info">
             <div class="order-id">订单编号: {{ item.orderNumber }}</div>
+            <div class="order-status">
+              <span> 订单状态: {{ progressBar(item.status) }} </span>
+            </div>
             <div class="order-time">
               订单时间: {{ item.inDate | dateFormat }}
             </div>
@@ -99,8 +102,42 @@
           </div>
           <!-- 订单列表END -->
         </div>
+        <!--快递信息-->
+        <div
+          class="order-bar"
+          v-if="item.status === 'D' || item.status === 'E'"
+        >
+          <div class="order-bar-left">
+            <span class="order-total">
+              快递公司:
+              <span class="order-total-num">
+                {{ item.express }}
+              </span>
+            </span>
+          </div>
+          <div
+            class="order-bar-right"
+            style="margin-left: 5%"
+            v-if="item.status === 'D'"
+          >
+            <el-button
+              size="medium"
+              type="warning"
+              plain
+              icon="el-icon-shopping-bag-1"
+              @click="closedOrder(index, item.id)"
+            >
+              确认收货
+            </el-button>
+          </div>
+          <div class="order-bar-right">
+            快递单号:
+            <span class="total-price-title">{{ item.expressNum }}</span>
+          </div>
+          <!-- 快递信息END -->
+        </div>
       </div>
-      <div style="margin-top: -40px"></div>
+      <div style="margin-top: -20px"></div>
       <div class="block">
         <el-pagination
           :hide-on-single-page="page.total < 5"
@@ -129,10 +166,45 @@
   </div>
 </template>
 <script>
-import { getOrderList } from "@/api/OrderService";
+import { getOrderList, delivery } from "@/api/OrderService";
 
 export default {
   methods: {
+    closedOrder(index, id) {
+      let request = {
+        id: id,
+        status: "E",
+      };
+      delivery(request).then((res) => {
+        if (res.code === 200) {
+          this.notifySucceed("收货成功");
+          this.orders[index].status = "E";
+        } else {
+          this.notifyError(res.message);
+        }
+      });
+    },
+    progressBar(status) {
+      let num;
+      switch (status) {
+        case "A":
+          num = "取消";
+          break;
+        case "B":
+          num = "未支付";
+          break;
+        case "C":
+          num = "待发货";
+          break;
+        case "D":
+          num = "待收货";
+          break;
+        case "E":
+          num = "已完成";
+          break;
+      }
+      return num;
+    },
     handleSizeChange(val) {
       this.page.pageSize = val;
       this.page.pageNum = 1;
@@ -257,6 +329,15 @@ export default {
   color: #ff6700;
 }
 
+.order .content ul .order-info .order-status {
+  float: left;
+  margin-left: 30%;
+  color: #424242;
+}
+.order .content ul .order-info .order-status span {
+  color: #ff6700;
+}
+
 .order .content ul .order-info .order-time {
   float: right;
 }
@@ -347,6 +428,7 @@ export default {
 }
 
 .order .order-bar .order-bar-right {
+  color: #757575;
   float: right;
 }
 

@@ -34,6 +34,8 @@ public class Goods {
 
     private Integer inventory;
 
+    public Integer salesVolume;
+
     public String images;
 
     @NotBlank(message = "品牌不能为空")
@@ -53,6 +55,7 @@ public class Goods {
         this.inventory = history.getInventory();
         this.images = history.getImages();
         this.brand = history.getBrand();
+        this.salesVolume = history.getSalesVolume();
         this.shelf = false;
     }
 }

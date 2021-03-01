@@ -1,5 +1,6 @@
 package com.sht.shoesboot.controller;
 
+import com.sht.shoesboot.DTO.Delivery;
 import com.sht.shoesboot.entity.Order;
 import com.sht.shoesboot.service.GoodsService;
 import com.sht.shoesboot.service.OrderService;
@@ -37,9 +38,10 @@ public class OrderController extends BaseController{
     @GetMapping
     public ResponseEntity<RestResponse> queryPage(@RequestParam(name = "status", required = false) String status,
                                                   @RequestParam(name = "userId", required = false, defaultValue = "0") Integer userId,
+                                                  @RequestParam(name = "id", required = false, defaultValue = "0") Integer id,
                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                   @RequestParam(name = "size", defaultValue = "20") Integer size) {
-        return ResponseEntity.ok(SUCCESS(orderService.queryPage(status, userId, page, size)));
+        return ResponseEntity.ok(SUCCESS(orderService.queryPage(status, userId, id, page, size)));
     }
 
     @DeleteMapping
@@ -49,5 +51,10 @@ public class OrderController extends BaseController{
         }else {
             return ResponseEntity.ok(ERROR("删除失败"));
         }
+    }
+
+    @PutMapping
+    public ResponseEntity<RestResponse> delivery(@RequestBody Delivery delivery) {
+        return ResponseEntity.ok(orderService.delivery(delivery));
     }
 }

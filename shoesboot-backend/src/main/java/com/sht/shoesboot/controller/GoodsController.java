@@ -33,6 +33,7 @@ public class GoodsController extends BaseController {
     @PostMapping
     public ResponseEntity<RestResponse> jsoupSave(@Valid @RequestBody Goods goods) {
         goods.setId(null);
+        goods.setSalesVolume(0);
         int id = goodsService.save(goods);
         goods.setId(goods.getId());
         if (goods.getShelf()) {
@@ -63,11 +64,24 @@ public class GoodsController extends BaseController {
         return ResponseEntity.ok().body(SUCCESS(byId));
     }
 
+    @GetMapping("findById")
+    public ResponseEntity<RestResponse> findById(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(SUCCESS(goodsService.findByID(id)));
+    }
+
+    @GetMapping("findGoodsPage")
+    public ResponseEntity<RestResponse> findByPage(@RequestParam(name = "keyword", required = false) String keyword,
+                                                   @RequestParam(name = "shelf", required = false) Boolean shelf,
+                                                   @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                   @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        return ResponseEntity.ok(SUCCESS(goodsService.findGoodsPage(keyword, shelf, page, size)));
+    }
+
     @DeleteMapping
     public ResponseEntity<RestResponse> soldOut(@RequestParam(name = "id") Integer id) {
         if (!goodsService.soldOut(id)) {
             redisService.deleteData("shoes_goods_" + id);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(ERROR("不存在id为'" + id + "'的商品"));
         }
         return ResponseEntity.ok().body(SUCCESS("success"));
     }

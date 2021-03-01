@@ -2,6 +2,8 @@ package com.sht.shoesboot.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.entity.GoodsHistory;
 import com.sht.shoesboot.entity.PageResult;
@@ -35,6 +37,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -202,5 +205,20 @@ public class GoodsService {
 
     public Goods findByID(Integer id) {
         return goodsMapper.selectByPrimaryKey(id);
+    }
+
+    public PageResult<Goods> findGoodsPage(String keyword, Boolean shelf, Integer page, Integer size) {
+        Example example = new Example(Goods.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (shelf != null) {
+            criteria.andEqualTo("shelf", shelf);
+        }
+
+        if (keyword != null) {
+            criteria.andLike("title", "%" + keyword + "%");
+        }
+        PageHelper.startPage(page, size);
+        Page<Goods> goodsPage = (Page<Goods>) goodsMapper.selectByExample(example);
+        return new PageResult<>(goodsPage.getTotal(), goodsPage.getPages(), goodsPage.getResult());
     }
 }

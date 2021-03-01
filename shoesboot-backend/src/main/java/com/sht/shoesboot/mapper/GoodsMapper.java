@@ -41,6 +41,6 @@ public interface GoodsMapper extends Mapper<Goods> {
      * @param goodsId
      * @param amount
      */
-    @Update("UPDATE goods SET inventory = (inventory - #{amount}) WHERE id = #{goodsId}")
+    @Update("UPDATE goods SET inventory = (inventory - #{amount}), sales_volume = (sales_volume + #{amount}) WHERE id = #{goodsId}")
     void updateInventory(Integer goodsId, Integer amount);
 }

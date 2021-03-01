@@ -5,13 +5,14 @@
 <mapper namespace="com.sht.shoesboot.mapper.OrderMapper">
 
     <select id="queryPage" resultMap="orderInfo">
-        SELECT g.goods_id, g.title AS title, g.amount, g.image AS image,g.price AS price, o.id AS id,o.order_number, o.status, o.money AS money,o.in_date
+        SELECT g.goods_id, g.title AS title, g.amount, g.image AS image,g.price AS price, o.id AS id,o.order_number, o.express, o.express_num, user_id, o.status, o.money AS money,o.in_date
         FROM `orders` o
         INNER JOIN order_goods g
         ON o.id = g.order_id
         <where>
             <if test="status != null"> status = #{status} </if>
             <if test="user_id != 0"> AND o.user_id = #{user_id} </if>
+            <if test="id != 0"> AND o.id = #{id} </if>
         </where>
     </select>
 
@@ -25,11 +26,13 @@
 
     <resultMap id="orderInfo" type="com.sht.shoesboot.entity.Order">
         <id column="id" jdbcType="INTEGER" property="id"></id>
-        <result column="user_id" property="userId"></result>
+        <result column="user_id" jdbcType="INTEGER" property="userId"></result>
         <result column="in_date" property="inDate"></result>
         <result column="money" property="money"></result>
         <result column="order_number" property="orderNumber"></result>
         <result column="status" property="status"></result>
+        <result column="express" property="express"></result>
+        <result column="express_num" property="expressNum"></result>
 
         <collection property="orderGoodsList" ofType="com.sht.shoesboot.entity.OrderGoods">
             <id column="o_id" property="id"></id>

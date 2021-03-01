@@ -2,6 +2,7 @@ package com.sht.shoesboot.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sht.shoesboot.DTO.Delivery;
 import com.sht.shoesboot.DTO.OrderDTO;
 import com.sht.shoesboot.entity.Order;
 import com.sht.shoesboot.entity.OrderGoods;
@@ -75,9 +76,12 @@ public class OrderService {
         }
     }
 
-    public PageResult<Order> queryPage(String status, Integer userId, Integer page, Integer size) {
+    public PageResult<Order> queryPage(String status, Integer userId, Integer id, Integer page, Integer size) {
+        if ("".equals(status)) {
+            status = null;
+        }
         PageHelper.startPage(page, size);
-        List<Order> dtoList = orderMapper.queryPage(status, userId);
+        List<Order> dtoList = orderMapper.queryPage(status, userId, id);
         Page<Order> dtoPage = (Page<Order>) dtoList;
         return new PageResult<>(dtoPage.getTotal(), dtoPage.getPages(), dtoPage.getResult());
     }
@@ -89,5 +93,22 @@ public class OrderService {
         }catch (Exception e) {
             return false;
         }
+    }
+
+    public RestResponse delivery(Delivery delivery) {
+        if (orderMapper.existsWithPrimaryKey(delivery.getId())){
+            Order order = new Order();
+            order.setId(delivery.getId());
+            order.setExpress(delivery.getExpress());
+            order.setExpressNum(delivery.getExpressNum());
+            order.setStatus(delivery.getStatus());
+            try {
+                orderMapper.updateByPrimaryKeySelective(order);
+                return new RestResponse(200, "发货成功");
+            }catch (Exception e){
+                return new RestResponse(400, e.getMessage(), "填写失败，请稍后重试");
+            }
+        }
+        return new RestResponse(400, "不存在该订单");
     }
 }

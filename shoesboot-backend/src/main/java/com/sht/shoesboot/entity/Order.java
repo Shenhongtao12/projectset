@@ -31,13 +31,20 @@ public class Order{
     private String orderNumber;
 
     /**
-     * 创建成功: C
+     * 创建成功: A  已支付: B  待发货: C 待签收: D  已完成: E
      */
     private String status;
 
     private Integer userId;
 
     private Date inDate;
+
+    /**
+     * 快递公司
+     */
+    private String express;
+
+    private String expressNum;
 
     @Transient
     private List<OrderGoods> orderGoodsList;

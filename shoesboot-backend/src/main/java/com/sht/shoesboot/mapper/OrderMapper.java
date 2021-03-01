@@ -28,7 +28,7 @@ public interface OrderMapper extends Mapper<Order> {
      * @param user_id user id
      * @return list
      */
-    List<Order> queryPage(String status, Integer user_id);
+    List<Order> queryPage(String status, Integer user_id, Integer id);
 
     /**
      * 批量插入

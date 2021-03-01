@@ -15,3 +15,12 @@ export function createOrder(data) {
     data: data,
   });
 }
+
+//收货
+export function delivery(data) {
+  return request({
+    url: "order",
+    method: "put",
+    data: data,
+  });
+}

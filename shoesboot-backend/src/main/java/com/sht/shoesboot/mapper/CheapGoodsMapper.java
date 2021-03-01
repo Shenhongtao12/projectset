@@ -17,7 +17,7 @@ public interface CheapGoodsMapper  extends Mapper<CheapGoods> {
      * @param status 状态
      * @return 结果
      */
-    @Select("SELECT A.id, A.title, A.price AS originalPrice, A.inventory, A.images, A.brand, A.shelf, B.price \n" +
+    @Select("SELECT A.id, A.title, A.price AS originalPrice, A.inventory, A.sales_volume AS salesVolume, A.images, A.brand, A.shelf, B.price \n" +
             "FROM goods A\n" +
             "INNER JOIN cheap_goods B\n" +
             "ON A.id = B.goods_id\n" +

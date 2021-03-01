@@ -6,7 +6,7 @@
  * @LastEditTime: 2020-03-05 01:41:38
  */
 
-const port = process.env.port || process.env.npm_config_port || 8080; // 端口
+const port = process.env.port || process.env.npm_config_port || 8090; // 端口
 
 module.exports = {
   //publicPath: "./",
@@ -26,7 +26,7 @@ module.exports = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://47.98.128.88:8086/api/`,
+        target: `http://localhost:8086/api/`,
         changeOrigin: true,
         pathRewrite: {
           ["^" + process.env.VUE_APP_BASE_API]: "",
