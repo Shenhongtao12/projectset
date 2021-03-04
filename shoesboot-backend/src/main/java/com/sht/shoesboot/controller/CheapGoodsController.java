@@ -35,8 +35,18 @@ public class CheapGoodsController extends BaseController {
     }
 
     @DeleteMapping("cheap-goods")
-    public ResponseEntity<RestResponse> delete(@RequestParam Integer id) {
+    public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
         cheapGoodsService.delete(id);
         return ResponseEntity.ok(SUCCESS("删除成功"));
+    }
+
+    @PutMapping
+    public ResponseEntity<RestResponse> update(@RequestBody CheapGoods cheapGoods) {
+        return ResponseEntity.ok(cheapGoodsService.update(cheapGoods));
+    }
+
+    @GetMapping("cheap-goods/findById")
+    public ResponseEntity<RestResponse> findById(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(SUCCESS(cheapGoodsService.findById(id)));
     }
 }

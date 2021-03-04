@@ -77,4 +77,30 @@ public class CheapGoodsService {
         Page<Goods> goodsPage = (Page<Goods>) cheapGoodsMapper.queryPage(status);
         return new PageResult<>(goodsPage.getTotal(), goodsPage.getPages(), goodsPage.getResult());
     }
+
+    public RestResponse update(CheapGoods cheapGoods) {
+        CheapGoods cheapGoods1 = cheapGoodsMapper.selectByPrimaryKey(cheapGoods.getGoodsId());
+        Goods goods = goodsService.findByID(cheapGoods.getGoodsId());
+
+        try {
+            // 取消促销活动
+            if (cheapGoods1.getStatus() && !cheapGoods.getStatus()) {
+                sendKafKa(goods);
+            }
+            //促销
+            else if (cheapGoods.getStatus()){
+                goods.setPrice(cheapGoods.getPrice());
+                sendKafKa(goods);
+            }
+            //单纯的更新价钱
+            cheapGoodsMapper.updateByPrimaryKey(cheapGoods);
+            return new RestResponse(200, "更新成功");
+        } catch (Exception e) {
+            return new RestResponse(400, e.getMessage(), "系统异常，请稍后重试");
+        }
+    }
+
+    public CheapGoods findById(Integer id) {
+        return cheapGoodsMapper.selectByPrimaryKey(id);
+    }
 }

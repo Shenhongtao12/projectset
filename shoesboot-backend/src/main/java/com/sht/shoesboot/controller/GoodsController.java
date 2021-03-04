@@ -33,14 +33,14 @@ public class GoodsController extends BaseController {
     @PostMapping
     public ResponseEntity<RestResponse> jsoupSave(@Valid @RequestBody Goods goods) {
         goods.setId(null);
-        goods.setSalesVolume(0);
+        //goods.setSalesVolume(0)
         int id = goodsService.save(goods);
         goods.setId(goods.getId());
         if (goods.getShelf()) {
             kafkaProducer.send(goods);
             redisService.setData("shoes_goods_" + id, goods.getInventory().toString());
         }
-        return ResponseEntity.ok(SUCCESS(""));
+        return ResponseEntity.ok(SUCCESS(id, "添加成功"));
     }
 
     @GetMapping

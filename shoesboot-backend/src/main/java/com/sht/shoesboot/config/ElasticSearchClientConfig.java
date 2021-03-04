@@ -17,7 +17,7 @@ public class ElasticSearchClientConfig {
     public RestHighLevelClient restHighLevelClient() {
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("182.92.218.236", 9200, "http")
+                        new HttpHost("101.201.151.118", 9200, "http")
                 )
         );
         return client;
