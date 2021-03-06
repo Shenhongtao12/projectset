@@ -62,7 +62,8 @@ public class UploadService {
                 //缩略图
                 String thumbnailName = uuid + "thumbnail" + suffixName;
 
-                String thumbnailUrl = "http://182.92.218.236:8888" + site + "/" + thumbnailName;
+                //101.201.151.118  15
+                String thumbnailUrl = "http://101.201.151.118:8888" + site + "/" + thumbnailName;
 
                 if (size < 200 * 1024) {
                     Thumbnails.of(new String[]{site + "/" + fileName}).scale(1.0D).toFile(site + "/" + thumbnailName);
@@ -91,7 +92,7 @@ public class UploadService {
     public String deleteImage(String url) {
         String resultInfo;
 
-        String path = url.substring(26); //截掉http://182.92.218.236:8888
+        String path = url.substring(27); //截掉http://101.201.151.118:8888
 
         String name2 = path.substring(0, path.indexOf("thumbnail"));
         String jpg = url.substring(url.lastIndexOf("."));
