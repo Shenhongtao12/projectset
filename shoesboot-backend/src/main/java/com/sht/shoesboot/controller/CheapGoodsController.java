@@ -40,7 +40,7 @@ public class CheapGoodsController extends BaseController {
         return ResponseEntity.ok(SUCCESS("删除成功"));
     }
 
-    @PutMapping
+    @PutMapping("cheap-goods")
     public ResponseEntity<RestResponse> update(@RequestBody CheapGoods cheapGoods) {
         return ResponseEntity.ok(cheapGoodsService.update(cheapGoods));
     }
