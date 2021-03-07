@@ -68,7 +68,7 @@ public class MatterService {
                     list.add(criteriaBuilder.equal(root.get("id"), id));
                 }
                 if(id == null && StringUtils.isNotEmpty(title)){
-                    list.add(criteriaBuilder.equal(root.get("title"), title));
+                    list.add(criteriaBuilder.like(root.get("title"), "%" + title + "%"));
                 }
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }
