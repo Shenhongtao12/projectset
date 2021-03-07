@@ -41,12 +41,12 @@ public class CheapGoodsController extends BaseController {
     }
 
     @PutMapping("cheap-goods")
-    public ResponseEntity<RestResponse> update(@RequestBody CheapGoods cheapGoods) {
+    public ResponseEntity<RestResponse> updateCheap(@RequestBody CheapGoods cheapGoods) {
         return ResponseEntity.ok(cheapGoodsService.update(cheapGoods));
     }
 
     @GetMapping("cheap-goods/findById")
-    public ResponseEntity<RestResponse> findById(@RequestParam(name = "id") Integer id) {
+    public ResponseEntity<RestResponse> findCheapById(@RequestParam(name = "id") Integer id) {
         return ResponseEntity.ok(SUCCESS(cheapGoodsService.findById(id)));
     }
 }

@@ -1,0 +1,7 @@
+server:
+  port: 8889
+spring:
+  servlet:
+    multipart:
+      max-file-size: 8MB
+      enabled: true
