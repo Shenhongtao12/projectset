@@ -75,6 +75,10 @@ public class MatterService {
         };
 
         Page<Matter> matterPage = matterRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.DESC,"id")));
+        if (id != null) {
+            List<Comment> commentList = commentService.findByMatterId(id, true);
+            matterPage.getContent().get(0).setCommentList(commentList);
+        }
         return new PageResult<>(matterPage.getTotalElements(), matterPage.getTotalPages(), matterPage.getContent());
     }
 
