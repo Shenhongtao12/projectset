@@ -57,7 +57,7 @@ public class ReplyService {
 
 
     public JsonData save(Reply reply) throws Exception {
-        if (replyRepository.existsReplyByCommentId(reply.getCommentId())) {
+        if (reply.getPostId() == null && replyRepository.existsReplyByCommentId(reply.getCommentId())) {
             return JsonData.buildError("暂不允许再次回复");
         }
 
