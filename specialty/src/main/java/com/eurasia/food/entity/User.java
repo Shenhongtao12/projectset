@@ -62,5 +62,6 @@ public class User {
     public User(Admin admin) {
         this.id = admin.getId();
         this.nickName = admin.getAdminName();
+        this.avatarUrl = admin.getImage();
     }
 }

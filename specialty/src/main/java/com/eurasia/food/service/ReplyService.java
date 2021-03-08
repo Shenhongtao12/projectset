@@ -7,6 +7,8 @@ import java.util.List;
 import com.eurasia.food.entity.Comment;
 import com.eurasia.food.entity.Post;
 import com.eurasia.food.entity.Reply;
+import com.eurasia.food.entity.User;
+import com.eurasia.food.repository.AdminRepository;
 import com.eurasia.food.repository.ReplyRepository;
 import com.eurasia.food.utils.JsonData;
 import com.eurasia.food.utils.MessageUtils;
@@ -37,6 +39,8 @@ public class ReplyService {
     private UserService userService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private AdminRepository adminRepository;
 
 
     @Transactional
@@ -84,7 +88,11 @@ public class ReplyService {
     }
 
     public List<Reply> findByComId(Integer id) {
-        return replyRepository.findRepliesByCommentId(id);
+        List<Reply> replyList = replyRepository.findRepliesByCommentId(id);
+        if (replyList.size() > 0) {
+            replyList.forEach( reply -> reply.setUser(new User(adminRepository.findById(reply.getUserId()).get())));
+        }
+        return  replyList;
     }
 
     @Transactional

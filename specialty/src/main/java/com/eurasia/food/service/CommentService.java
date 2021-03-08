@@ -141,10 +141,13 @@ public class CommentService {
 
     public List<Comment> findByMatterId(Integer matterId, Boolean show) {
         List<Comment> commentList = commentRepository.findCommentsByMatterIdAndIsShow(matterId, show);
-        commentList.forEach(comment ->
-            comment.setReplyList(replyService.findByComId(comment.getCommentId()))
-        );
-
+        if (commentList.size() > 0) {
+            commentList.forEach(comment -> {
+                        comment.setUser(userService.findUserById(comment.getUserId()));
+                        comment.setReplyList(replyService.findByComId(comment.getCommentId()));
+                    }
+            );
+        }
         return commentList;
     }
 
