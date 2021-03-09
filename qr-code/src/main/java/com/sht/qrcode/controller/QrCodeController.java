@@ -34,37 +34,29 @@ public class QrCodeController {
 
     @PostMapping
     public void getQRCode(QrCode qrCode, HttpServletResponse response) {
-        //try {
-            Boolean bool = qrCode.getFile() == null && (qrCode.getContent() == null || "".equals(qrCode.getContent()));
-            if (bool) {
-                //return ResponseEntity.ok(JsonData.buildError("不能为空数据"));
-                response.setStatus(400);
+        Boolean bool = qrCode.getFile() == null && (qrCode.getContent() == null || "".equals(qrCode.getContent()));
+        if (bool) {
+            response.setStatus(400);
+            new AllException(400, "失败");
+        }
+        QrEntity qrEntity = new QrEntity();
+        qrEntity.setContent(qrCode.getContent());
+        if (qrCode.getFile() != null) {
+            JsonData upload = uploadService.upload(qrCode.getFile(), "/qrcode/images");
+            if (upload.getCode() == 200) {
+                log.info("返回的图片链接：{}", qrCode.getContent());
+                qrEntity.setImage(upload.getData().toString());
+            } else {
                 new AllException(400, "失败");
             }
-        QrEntity qrEntity = new QrEntity();
-            qrEntity.setContent(qrCode.getContent());
-            if (qrCode.getFile() != null) {
-                JsonData upload = uploadService.upload(qrCode.getFile(), "/qrcode/images");
-                if (upload.getCode() == 200) {
-                    log.info("返回的图片链接：{}", qrCode.getContent());
-                    qrEntity.setImage(upload.getData().toString());
-                } else {
-                    //return ResponseEntity.ok(upload);
-                    new AllException(400, "失败");
-                }
-            }
+        }
 
         int i = qrMapper.insertSelective(qrEntity);
-            int id = qrEntity.getId();
-            String url = qrMapper.findIp() + id;
-            log.info(url);
+        int id = qrEntity.getId();
+        String url = qrMapper.findIp() + id;
+        log.info(url);
         qrCodeService.createQRCode2Stream(url, response);
-            log.info("成功生成二维码！");
-            //return ResponseEntity.ok(new JsonData());
-        //} catch (Exception e) {
-            //log.error("发生错误， 错误信息是：{}！", e.getMessage());
-            //return ResponseEntity.ok(JsonData.buildError(e.getMessage(), "发送异常，失败"));
-        //}
+        log.info("成功生成二维码！");
     }
 
     @GetMapping
