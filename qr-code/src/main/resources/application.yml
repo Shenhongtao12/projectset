@@ -5,3 +5,11 @@ spring:
     multipart:
       max-file-size: 8MB
       enabled: true
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:mysql://47.98.128.88:3306/common?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: kindy0916
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
