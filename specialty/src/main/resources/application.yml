@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8890
 database:
   url: jdbc:mysql://47.98.128.88:3306/specialty?useUnicode=true&characterEncoding=utf-8&useSSL=false
   username: root
@@ -16,14 +16,13 @@ spring:
       max-file-size: 10MB
       enabled: true
   redis:
-    #host: 172.17.240.99
     host: 47.98.128.88
     port: 6379
     database: 0
     password: sht123
     timeout: 5000
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       #create-drop
       ddl-auto: update

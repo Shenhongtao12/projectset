@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.entity.CheapGoods;
 import com.sht.shoesboot.entity.Goods;
 import com.sht.shoesboot.entity.PageResult;
-import com.sht.shoesboot.kafka.KafkaProducer;
 import com.sht.shoesboot.mapper.CheapGoodsMapper;
 import com.sht.shoesboot.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ public class CheapGoodsService {
     private GoodsService goodsService;
 
     @Autowired
-    private KafkaProducer kafkaProducer;
-
-    @Autowired
     private RedisService redisService;
 
     public RestResponse setup(CheapGoods cheapGoods) {
@@ -35,8 +31,8 @@ public class CheapGoodsService {
             Goods goods = goodsService.findByID(cheapGoods.getGoodsId());
             if (goods != null && goods.getShelf()) {
                 goods.setPrice(cheapGoods.getPrice());
-                Boolean sendKafKa = sendKafKa(goods);
-                if (!sendKafKa) {
+                Boolean sentEs = sentEs(goods);
+                if (!sentEs) {
                     return new RestResponse(400, "网络异常");
                 }
                 if (!cheapGoodsMapper.existsWithPrimaryKey(cheapGoods.getGoodsId())) {
@@ -53,9 +49,9 @@ public class CheapGoodsService {
         }
     }
 
-    public Boolean sendKafKa(Goods goods) {
+    public Boolean sentEs(Goods goods) {
         try {
-            kafkaProducer.send(goods);
+            goodsService.saveGoodsToEs(goods);
             redisService.setData("shoes_goods_" + goods.getId(), goods.getInventory().toString());
             return true;
         } catch (Exception e) {
@@ -67,7 +63,7 @@ public class CheapGoodsService {
     public void delete(Integer id) {
         if (cheapGoodsMapper.existsWithPrimaryKey(id)){
             Goods goods = goodsService.findByID(id);
-            sendKafKa(goods);
+            sentEs(goods);
             cheapGoodsMapper.deleteByPrimaryKey(id);
         }
     }
@@ -85,12 +81,12 @@ public class CheapGoodsService {
         try {
             // 取消促销活动
             if (cheapGoods1.getStatus() && !cheapGoods.getStatus()) {
-                sendKafKa(goods);
+                sentEs(goods);
             }
             //促销
             else if (cheapGoods.getStatus()){
                 goods.setPrice(cheapGoods.getPrice());
-                sendKafKa(goods);
+                sentEs(goods);
             }
             //单纯的更新价钱
             cheapGoodsMapper.updateByPrimaryKey(cheapGoods);

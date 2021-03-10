@@ -1,7 +1,6 @@
 package com.sht.shoesboot.controller;
 
 import com.sht.shoesboot.entity.Goods;
-import com.sht.shoesboot.kafka.KafkaProducer;
 import com.sht.shoesboot.service.GoodsService;
 import com.sht.shoesboot.service.RedisService;
 import com.sht.shoesboot.utils.RestResponse;
@@ -25,9 +24,6 @@ public class GoodsController extends BaseController {
     private GoodsService goodsService;
 
     @Autowired
-    private KafkaProducer kafkaProducer;
-
-    @Autowired
     private RedisService redisService;
 
     @PostMapping
@@ -37,7 +33,7 @@ public class GoodsController extends BaseController {
         int id = goodsService.save(goods);
         goods.setId(goods.getId());
         if (goods.getShelf()) {
-            kafkaProducer.send(goods);
+            goodsService.saveGoodsToEs(goods);
             redisService.setData("shoes_goods_" + id, goods.getInventory().toString());
         }
         return ResponseEntity.ok(SUCCESS(id, "添加成功"));
@@ -92,7 +88,7 @@ public class GoodsController extends BaseController {
             int i = goodsService.update(goods);
             if (i != 0) {
                 if (goods.getShelf()) {
-                    kafkaProducer.send(goods);
+                    goodsService.saveGoodsToEs(goods);
                     redisService.setData("shoes_goods_" + goods.getId(), goods.getInventory().toString());
                 } else {
                     goodsService.soldOut(goods.getId());

@@ -84,11 +84,11 @@ public class GoodsService {
         return !bulk.hasFailures();
     }
 
-    public void saveGoodsToEs(JSONObject goods) {
+    public void saveGoodsToEs(Goods goods) {
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("1s");
         bulkRequest.add(new IndexRequest("shoes_goods")
-                .id(goods.get("id").toString())
+                .id(goods.getId().toString())
                 .source(goods, XContentType.JSON));
         try {
             BulkResponse bulk = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
