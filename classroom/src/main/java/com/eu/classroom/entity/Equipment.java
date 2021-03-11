@@ -37,7 +37,7 @@ public class Equipment {
 
     private LocalDateTime inDate;
 
-    @ManyToMany
+    /*@ManyToMany
     @JoinTable(name = "equipment_user", joinColumns = @JoinColumn(name = "equipment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    private List<User> users;*/
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RequestMapping("api/announcement")
 @RestController
-@Api
+@Api(tags = "公告")
 public class AnnouncementController extends BaseController {
 
     @Autowired

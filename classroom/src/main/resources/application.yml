@@ -18,7 +18,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   jackson:
     default-property-inclusion: non_null
-    date-format: yy-MM-dd hh:mm:ss
+    date-format: yy-MM-dd HH:mm:ss

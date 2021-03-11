@@ -47,9 +47,9 @@ public class UserController extends BaseController{
 
     @GetMapping
     public ResponseEntity<RestResponse> findByPage(
-            @RequestParam(name = "username", defaultValue = "false") String username,
+            @RequestParam(name = "username", required = false) String username,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
-            @RequestParam(name = "rows", defaultValue = "20") Integer size
+            @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
         return ResponseEntity.ok(SUCCESS(userService.findByPage(username, page, size), ""));
     }

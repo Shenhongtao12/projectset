@@ -22,7 +22,7 @@ public class UploadController extends BaseController{
 
     @PostMapping({"image"})
     @ApiOperation(value = "上传图片", notes = "上传图片")
-    public ResponseEntity<RestResponse> uploadImage(@RequestParam("file") MultipartFile[] file, @RequestParam(name = "site", defaultValue = "/eurasia/other") String site) {
+    public ResponseEntity<RestResponse> uploadImage(@RequestParam("file") MultipartFile[] file, @RequestParam(name = "site", defaultValue = "/classroom/images") String site) {
         RestResponse url = this.uploadService.upload(file, site);
         return ResponseEntity.ok(url);
     }

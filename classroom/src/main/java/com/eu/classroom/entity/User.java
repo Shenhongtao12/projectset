@@ -50,10 +50,9 @@ public class User {
     /**
      * 手机号
      */
-    @Transient
     private String phone;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Equipment> equipments;
+    /*@ManyToMany(mappedBy = "users")
+    private List<Equipment> equipments;*/
 
 }
