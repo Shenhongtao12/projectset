@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**")
                 //配置不拦截的api
                 .excludePathPatterns(
-                        "/api/user/login",
+                        "/api/user/**",
                         "/api/admin/login",
                         "api/equipment/findByPage",
                         "api/laboratory/findByPage"

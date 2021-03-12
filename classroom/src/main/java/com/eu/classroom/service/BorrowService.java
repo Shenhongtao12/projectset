@@ -74,7 +74,7 @@ public class BorrowService {
             }
         };
         Page<Borrow> borrowPage = borrowRepository.findAll(spec, PageRequest.of(page, size));
-        if (borrowPage.getContent().size() > 0) {
+        if (!borrowPage.getContent().isEmpty()) {
             if (userId == null && equipmentId == null) {
                 borrowPage.getContent().forEach(x -> {
                     x.setEquipment(equipmentService.findById(x.getEquipmentId()));

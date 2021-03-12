@@ -36,8 +36,4 @@ public class Equipment {
     private Integer borrowNum;
 
     private LocalDateTime inDate;
-
-    /*@ManyToMany
-    @JoinTable(name = "equipment_user", joinColumns = @JoinColumn(name = "equipment_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;*/
 }

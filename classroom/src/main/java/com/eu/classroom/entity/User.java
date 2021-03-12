@@ -1,10 +1,12 @@
 package com.eu.classroom.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Data
-public class User {
+public class User implements Serializable {
 
     /**
      * ID
@@ -52,7 +54,7 @@ public class User {
      */
     private String phone;
 
-    /*@ManyToMany(mappedBy = "users")
-    private List<Equipment> equipments;*/
+    @ManyToMany(mappedBy = "users")
+    private List<Role> roles;
 
 }
