@@ -1,6 +1,7 @@
 package com.eu.classroom.controller;
 
 import com.eu.classroom.common.RestResponse;
+import com.eu.classroom.dto.RoleDto;
 import com.eu.classroom.entity.Role;
 import com.eu.classroom.service.RoleService;
 import io.swagger.annotations.Api;
@@ -21,8 +22,8 @@ public class RoleController extends BaseController {
     private RoleService roleService;
 
     @PostMapping
-    private ResponseEntity<RestResponse> saveOrUpdate(@RequestBody Role role) {
-        return ResponseEntity.ok(roleService.saveOrUpdate(role));
+    private ResponseEntity<RestResponse> saveOrUpdate(@RequestBody RoleDto role) {
+        return ResponseEntity.ok(roleService.saveOrUpdate(new Role(role)));
     }
 
     @GetMapping

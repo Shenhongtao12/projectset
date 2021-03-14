@@ -1,10 +1,14 @@
 package com.eu.classroom.entity;
 
+import com.eu.classroom.dto.RoleDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,22 +18,32 @@ import java.util.List;
  * @author Aaron
  * @date 2021/3/10 20:46
  */
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
 @Entity
 @ApiModel(description = "权限")
-public class Role implements Serializable {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String nodes;
+    private String notes;
 
     @ApiModelProperty(notes = "页面路由结点")
     private String node;
 
     @JsonBackReference(value = "role-user")
-    @ManyToMany
-    @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(mappedBy = "roles")
     private List<User> users;
+
+    @JsonBackReference(value = "admin-role")
+    @ManyToMany(mappedBy = "roles")
+    private List<Admin> admins;
+
+    public Role(RoleDto roleDto) {
+        this.notes = roleDto.getNotes();
+        this.node = roleDto.getNotes();
+    }
 }

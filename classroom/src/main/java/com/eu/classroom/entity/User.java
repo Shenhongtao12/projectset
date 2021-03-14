@@ -1,7 +1,7 @@
 package com.eu.classroom.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Aaron
@@ -16,7 +17,8 @@ import java.util.List;
  */
 @Entity
 @Data
-public class User implements Serializable {
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
+public class User {
 
     /**
      * ID
@@ -54,7 +56,8 @@ public class User implements Serializable {
      */
     private String phone;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Role> roles;
+    @ManyToMany
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
 }

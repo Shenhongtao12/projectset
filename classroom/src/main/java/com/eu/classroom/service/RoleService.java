@@ -43,4 +43,12 @@ public class RoleService {
     public List<Role> findAll() {
         return roleRepository.findAll();
     }
+
+    public Role findById(Integer id) {
+        return roleRepository.findById(id).get();
+    }
+
+    public Boolean exists(Integer id) {
+        return roleRepository.existsById(id);
+    }
 }
