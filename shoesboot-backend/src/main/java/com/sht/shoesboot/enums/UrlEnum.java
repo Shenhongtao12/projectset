@@ -10,11 +10,7 @@ import lombok.Setter;
  */
 public enum UrlEnum {
 
-    /**
-     *
-     */
-    EMAIL("http://eurasia.plus:8080/api/email"),
-    UPLOAD("http://eurasia.plus:8080/api/upload")
+    EMAIL("http://eurasia.plus:8080/api/email")
     ;
 
     private final String url;

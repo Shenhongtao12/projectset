@@ -22,8 +22,6 @@ public class JwtUtils {
 		String token;
 		token = Jwts.builder().setSubject(SUBJECT)
 				.claim("id", user.getId())
-				/*.claim("openid", user.getOpenid())
-				.claim("session_key", user.getSession_key())*/
 				.setIssuedAt(new Date())
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
 				.signWith(SignatureAlgorithm.HS256, APPSECRET)

@@ -90,10 +90,6 @@ public class FavoriteService {
                 e.printStackTrace();
             }
         }
-        //下架的商品
-//        if (flag) {
-//            goodsList.addAll(goodsService.queryShelfGoods(userId));
-//        }
         return new PageResult<>(favoritePage.getTotal(), favoritePage.getPages(), goodsList);
     }
 

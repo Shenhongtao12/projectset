@@ -49,7 +49,7 @@ public class UserService {
             JSONObject body = new JSONObject();
             body.put("fromName", "鞋靴专卖旗舰店");
             body.put("email", email);
-            body.put("subject", "空军一号");
+            body.put("subject", "精致鞋业");
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(UrlEnum.EMAIL.getUrl(), body, String.class);
             if(responseEntity.getStatusCode() == HttpStatus.OK){
                 redisService.setEmailCode("shoes-" + email, JSONObject.parseObject(responseEntity.getBody()).get("message").toString());

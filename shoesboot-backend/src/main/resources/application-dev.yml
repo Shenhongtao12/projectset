@@ -3,7 +3,6 @@ spring:
     url: ENC(fXtcBfq64N3j1gvo0ZWgt4q7F34WwdEvWvjWw5K8HFgjU2h9JRWvpUaNoWmk+4qYWwWNJ0EPTuEIA/gWyIB5dPvHsxkHyGgvSsnQsjPrQCKOzjgoXjuhu8biiR2K07JyPakFxwt/nNsAKwtxFTcWBBNlR/0gUg9uRhe77Lvs5SwkbjkNaw2gMg==)
     username: ENC(0XAQhNsW5HAM6wajkcPgPQ==)
     password: ENC(2nsnZRQP+OYw+h5bnZt/fclV7aSYCi8x)
-    #使用阿里巴巴Druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
