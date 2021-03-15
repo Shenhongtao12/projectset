@@ -3,6 +3,7 @@ package com.eu.classroom.entity;
 import com.eu.classroom.dto.RoleDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,6 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @ApiModel(description = "权限")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer"})
 public class Role {
 
     @Id
@@ -43,6 +45,7 @@ public class Role {
     private List<Admin> admins;
 
     public Role(RoleDto roleDto) {
+        this.id = roleDto.getId();
         this.notes = roleDto.getNotes();
         this.node = roleDto.getNotes();
     }

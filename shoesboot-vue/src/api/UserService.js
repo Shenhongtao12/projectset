@@ -41,3 +41,11 @@ export function regist(data) {
     data: data,
   });
 }
+
+export function emailLogin(params) {
+  return request({
+    url: "user/email-login",
+    method: "get",
+    params: params,
+  });
+}

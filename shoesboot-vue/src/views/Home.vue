@@ -154,6 +154,15 @@ export default {
       }
     },
     accessoryActive: function (val) {
+      // 获取轮播图数据
+      getCarousel()
+        .then((res) => {
+          this.carousel = res.data;
+          console.log(this.carousel);
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
       // 页面初始化的时候把accessoryHotList(热门配件商品列表)直接赋值给accessoryList(配件商品列表)
       // 所以在切换商品列表时判断accessoryHotList是否为空,为空则是第一次切换,把accessoryList赋值给accessoryHotList
       if (this.accessoryHotList == "") {

@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/api/admin/login",
                         "/api/goods/**",
                         "/api/classify/**",
-                        "api/carousel/**"
+                        "/api/carousel/**"
                 );
 
         WebMvcConfigurer.super.addInterceptors(registry);

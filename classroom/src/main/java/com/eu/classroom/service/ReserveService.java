@@ -40,6 +40,9 @@ public class ReserveService {
         if (reserve.getId() != null && reserveRepository.existsById(reserve.getId())) {
             JpaUtils.copyNotNullProperties(reserve, reserveRepository.findById(reserve.getId()).get());
         }else {
+            if (laboratoryService.findById(reserve.getLaboratoryId()).getStatus()) {
+                return new RestResponse(400, "该实验室已停用");
+            }
             if (reserve.getStartDateTime().isAfter(reserve.getEndDateTime())) {
                 return new RestResponse(400, "开始时间不能小于结束时间");
             }
@@ -54,6 +57,7 @@ public class ReserveService {
                 return new RestResponse(400, "您已预约该时间段！");
             }
             reserve.setStatus(1);
+            reserve.setInDate(LocalDateTime.now());
         }
 
         try {
@@ -116,6 +120,9 @@ public class ReserveService {
         }
         Reserve reserve = reserveRepository.findById(borrowReq.getId()).get();
         if ("1".equals(borrowReq.getOperation())) {
+            if (reserve.getStatus() == 2) {
+                return new RestResponse(200, "您已审批通过，切勿重复操作");
+            }
             if (reserveRepository.existsReserve(reserve.getStartDateTime(), reserve.getEndDateTime(),reserve.getLaboratoryId(), 2) != null) {
                 reserve.setStatus(3);
                 reserveRepository.save(reserve);

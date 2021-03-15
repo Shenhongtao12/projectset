@@ -1,5 +1,6 @@
 package com.eu.classroom.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.eu.classroom.common.PageResult;
 import com.eu.classroom.common.RestResponse;
 import com.eu.classroom.entity.Laboratory;
@@ -37,6 +38,7 @@ public class LaboratoryService {
             JpaUtils.copyNotNullProperties(laboratory, one);
         } else {
             laboratory.setInDate(LocalDateTime.now());
+            laboratory.setStatus(false);
         }
         try {
             Laboratory save = laboratoryRepository.save(laboratory);
@@ -53,7 +55,7 @@ public class LaboratoryService {
         }
     }
 
-    public PageResult<Laboratory> findByPage(String name, Integer page, Integer size) {
+    public PageResult<Laboratory> findByPage(String name, String status, Integer page, Integer size) {
         Specification<Laboratory> spec = new Specification<Laboratory>() {
             @Override
             public Predicate toPredicate(Root<Laboratory> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -61,6 +63,9 @@ public class LaboratoryService {
                 List<Predicate> list = new ArrayList<>();
                 if (name != null) {
                     list.add(criteriaBuilder.like(root.get("name"), "%"+name+"%"));
+                }
+                if (status != null) {
+                    list.add(criteriaBuilder.equal(root.get("status"), StrUtil.equals(status, "0") ? 0 : 1));
                 }
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }
@@ -88,5 +93,15 @@ public class LaboratoryService {
 
     public void updateBorrowNum(Laboratory laboratory) {
         laboratoryRepository.save(laboratory);
+    }
+
+    public RestResponse stop(Integer id, String status) {
+        if (!laboratoryRepository.existsById(id)) {
+            return new RestResponse(400, "不存在该id");
+        }
+        Laboratory laboratory = laboratoryRepository.findById(id).get();
+        laboratory.setStatus(StrUtil.equals("1", status));
+        laboratoryRepository.save(laboratory);
+        return new RestResponse(200, "操作成功");
     }
 }

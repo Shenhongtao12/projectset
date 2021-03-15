@@ -28,14 +28,21 @@ public class LaboratoryController extends BaseController {
     @GetMapping("findByPage")
     public ResponseEntity<RestResponse> findByPage(
             @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "size", defaultValue = "20") Integer size
     ) {
-        return ResponseEntity.ok(SUCCESS(laboratoryService.findByPage(name, page, size), ""));
+        return ResponseEntity.ok(SUCCESS(laboratoryService.findByPage(name, status, page, size), ""));
     }
 
     @DeleteMapping
     public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
         return ResponseEntity.ok(laboratoryService.delete(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<RestResponse> stop(@RequestParam(name = "id") Integer id,
+                                             @RequestParam(name = "status") String status) {
+        return ResponseEntity.ok(laboratoryService.stop(id, status));
     }
 }

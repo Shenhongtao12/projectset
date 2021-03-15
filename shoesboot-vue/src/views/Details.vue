@@ -209,6 +209,7 @@ export default {
         this.$store.dispatch("setShowLogin", true);
         return;
       }
+      console.log(this.$store.getters.getUser);
       postFavorite({
         userId: this.$store.getters.getUser.id,
         goodsId: this.productID,

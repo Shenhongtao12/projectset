@@ -19,7 +19,7 @@
             </li>
             <li v-else>
               欢迎
-              <el-popover placement="top" width="180" v-model="visible">
+              <!-- <el-popover placement="top" width="180" v-model="visible">
                 <p>确定退出登录吗？</p>
                 <div style="text-align: right; margin: 10px 0 0">
                   <el-button size="mini" type="text" @click="visible = false"
@@ -32,7 +32,26 @@
                 <el-button type="text" slot="reference">{{
                   this.$store.getters.getUser.username
                 }}</el-button>
-              </el-popover>
+              </el-popover> -->
+              <el-menu
+                :default-active="activeIndex"
+                active-text-color="#fff"
+                background-color="#3d3d3d"
+                text-color="#b0b0b0"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+              >
+                <el-submenu index="1">
+                  <template slot="title">{{
+                    this.$store.getters.getUser.username
+                  }}</template>
+                  <el-menu-item index="1-1">个人中心</el-menu-item>
+                  <el-menu-item index="1-2" @click="logout"
+                    >退出登陆</el-menu-item
+                  >
+                </el-submenu>
+              </el-menu>
             </li>
             <li>
               <router-link to="/order">我的订单</router-link>
@@ -62,7 +81,11 @@
         >
           <div class="logo">
             <router-link to="/">
-              <img src="./assets/imgs/logo.png" alt />
+              <img
+                src="./assets/imgs/logo.png"
+                alt
+                style="width: '240px'; height: 80px; margin-top: -5px"
+              />
             </router-link>
           </div>
           <el-menu-item index="/">首页</el-menu-item>
@@ -189,6 +212,9 @@ export default {
   },
   methods: {
     ...mapActions(["setUser", "setShowLogin", "setShoppingCart"]),
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
     login() {
       // 点击登录按钮, 通过更改vuex的showLogin值显示登录组件
       this.setShowLogin(true);
@@ -244,6 +270,10 @@ a:hover {
 /* 全局CSS END */
 
 /* 顶部导航栏CSS */
+.el-submenu .el-submenu__title {
+  height: 40px !important;
+  line-height: 40px !important;
+}
 .topbar {
   height: 40px;
   background-color: #3d3d3d;
