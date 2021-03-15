@@ -1,5 +1,6 @@
 package com.eu.classroom.service;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.eu.classroom.common.RestResponse;
 import com.eu.classroom.entity.Equipment;
 import com.eu.classroom.entity.Role;
@@ -50,5 +51,13 @@ public class RoleService {
 
     public Boolean exists(Integer id) {
         return roleRepository.existsById(id);
+    }
+
+    public RestResponse delete(Integer id) {
+        if (exists(id)){
+            roleRepository.deleteById(id);
+            return new RestResponse(200, "删除成功");
+        }
+        return new RestResponse(400, "不存在该id");
     }
 }

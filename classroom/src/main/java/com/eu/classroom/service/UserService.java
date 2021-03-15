@@ -52,11 +52,11 @@ public class UserService {
         if (user.getId() != null && userRepository.existsById(user.getId())) {
             User one = userRepository.findById(user.getId()).get();
             JpaUtils.copyNotNullProperties(user, one);
-            if (!user.getRoles().isEmpty()){
+           /* if (!user.getRoles().isEmpty()){
                 Set<Role> roles = one.getRoles();
                 roles.addAll(user.getRoles());
                 user.setRoles(roles);
-            }
+            }*/
         } else {
             if (userRepository.existsUserByUsername(user.getUsername())) {
                 response.setMessage("用户名已存在");
@@ -146,6 +146,15 @@ public class UserService {
             return new RestResponse(200, "成功");
         }catch (Exception e) {
             return new RestResponse(400, "删除失败，请求检查数据是否有误");
+        }
+    }
+
+    public RestResponse delete(Integer id) {
+        try {
+            userRepository.deleteById(id);
+            return new RestResponse(200, "删除成功");
+        } catch (Exception e) {
+            return new RestResponse(400, e.getMessage(), "服务异常，删除失败");
         }
     }
 }

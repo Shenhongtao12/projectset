@@ -12,3 +12,4 @@
 /shoesboot-vue/node_modules/
 #shoesboot-admin
 /shoesboot-admin/node_modules/
+/shoesboot-backend/src/main/resources/static/

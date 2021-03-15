@@ -12,6 +12,7 @@ import com.sht.shoesboot.mapper.OrderMapper;
 import com.sht.shoesboot.mapper.ShopCartMapper;
 import com.sht.shoesboot.utils.OrderNumber;
 import com.sht.shoesboot.utils.RestResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import java.util.List;
  * @author Aaron
  * @date 2020/12/29 22:53
  */
+@Slf4j
 @Service
 public class OrderService {
 
@@ -70,7 +72,7 @@ public class OrderService {
             orderMapper.batchInsert(order.getOrderGoodsList());
             return new RestResponse(200, "下单成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new RestResponse(400, "创建订单失败,请重试");
         }
@@ -110,5 +112,9 @@ public class OrderService {
             }
         }
         return new RestResponse(400, "不存在该订单");
+    }
+
+    public Integer countOrder() {
+        return orderMapper.countOrder();
     }
 }

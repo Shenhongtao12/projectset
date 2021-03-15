@@ -15,11 +15,17 @@ import javax.annotation.Resource;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    @Resource
+    private CorsInterceptor corsInterceptor;
     /**
      * 拦截器配置
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        // 跨域拦截器需放在最上面
+        registry.addInterceptor(corsInterceptor)
+                .addPathPatterns("/**");
 
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/api/**")

@@ -1,10 +1,12 @@
 package com.sht.shoesboot.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sht.shoesboot.entity.Admin;
 import com.sht.shoesboot.entity.PageResult;
 import com.sht.shoesboot.mapper.AdminMapper;
+import com.sht.shoesboot.utils.RestResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,15 @@ public class AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     public boolean checkRole(Integer userId) {
         Admin admin = adminMapper.selectByPrimaryKey(userId);
@@ -97,5 +108,15 @@ public class AdminService {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public RestResponse info() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("user", userService.count());
+        jsonObject.put("admin", adminMapper.countAdmin());
+        jsonObject.put("order", orderService.countOrder());
+        jsonObject.put("product", goodsService.countGoods());
+        return new RestResponse(200, jsonObject, "");
     }
 }

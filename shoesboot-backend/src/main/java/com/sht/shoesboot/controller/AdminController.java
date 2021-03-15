@@ -85,4 +85,9 @@ public class AdminController extends BaseController {
         return ResponseEntity.ok().body(ERROR(400,"删除失败"));
     }
 
+    @GetMapping("info")
+    public ResponseEntity<RestResponse> info() {
+        return ResponseEntity.ok(adminService.info());
+    }
+
 }

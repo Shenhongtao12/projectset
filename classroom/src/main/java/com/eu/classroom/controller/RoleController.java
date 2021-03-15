@@ -30,4 +30,9 @@ public class RoleController extends BaseController {
     public ResponseEntity<RestResponse> findAll() {
         return ResponseEntity.ok(SUCCESS(roleService.findAll()));
     }
+
+    @DeleteMapping
+    public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(roleService.delete(id));
+    }
 }

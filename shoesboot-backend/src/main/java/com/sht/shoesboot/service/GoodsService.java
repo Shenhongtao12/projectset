@@ -221,4 +221,8 @@ public class GoodsService {
         Page<Goods> goodsPage = (Page<Goods>) goodsMapper.selectByExample(example);
         return new PageResult<>(goodsPage.getTotal(), goodsPage.getPages(), goodsPage.getResult());
     }
+
+    public Integer countGoods() {
+        return goodsMapper.countGoods();
+    }
 }

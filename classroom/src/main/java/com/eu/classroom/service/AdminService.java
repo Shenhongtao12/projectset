@@ -84,11 +84,11 @@ public class AdminService {
             Admin response = adminRepository.findById(admin.getId()).get();
             admin.setPassword(response.getPassword());
             JpaUtils.copyNotNullProperties(admin, response);
-            if (!admin.getRoles().isEmpty()){
+            /*if (!admin.getRoles().isEmpty()){
                 Set<Role> roles = response.getRoles();
                 roles.addAll(admin.getRoles());
                 admin.setRoles(roles);
-            }
+            }*/
             adminRepository.save(admin);
             return true;
         } catch (Exception e) {

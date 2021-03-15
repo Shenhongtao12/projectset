@@ -55,8 +55,8 @@ public class UserController extends BaseController{
     }
 
     @DeleteMapping
-    public ResponseEntity<RestResponse> batchDelete(@RequestParam(name = "ids") List<Integer> ids) {
-        return ResponseEntity.ok(userService.batchDelete(ids));
+    public ResponseEntity<RestResponse> batchDelete(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(userService.delete(id));
     }
 
     @DeleteMapping("deleteRole")

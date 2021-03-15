@@ -121,4 +121,8 @@ public class UserService {
         Page<User> users = (Page<User>) userMapper.selectByExample(example);
         return new PageResult<>(users.getTotal(), users.getPages(), users.getResult());
     }
+
+    public Integer count() {
+        return userMapper.countUser();
+    }
 }

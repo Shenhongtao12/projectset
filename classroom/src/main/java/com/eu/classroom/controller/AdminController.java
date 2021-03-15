@@ -1,6 +1,6 @@
 package com.eu.classroom.controller;
 
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 import com.eu.classroom.common.RestResponse;
 import com.eu.classroom.entity.Admin;
 import com.eu.classroom.service.AdminService;
@@ -42,7 +42,7 @@ public class AdminController extends BaseController {
         }
         JSONObject response = new JSONObject();
         response.put("admin", adminInfo);
-        response.put("token", JwtUtils.geneJsonWebToken(admin.getId(), "admin"));
+        response.put("token", JwtUtils.geneJsonWebToken(adminInfo.getId(), "admin"));
         return ResponseEntity.ok(SUCCESS(response, ""));
     }
 

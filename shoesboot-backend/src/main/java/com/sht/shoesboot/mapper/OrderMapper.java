@@ -35,4 +35,7 @@ public interface OrderMapper extends Mapper<Order> {
      * @param orderGoodsList
      */
     void batchInsert(@Param("orderGoodsList") List<OrderGoods> orderGoodsList);
+
+    @Select("select count(1) from orders LIMIT 1")
+    Integer countOrder();
 }

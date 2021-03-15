@@ -29,3 +29,6 @@ swagger:
   application-version: 1.0
   application-description: springfox swagger
   try-host: http://localhost:${server.port}
+#logging:
+#  level:
+#    root: info
