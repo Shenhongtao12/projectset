@@ -24,8 +24,19 @@ public class RoleService {
     public RestResponse saveOrUpdate(Role role) {
         RestResponse response = new RestResponse();
         if (role.getId() != null && roleRepository.existsById(role.getId())) {
+            if (roleRepository.checkNode(role.getNode(), role.getId()) != null) {
+                response.setCode(400);
+                response.setMessage("已存在该node结点: " + role.getNode());
+                return response;
+            }
             Role one = roleRepository.getOne(role.getId());
             JpaUtils.copyNotNullProperties(role, one);
+        } else {
+            if (roleRepository.existsRoleByNode(role.getNode())) {
+                response.setCode(400);
+                response.setMessage("已存在该node结点: " + role.getNode());
+                return response;
+            }
         }
         try {
             Role save = roleRepository.save(role);

@@ -171,7 +171,6 @@ export default {
           }
         });
       }
-      console.log(request);
       putShopCart(request)
         .then((res) => {
           if (res.code === 200) {
@@ -181,7 +180,7 @@ export default {
             } else {
               // 新加入购物车成功
               let goods = {
-                goodsId: this.productDetails.goodsId,
+                goodsId: this.productDetails.id,
                 title: this.productDetails.title,
                 image: this.productPicture[0],
                 price: this.productDetails.price,

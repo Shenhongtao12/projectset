@@ -47,6 +47,10 @@ public class Role {
     public Role(RoleDto roleDto) {
         this.id = roleDto.getId();
         this.notes = roleDto.getNotes();
-        this.node = roleDto.getNotes();
+        this.node = roleDto.getNode();
+    }
+
+    public Role(String node) {
+        this.node = node;
     }
 }

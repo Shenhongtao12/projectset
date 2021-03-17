@@ -169,7 +169,7 @@ export default {
         email: "shenhongtao12@aliyun.com",
       },
       emailLoginForm: {
-        code: null,
+        code: "",
       },
       showTime: true /* 布尔值，通过v-show控制显示‘获取按钮’还是‘倒计时’ */,
       sendTime: null /* 倒计时 计数器 */,
@@ -200,37 +200,44 @@ export default {
   methods: {
     ...mapActions(["setUser", "setShowLogin"]),
     loginForEmail() {
-      this.$refs["emailLoginForm"].validate((valid) => {
-        if (valid) {
-          let request = {
-            email: sendEmailForm.email,
-            code: emailLoginForm.code,
-          };
-          emailLogin(request).then((res) => {
-            if (res.code === 200) {
-              // 隐藏登录组件
-              this.isLogin = false;
-              // 登录信息存到本地
-              let user = JSON.stringify(res.data.user);
-              localStorage.setItem("user", user);
-              localStorage.setItem("User-Token", res.data.token);
-              // 登录信息存到vuex
-              this.setUser(res.data.user);
-              // 弹出通知框提示登录成功信息
-              this.notifySucceed("登录成功");
-            } else {
-              // 弹出通知框提示登录失败信息
-              this.notifyError(res.message);
-            }
-          });
-        }
-      });
+      if (!this.send) {
+        this.notifyError("请先发送验证码");
+      } else {
+        this.$refs["emailLoginForm"].validate((valid) => {
+          if (valid) {
+            let request = {
+              email: this.sendEmailForm.email,
+              code: this.emailLoginForm.code,
+            };
+            emailLogin(request).then((res) => {
+              if (res.code === 200) {
+                // 隐藏登录组件
+                this.isLogin = false;
+                // 登录信息存到本地
+                let user = JSON.stringify(res.data.user);
+                localStorage.setItem("user", user);
+                localStorage.setItem("User-Token", res.data.token);
+                // 登录信息存到vuex
+                this.setUser(res.data.user);
+                // 弹出通知框提示登录成功信息
+                this.notifySucceed("登录成功");
+              } else {
+                // 弹出通知框提示登录失败信息
+                this.notifyError(res.message);
+              }
+            });
+          }
+        });
+      }
     },
     emailLogin() {
       this.flagEmailLogin = !this.flagEmailLogin;
     },
     sendEmail(email) {
       this.$refs["sendEmailForm"].validate((valid) => {
+        if (email == null) {
+          this.notifyError("请输入邮箱");
+        }
         if (valid) {
           let request = {
             email: email,
@@ -238,6 +245,7 @@ export default {
           };
           sendEmailCode(request).then((res) => {
             if (res.code == 200) {
+              this.send = true;
               const TIME_COUNT = 90; //  更改倒计时时间
               this.notifySucceed(res.message);
               if (!this.timer) {

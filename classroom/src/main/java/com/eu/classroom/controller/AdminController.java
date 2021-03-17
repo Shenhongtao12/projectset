@@ -1,8 +1,10 @@
 package com.eu.classroom.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.eu.classroom.common.RestResponse;
 import com.eu.classroom.entity.Admin;
+import com.eu.classroom.entity.Role;
 import com.eu.classroom.service.AdminService;
 import com.eu.classroom.utils.JwtUtils;
 import io.swagger.annotations.Api;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Aaron.H.Shen
@@ -41,6 +46,17 @@ public class AdminController extends BaseController {
             return ResponseEntity.ok().body(ERROR("用户名或密码错误"));
         }
         JSONObject response = new JSONObject();
+        if (StrUtil.equals("admin", adminInfo.getAdminName())) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(new Role("/user"));
+            roles.add(new Role("/admin"));
+            roles.add(new Role("/power"));
+            roles.add(new Role("/notes"));
+            roles.add(new Role("/classrome"));
+            roles.add(new Role("/appointment"));
+            roles.add(new Role("/equipment"));
+            adminInfo.setRoles(roles);
+        }
         response.put("admin", adminInfo);
         response.put("token", JwtUtils.geneJsonWebToken(adminInfo.getId(), "admin"));
         return ResponseEntity.ok(SUCCESS(response, ""));

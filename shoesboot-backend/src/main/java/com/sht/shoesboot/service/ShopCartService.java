@@ -89,7 +89,8 @@ public class ShopCartService {
 
     public Integer save(ShopCart shopCart) {
         shopCart.setCheck(false);
-        return shopCartMapper.insertSelective(shopCart);
+        shopCartMapper.insertSelective(shopCart);
+        return shopCart.getId();
     }
 
     public Boolean delete(Integer id) {

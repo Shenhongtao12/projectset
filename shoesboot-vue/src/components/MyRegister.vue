@@ -7,7 +7,13 @@
  -->
 <template>
   <div id="register">
-    <el-dialog title="注册" width="25%" center :visible.sync="isRegister">
+    <el-dialog
+      title="注册"
+      width="25%"
+      center
+      :visible.sync="isRegister"
+      :before-close="handleClose"
+    >
       <el-form
         :model="RegisterUser"
         :rules="rules"
@@ -190,6 +196,13 @@ export default {
     },
   },
   methods: {
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
+    },
     sendEmail(email) {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {

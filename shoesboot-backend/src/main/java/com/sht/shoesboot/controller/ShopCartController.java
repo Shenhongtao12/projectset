@@ -28,7 +28,7 @@ public class ShopCartController extends BaseController{
 
     @PutMapping
     public ResponseEntity<RestResponse> shoppingCart (@RequestBody ShopCart shopCart) {
-        String inventory = redisService.getData("shoes_goods_" + shopCart.getGoodsId());
+        String inventory = redisService.getData("shoes_goods_" + shopCart.getGoodsId());    
         if (StringUtils.isNoneEmpty(inventory)) {
             if (Integer.parseInt(inventory) >= shopCart.getAmount()) {
                 JSONObject response = new JSONObject();
