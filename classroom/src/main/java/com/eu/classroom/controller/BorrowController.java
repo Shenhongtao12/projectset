@@ -46,4 +46,9 @@ public class BorrowController extends BaseController{
     public ResponseEntity<RestResponse> approval(@RequestBody BorrowReq borrowReq) {
         return ResponseEntity.ok(borrowService.approval(borrowReq));
     }
+
+    @PutMapping("refund")
+    public ResponseEntity<RestResponse> refund(@RequestParam(name = "id")Integer id) {
+        return ResponseEntity.ok(borrowService.refund(id));
+    }
 }

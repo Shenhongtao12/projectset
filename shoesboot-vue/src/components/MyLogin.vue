@@ -215,6 +215,8 @@ export default {
                 this.isLogin = false;
                 // 登录信息存到本地
                 let user = JSON.stringify(res.data.user);
+                console.log("00000000");
+                console.log(res.data.user);
                 localStorage.setItem("user", user);
                 localStorage.setItem("User-Token", res.data.token);
                 // 登录信息存到vuex
@@ -284,6 +286,8 @@ export default {
                 this.isLogin = false;
                 // 登录信息存到本地
                 let user = JSON.stringify(res.data.user);
+                console.log("00000000");
+                console.log(res.data.user);
                 localStorage.setItem("user", user);
                 localStorage.setItem("User-Token", res.data.token);
                 // 登录信息存到vuex

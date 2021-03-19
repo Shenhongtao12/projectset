@@ -24,10 +24,11 @@ public class Borrow {
 
     private Integer borrowNum;
 
-    @ApiModelProperty(notes = "申请借实验器材状态：1-待审批  2-审批通过  3-未通过")
+    @ApiModelProperty(notes = "申请借实验器材状态：1-待审批  2-审批通过  3-未通过  4-退还")
     private Integer status;
 
     @ApiModelProperty(notes = "归还日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime giveBackDate;
 
     @ApiModelProperty(notes = "备注")
@@ -36,6 +37,10 @@ public class Borrow {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime inDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate;
 
     private Integer userId;
 

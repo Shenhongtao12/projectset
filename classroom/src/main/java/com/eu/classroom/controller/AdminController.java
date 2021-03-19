@@ -55,6 +55,7 @@ public class AdminController extends BaseController {
             roles.add(new Role("/classrome"));
             roles.add(new Role("/appointment"));
             roles.add(new Role("/equipment"));
+            roles.add(new Role("/reqequipment"));
             adminInfo.setRoles(roles);
         }
         response.put("admin", adminInfo);

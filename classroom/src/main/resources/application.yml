@@ -21,4 +21,4 @@ spring:
       ddl-auto: update
   jackson:
     default-property-inclusion: non_null
-    date-format: yy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
