@@ -31,6 +31,9 @@ public class LaboratoryService {
     @Autowired
     private LaboratoryRepository laboratoryRepository;
 
+    @Autowired
+    private ReserveService reserveService;
+
     public RestResponse saveOrUpdate(Laboratory laboratory) {
         RestResponse response = new RestResponse();
         if (laboratory.getId() != null && laboratoryRepository.existsById(laboratory.getId())) {
@@ -75,6 +78,9 @@ public class LaboratoryService {
     }
 
     public RestResponse delete(Integer id) {
+        if (reserveService.existsByLa(id)) {
+            return new RestResponse(400, "不能删除，存在实验室预约记录");
+        }
         if (!laboratoryRepository.existsById(id)) {
             return new RestResponse(400, "不存在该id");
         }

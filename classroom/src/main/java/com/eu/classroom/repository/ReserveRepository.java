@@ -25,4 +25,8 @@ public interface ReserveRepository extends JpaRepository<Reserve, Integer>, JpaS
 
     @Query(value = "select status from reserve where start_date_time>=?1 and end_date_time<=?2 and laboratory_id=?3 and user_id=?4 limit 1" ,nativeQuery = true)
     Integer existsReserveByUser(LocalDateTime startDateTime, LocalDateTime endDateTime, Integer laboratoryId, Integer userId);
+
+    Boolean existsByUserId(Integer id);
+
+    Boolean existsByLaboratoryId(Integer id);
 }

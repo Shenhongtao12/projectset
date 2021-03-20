@@ -154,4 +154,12 @@ public class BorrowService {
         borrowRepository.save(borrow);
         return new RestResponse(200, "归还成功");
     }
+
+    public Boolean existsByUser(Integer id){
+        return borrowRepository.existsByUserId(id);
+    }
+
+    public Boolean existsByEq(Integer id){
+        return borrowRepository.existsByEquipmentId(id);
+    }
 }

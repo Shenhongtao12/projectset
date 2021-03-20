@@ -9,4 +9,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @date 2021/3/11 21:12
  */
 public interface BorrowRepository extends JpaRepository<Borrow, Integer>, JpaSpecificationExecutor<Borrow> {
+
+    Boolean existsByUserId(Integer id);
+
+    Boolean existsByEquipmentId(Integer id);
 }

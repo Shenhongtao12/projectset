@@ -136,4 +136,12 @@ public class ReserveService {
         reserveRepository.save(reserve);
         return new RestResponse(200, "审批成功");
     }
+
+    public Boolean existsByUser(Integer id){
+        return reserveRepository.existsByUserId(id);
+    }
+
+    public Boolean existsByLa(Integer id){
+        return reserveRepository.existsByLaboratoryId(id);
+    }
 }

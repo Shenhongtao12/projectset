@@ -39,6 +39,12 @@ public class UserService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private BorrowService borrowService;
+
+    @Autowired
+    private ReserveService reserveService;
+
 
     public String refreshToken(Integer userId) {
         if (userRepository.existsById(userId)) {
@@ -150,6 +156,13 @@ public class UserService {
     }
 
     public RestResponse delete(Integer id) {
+        if (borrowService.existsByUser(id)) {
+            return new RestResponse(400, "该用户存在借用记录，不可删除");
+        }
+
+        if (reserveService.existsByUser(id)) {
+            return new RestResponse(400, "该用户存在预约记录，不可删除");
+        }
         try {
             userRepository.deleteById(id);
             return new RestResponse(200, "删除成功");

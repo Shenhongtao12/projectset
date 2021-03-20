@@ -34,6 +34,9 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
+    @Autowired
+    private BorrowService borrowService;
+
     public RestResponse saveOrUpdate(Equipment equipment) {
         RestResponse response = new RestResponse();
         if (equipment.getId() != null && equipmentRepository.existsById(equipment.getId())) {
@@ -73,6 +76,9 @@ public class EquipmentService {
     }
 
     public RestResponse delete(Integer id) {
+        if (borrowService.existsByEq(id)) {
+            return new RestResponse(400, "该器材存在借用记录，不能删除");
+        }
         if (!equipmentRepository.existsById(id)) {
             return new RestResponse(400, "不存在该id");
         }
