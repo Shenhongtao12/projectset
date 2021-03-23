@@ -24,7 +24,8 @@ public class GoodsTest {
 
         //System.out.println(goodsService.queryShelfGoods(1));
         for (int i = 453; i < 243 + 453; i++) {
-             redisService.setData("shoes_goods_" + (453 + i), "100");
+             redisService.setData("shoes_goods_" + i, "100");
+             //redisService.deleteData("shoes_goods_" + (i + 453));
         }
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -116,5 +117,12 @@ public class OrderService {
 
     public Integer countOrder() {
         return orderMapper.countOrder();
+    }
+
+    public Boolean existByUser(Integer userId) {
+        Example example = new Example(Order.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        return orderMapper.selectCountByExample(example) > 0;
     }
 }

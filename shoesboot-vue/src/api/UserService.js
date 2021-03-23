@@ -25,6 +25,22 @@ export function logout() {
   });
 }
 
+export function update(data) {
+  return request({
+    url: "/user",
+    method: "put",
+    data: data,
+  });
+}
+
+export function updatePass(data) {
+  return request({
+    url: "/user/updatePas",
+    method: "put",
+    params: data,
+  });
+}
+
 // 获取验证码
 export function sendEmailCode(data) {
   return request({

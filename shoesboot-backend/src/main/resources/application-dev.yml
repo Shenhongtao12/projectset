@@ -11,7 +11,7 @@ spring:
     port: 6379
     database: 0
     password: ENC(6u+uxPExCZ3TPUpD6C1qOQ==)
-    timeout: 6000
+    timeout: 30000
     lettuce:
       pool:
         max-wait: -1

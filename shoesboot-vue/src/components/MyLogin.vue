@@ -215,8 +215,9 @@ export default {
                 this.isLogin = false;
                 // 登录信息存到本地
                 let user = JSON.stringify(res.data.user);
-                console.log("00000000");
-                console.log(res.data.user);
+                res.data.user.inDate = this.$moment(
+                  res.data.user.inDate
+                ).format("YYYY-MM-DD HH:mm:ss");
                 localStorage.setItem("user", user);
                 localStorage.setItem("User-Token", res.data.token);
                 // 登录信息存到vuex
@@ -234,6 +235,9 @@ export default {
     },
     emailLogin() {
       this.flagEmailLogin = !this.flagEmailLogin;
+      this.$refs["emailLoginForm"].resetFields();
+      this.$refs["sendEmailForm"].resetFields();
+      this.$refs["loginForm"].resetFields();
     },
     sendEmail(email) {
       this.$refs["sendEmailForm"].validate((valid) => {
@@ -286,8 +290,9 @@ export default {
                 this.isLogin = false;
                 // 登录信息存到本地
                 let user = JSON.stringify(res.data.user);
-                console.log("00000000");
-                console.log(res.data.user);
+                res.data.user.inDate = this.$moment(
+                  res.data.user.inDate
+                ).format("YYYY-MM-DD HH:mm:ss");
                 localStorage.setItem("user", user);
                 localStorage.setItem("User-Token", res.data.token);
                 // 登录信息存到vuex

@@ -14,7 +14,10 @@
       </div>
     </div>
     <div class="about-content">
-      <MyMarkdown></MyMarkdown>
+      <!-- <MyMarkdown></MyMarkdown> -->
+      <h1>鞋品网购小店</h1>
+      <h2>联系我们</h2>
+      <h3>888-8888-88888</h3>
     </div>
   </div>
 </template>

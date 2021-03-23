@@ -98,7 +98,7 @@ export default {
             // 删除成功
             // 删除删除列表中的该商品信息
             for (let i = 0; i < this.list.length; i++) {
-              const temp = this.list[i];
+              let temp = this.list[i];
               if (temp.product_id == product_id) {
                 this.list.splice(i, 1);
               }

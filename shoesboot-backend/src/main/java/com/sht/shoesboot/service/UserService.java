@@ -35,6 +35,8 @@ public class UserService {
     private RedisService redisService;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private OrderService orderService;
 
     public RestResponse sendEmailCode(String email, String newUser) {
         Example example = new Example(User.class);
@@ -101,13 +103,14 @@ public class UserService {
         return userMapper.updateByPrimaryKeySelective(user) == 1;
     }
 
-    public Boolean updatePassword(Integer id, String oldPas, String password) {
+    public RestResponse updatePassword(Integer id, String oldPas, String password) {
         User user = userMapper.selectByPrimaryKey(id);
         if (user != null && user.getPassword().equals(oldPas)) {
             user.setPassword(password);
-            return update(user);
+            update(user);
+            return new RestResponse(200, "更新成功");
         }else {
-            return false;
+            return new RestResponse(400, "更新失败，原密码错误");
         }
     }
 
@@ -124,5 +127,20 @@ public class UserService {
 
     public Integer count() {
         return userMapper.countUser();
+    }
+
+    public RestResponse delete(Integer id) {
+        if (!userMapper.existsWithPrimaryKey(id)) {
+            return new RestResponse(400, "该用户不存在");
+        }
+        if (orderService.existByUser(id)) {
+            return new RestResponse(400, "该用户存在订单数据，不可删除");
+        }
+        userMapper.deleteByPrimaryKey(id);
+        return new RestResponse(200, "删除成功");
+    }
+
+    public User findById(Integer id) {
+        return userMapper.selectByPrimaryKey(id);
     }
 }

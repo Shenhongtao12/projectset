@@ -5,16 +5,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.*;
 
+import javax.annotation.Resource;
+
 /**
  * @author Aaron
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Resource
+    private CorsInterceptor corsInterceptor;
     /**
      * 拦截器配置
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        // 跨域拦截器需放在最上面
+        registry.addInterceptor(corsInterceptor)
+                .addPathPatterns("/**");
 
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/api/**")

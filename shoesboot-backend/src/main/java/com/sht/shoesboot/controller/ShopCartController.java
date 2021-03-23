@@ -1,9 +1,12 @@
 package com.sht.shoesboot.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sht.shoesboot.entity.CheapGoods;
 import com.sht.shoesboot.entity.ShopCart;
+import com.sht.shoesboot.service.CheapGoodsService;
 import com.sht.shoesboot.service.RedisService;
 import com.sht.shoesboot.service.ShopCartService;
+import com.sht.shoesboot.service.UserService;
 import com.sht.shoesboot.utils.RestResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +29,19 @@ public class ShopCartController extends BaseController{
     @Autowired
     private RedisService redisService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CheapGoodsService cheapGoodsService;
+
     @PutMapping
     public ResponseEntity<RestResponse> shoppingCart (@RequestBody ShopCart shopCart) {
-        String inventory = redisService.getData("shoes_goods_" + shopCart.getGoodsId());    
+        CheapGoods cheapGoods = cheapGoodsService.findById(shopCart.getGoodsId());
+        if (shopCart.getId() == null && cheapGoods != null && !userService.findById(shopCart.getUserId()).getVip()) {
+                return ResponseEntity.ok(ERROR("很抱歉，只有成为VIP用户才能购买优惠产品"));
+        }
+        String inventory = redisService.getData("shoes_goods_" + shopCart.getGoodsId());
         if (StringUtils.isNoneEmpty(inventory)) {
             if (Integer.parseInt(inventory) >= shopCart.getAmount()) {
                 JSONObject response = new JSONObject();

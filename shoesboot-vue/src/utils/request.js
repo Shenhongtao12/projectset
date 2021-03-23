@@ -48,7 +48,7 @@ service.interceptors.response.use(
           location.href = "/index";
         });
       });
-    } else if (code === 500) {
+    } else if (code === 400) {
       Message({
         message: msg,
         type: "error",
@@ -64,7 +64,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log("err" + error);
+    console.log("err: " + error);
     let { message } = error;
     if (message == "Network Error") {
       message = "后端接口连接异常";
@@ -72,6 +72,10 @@ service.interceptors.response.use(
       message = "系统接口请求超时";
     } else if (message.includes("Request failed with status code")) {
       message = "系统接口" + message.substr(message.length - 3) + "异常";
+    }
+    if (error.response.status === 400) {
+      console.log(error.response);
+      message = error.response.data.message;
     }
     Message({
       message: message,

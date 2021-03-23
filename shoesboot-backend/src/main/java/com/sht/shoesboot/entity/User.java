@@ -42,6 +42,8 @@ public class User {
     @Email
     private String email;
 
+    private String url;
+
     @NotBlank(message = "手机号不能为空")
     @NotNull(message = "手机号不能为空")
     @Length(min = 11, max = 11)

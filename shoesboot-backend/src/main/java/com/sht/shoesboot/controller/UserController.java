@@ -102,11 +102,9 @@ public class UserController extends BaseController {
 
     @PutMapping("updatePas")
     public ResponseEntity<RestResponse> updatePas(@RequestParam(name = "oldPassword") String oldPassword,
+                                                  @RequestParam(name = "id") Integer id,
                                                   @RequestParam(name = "password") String password) {
-        if (userService.updatePassword(userId, oldPassword, password)) {
-            return ResponseEntity.ok(SUCCESS("修改成功，请重新登录"));
-        }
-        return ResponseEntity.ok().body(ERROR("修改失败，请重试"));
+        return ResponseEntity.ok().body(userService.updatePassword(id, oldPassword, password));
     }
 
     @GetMapping("userPage")
@@ -115,5 +113,11 @@ public class UserController extends BaseController {
                                                  @RequestParam(name = "rows", defaultValue = "10") Integer rows) {
         PageResult<User> userPageResult = userService.userPage(name, page, rows);
         return ResponseEntity.ok(SUCCESS(userPageResult));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<RestResponse> delete(@RequestParam(name = "id") Integer id) {
+
+        return ResponseEntity.ok(userService.delete(id));
     }
 }
