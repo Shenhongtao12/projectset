@@ -43,6 +43,10 @@ public class PostService {
     @Autowired
     private FansService fansService;
 
+    public Boolean existsByUser(Integer id) {
+        return postRepository.existsByUserId(id);
+    }
+
     public PageResult<Post> init(){
         Page<Post> page = postRepository.findAll(PageRequest.of(0, 30, Sort.by(Sort.Direction.DESC, "createTime")));
         for (Post post : page) {

@@ -42,6 +42,10 @@ public class CommentService {
     @Autowired
     private PraiseRepository praiseRepository;
 
+    public Boolean existsByUser(Integer id) {
+        return commentRepository.existsByUserId(id);
+    }
+
     //添加留言
     public JsonData save(Comment comment) {
         comment.setCreateTime(DateUtils.dateToString());

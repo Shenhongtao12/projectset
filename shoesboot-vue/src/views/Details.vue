@@ -82,7 +82,7 @@
           <el-button class="shop-cart" :disabled="dis" @click="addShoppingCart"
             >加入购物车
           </el-button>
-          <el-button class="like" @click="addCollect">喜欢</el-button>
+          <el-button class="like" @click="addCollect">收藏</el-button>
         </div>
         <!-- 内容区底部按钮END -->
         <div class="pro-policy">

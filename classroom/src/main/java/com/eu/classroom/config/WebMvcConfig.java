@@ -33,8 +33,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/user/login",
                         "/api/admin/login",
-                        "api/equipment/findByPage",
-                        "api/laboratory/findByPage"
+                        "/api/equipment/findByPage",
+                        "/api/laboratory/findByPage"
                 )
         ;
 

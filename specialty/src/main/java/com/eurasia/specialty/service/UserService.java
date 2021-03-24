@@ -45,6 +45,12 @@ public class UserService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private PostService postService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private ReplyService replyService;
 
     public JsonData login(User user) {
         User info = userRepository.findUserByNickName(user.getNickName());
@@ -148,5 +154,23 @@ public class UserService {
         };
         Page<User> userPage = userRepository.findAll(specification, PageRequest.of(page, rows, Sort.by(Sort.Direction.ASC, "id")));
         return new PageResult<>(userPage.getTotalElements(), userPage.getTotalPages(), userPage.getContent());
+    }
+
+    public JsonData delete(Integer id) {
+        if (!userRepository.existsById(id)) {
+            return JsonData.buildError("不存在该用户");
+        }
+        if (postService.existsByUser(id)) {
+            return JsonData.buildError("该用户存在帖子数据，删除失败");
+        }
+        if (commentService.existsByUser(id)) {
+            return JsonData.buildError("该用户存在留言数据，删除失败");
+        }
+        if (replyService.existsByUser(id)) {
+            return JsonData.buildError("该用户存在回复数据，删除失败");
+        }
+
+        userRepository.deleteById(id);
+        return JsonData.buildSuccess("删除成功");
     }
 }

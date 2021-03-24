@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface CommentRepository extends JpaRepository<Comment, Integer>, JpaSpecificationExecutor<Comment> {
 
     Integer countByPostId(Integer postId);
+
+    Boolean existsByUserId(Integer id);
 }

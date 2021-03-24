@@ -45,12 +45,14 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="是否注册为会员: " prop="vip">
-          <el-switch
-            v-model="RegisterUser.vip"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
+          <el-tooltip content="成为VIP用户可购买专享的特价商品" placement="top">
+            <el-switch
+              v-model="RegisterUser.vip"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            >
+            </el-switch>
+          </el-tooltip>
         </el-form-item>
         <el-form-item
           label="邮箱"

@@ -15,4 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>, JpaSpecifi
     Post findUserIdById(Integer postId);
 
     List<Post> findByUserId(Integer userId);
+
+    Boolean existsByUserId(Integer id);
 }

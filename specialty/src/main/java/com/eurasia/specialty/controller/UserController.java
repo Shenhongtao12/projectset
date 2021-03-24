@@ -85,4 +85,9 @@ public class UserController extends BaseController{
                                                         @RequestParam(value = "rows", defaultValue = "20") Integer rows) {
         return ResponseEntity.ok(JsonData.buildSuccess(this.userService.findByPage( name, page, rows),""));
     }
+
+    @DeleteMapping
+    public ResponseEntity<JsonData> delete(@RequestParam(name = "id") Integer id) {
+        return ResponseEntity.ok(userService.delete(id));
+    }
 }

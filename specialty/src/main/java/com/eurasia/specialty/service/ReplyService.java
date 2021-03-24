@@ -41,6 +41,10 @@ public class ReplyService {
     @Autowired
     private FansService fansService;
 
+    public Boolean existsByUser(Integer id) {
+        return replyRepository.existsByUserId(id);
+    }
+
 
     @Transactional
     public int deleteByCommentId(Integer comid) {
