@@ -27,8 +27,13 @@ public class CarService {
 
     public RestResponse save(Car car) {
         if (car.getId() != null && carRepository.existsById(car.getId())) {
+            car.setLicensePlateNumber(null);
             JpaUtils.copyNotNullProperties(car, carRepository.findById(car.getId()).get());
         }else {
+            Integer count = carRepository.countByLicensePlateNumber(car.getLicensePlateNumber());
+            if (count > 0) {
+                return new RestResponse(400, "失败，车牌号重复");
+            }
             car.setInDate(LocalDate.now());
         }
         try {

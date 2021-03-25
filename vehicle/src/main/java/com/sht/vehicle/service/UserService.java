@@ -96,14 +96,14 @@ public class UserService {
         return response;
     }
 
-    public PageResult<User> findByPage(Boolean driver, Integer page, Integer size) {
+    public PageResult<User> findByPage(String driver, Integer page, Integer size) {
         Specification<User> spec = new Specification<User>() {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
 
                 List<Predicate> list = new ArrayList<>();
-                if (driver) {
-                    list.add(criteriaBuilder.equal(root.get("drive"), 1));
+                if (driver != null) {
+                    list.add(criteriaBuilder.equal(root.get("driver"), "true".equals(driver) ? 1:0));
                 }
                 return criteriaBuilder.and(list.toArray(new Predicate[list.size()]));
             }

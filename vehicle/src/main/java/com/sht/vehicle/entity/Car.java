@@ -1,16 +1,19 @@
 package com.sht.vehicle.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sht.vehicle.dto.CarDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +35,7 @@ public class Car{
     /**
      * 汽车品牌
      */
-    @ApiModelProperty(notes = "汽车品牌")
+    @ApiModelProperty(notes = "汽车品牌型号")
     private String brand;
 
     /**
@@ -46,6 +49,14 @@ public class Car{
      */
     @ApiModelProperty(notes = "限载人数")
     private Integer number;
+
+    @ApiModelProperty(notes = "车牌号")
+    private String licensePlateNumber;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(notes = "购车时间")
+    private LocalDateTime buyDateTime;
 
     /**
      * 入库时间
@@ -98,6 +109,8 @@ public class Car{
         this.notes = carDto.getNotes();
         this.number = carDto.getNumber();
         this.inDate = carDto.getInDate();
+        this.licensePlateNumber = carDto.getLicensePlateNumber();
+        this.buyDateTime = carDto.getBuyDateTime();
     }
 
 }

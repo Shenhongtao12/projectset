@@ -44,7 +44,7 @@ public class UserController extends BaseController{
 
     @GetMapping
     public ResponseEntity<RestResponse> findByPage(
-            @RequestParam(name = "driver", defaultValue = "false") Boolean driver,
+            @RequestParam(name = "driver", required = false) String driver,
             @RequestParam(name = "page", defaultValue = "0") Integer page,
             @RequestParam(name = "rows", defaultValue = "20") Integer size
     ) {

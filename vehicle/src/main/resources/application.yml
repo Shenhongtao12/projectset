@@ -1,7 +1,7 @@
 server:
   port: 6789
 database:
-  url: jdbc:mysql://47.98.128.88:3306/vehicle?useUnicode=true&characterEncoding=utf-8&useSSL=false
+  url: jdbc:mysql://47.98.128.88:3306/vehicle?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
   username: root
   password: kindy0916
 spring:

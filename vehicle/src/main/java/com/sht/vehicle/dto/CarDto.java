@@ -1,9 +1,12 @@
 package com.sht.vehicle.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author Aaron
@@ -31,6 +34,15 @@ public class CarDto {
      */
     @ApiModelProperty(notes = "限载人数")
     private Integer number;
+
+    @ApiModelProperty(notes = "车牌号")
+    private String licensePlateNumber;
+
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(notes = "购车时间")
+    private LocalDateTime buyDateTime;
 
     /**
      * 入库时间

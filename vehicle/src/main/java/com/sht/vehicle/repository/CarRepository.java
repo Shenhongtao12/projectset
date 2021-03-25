@@ -9,4 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @date 2021/2/16 11:52
  */
 public interface CarRepository extends JpaRepository<Car, Integer>, JpaSpecificationExecutor<Car> {
+
+
+    Integer countByLicensePlateNumber(String licensePlateNumber);
 }

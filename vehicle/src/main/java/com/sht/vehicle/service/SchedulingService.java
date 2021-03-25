@@ -3,6 +3,7 @@ package com.sht.vehicle.service;
 import com.sht.vehicle.common.PageResult;
 import com.sht.vehicle.common.RestResponse;
 import com.sht.vehicle.entity.Scheduling;
+import com.sht.vehicle.entity.User;
 import com.sht.vehicle.repository.SchedulingRepository;
 import com.sht.vehicle.utils.JpaUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,10 @@ public class SchedulingService {
     private CarService carService;
 
     public RestResponse save(Scheduling scheduling) {
+        User byId = userService.findById(scheduling.getUId());
+        if (!byId.getDriver()) {
+            return new RestResponse(400, "非驾驶人员，不能借用车辆");
+        }
         if (scheduling.getId() != null && schedulingRepository.existsById(scheduling.getId())) {
             JpaUtils.copyNotNullProperties(scheduling, schedulingRepository.findById(scheduling.getId()).get());
         }else {

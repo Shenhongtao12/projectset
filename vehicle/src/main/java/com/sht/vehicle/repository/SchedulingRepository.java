@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 public interface SchedulingRepository extends JpaRepository<Scheduling, Integer>, JpaSpecificationExecutor<Scheduling> {
 
 
-    @Query(value = "select scheduling0_.id as col_0_0_ from scheduling scheduling0_ where scheduling0_.start_date_time>=?1 and scheduling0_.end_date_time<=?2 and c_id=?3 and scheduling0_.status=?4 limit 1" ,nativeQuery = true)
+    @Query(value = "select id from scheduling where (start_date_time>=?1 and end_date_time<=?1) OR (start_date_time>=?2 and end_date_time<=?2) OR (start_date_time>=?1 and end_date_time<=?2) and c_id=?3 and status=?4 limit 1" ,nativeQuery = true)
     Integer existsScheduling(LocalDateTime startDateTime, LocalDateTime endDateTime, Integer cId, String s);
 
-    @Query(value = "select scheduling0_.status as col_0_0_ from scheduling scheduling0_ where scheduling0_.start_date_time>=?1 and scheduling0_.end_date_time<=?2 and c_id=?3 and scheduling0_.u_id=?4 limit 1" ,nativeQuery = true)
+    @Query(value = "select status from scheduling where (start_date_time>=?1 and end_date_time<=?1) OR (start_date_time>=?2 and end_date_time<=?2) OR (start_date_time>=?1 and end_date_time<=?2) and c_id=?3 and u_id=?4 limit 1" ,nativeQuery = true)
     String existsSchedulingByUser(LocalDateTime startDateTime, LocalDateTime endDateTime, Integer cId, Integer uId);
 }
