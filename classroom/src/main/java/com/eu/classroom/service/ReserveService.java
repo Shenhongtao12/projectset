@@ -54,7 +54,7 @@ public class ReserveService {
             }
             Integer byUser = reserveRepository.existsReserveByUser(reserve.getStartDateTime(), reserve.getEndDateTime(), reserve.getLaboratoryId(), reserve.getUserId());
             if (byUser != null) {
-                return new RestResponse(400, "您已预约该时间段！");
+                return new RestResponse(400, "该时间段与您预约过的时间段冲突");
             }
             reserve.setStatus(1);
             reserve.setInDate(LocalDateTime.now());
