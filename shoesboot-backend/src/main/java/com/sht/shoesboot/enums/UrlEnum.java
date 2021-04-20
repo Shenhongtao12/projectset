@@ -13,8 +13,8 @@ public enum UrlEnum {
     /**
      *
      */
-    EMAIL("http://eurasia.plus:8080/api/email"),
-    UPLOAD("http://eurasia.plus:8080/api/upload")
+    EMAIL("http://47.98.128.88:8080/api/email"),
+    UPLOAD("http://47.98.128.88:8080/api/upload")
     ;
 
     private final String url;

@@ -57,13 +57,13 @@ public class SwaggerConfig {
      */
     private ApiInfo apiInfo() {
 
-        Contact contact = new Contact("沈鸿涛", "http://eurasia.plus/swagger-ui.html", "shenhongtao12@aliyun.com");
+        Contact contact = new Contact("沈鸿涛", "http://47.98.128.88:8086/doc.html", "shenhongtao12@aliyun.com");
 
         return new ApiInfoBuilder()
                 .title("鞋靴直销系统 APIs")
                 //描述
                 .description("api接口文档")
-                .termsOfServiceUrl("http://eurasia.plus/swagger-ui.html")
+                .termsOfServiceUrl("http://47.98.128.88:8086/doc.html")
                 .contact(contact)
                 .version("1.0")
                 .build();
