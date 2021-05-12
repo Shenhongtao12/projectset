@@ -4,6 +4,7 @@ import com.sht.shoesboot.utils.JwtUtils;
 import com.sht.shoesboot.utils.OrderNumber;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Base64Utils;
 
 /**
  * @author Aaron
@@ -32,5 +33,10 @@ public class StringTest {
     public void testToken() {
         Claims claims = JwtUtils.checkJWT("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaHREZWFsIiwiaWQiOjEsImlhdCI6MTYxNDQ5NDAyNywiZXhwIjoxNjE1MDk4ODI3fQ.HritrE6ek02-4hFexcXcA0gsw_06iNTYe68SuxZmYDs");
         System.out.println(claims.get("id"));
+    }
+
+    @Test
+    public void decode() {
+        System.out.println(new String(Base64Utils.decode("MTIzNA==".getBytes())));
     }
 }
